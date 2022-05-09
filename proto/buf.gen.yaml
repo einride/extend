@@ -1,0 +1,19 @@
+version: v1
+
+managed:
+  enabled: true
+  go_package_prefix:
+    default: github.com/einride/saga/cmd/saga
+    except:
+      - buf.build/googleapis/googleapis
+      - buf.build/grpc-ecosystem/grpc-gateway
+
+plugins:
+  - name: openapiv2
+    out: openapiv2
+    strategy: all
+    opt:
+      - output_format=yaml
+      - allow_merge=true
+      - merge_file_name=extend
+      - omit_enum_default_value=true

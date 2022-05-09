@@ -1,0 +1,14 @@
+builds:
+  - id: saga
+    binary: saga
+    dir: cmd/saga
+    env:
+      - CGO_ENABLED=0
+    goos:
+      - linux
+      - windows
+      - darwin
+
+release:
+  github:
+  prerelease: auto

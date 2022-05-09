@@ -1,0 +1,105 @@
+syntax = "proto3";
+
+package einride.extend.book.v1alpha1;
+
+import "google/api/field_behavior.proto";
+import "google/api/resource.proto";
+import "google/protobuf/timestamp.proto";
+import "google/type/interval.proto";
+
+// A freight booking.
+message Booking {
+  option (google.api.resource) = {
+    type: "api.saga.einride.tech/Booking"
+    pattern: "organizations/{organization}/bookings/{booking}"
+    singular: "booking"
+    plural: "bookings"
+  };
+
+  // The resource name of the booking.
+  string name = 1;
+
+  // The creation timestamp of the transport order.
+  google.protobuf.Timestamp create_time = 2 [(google.api.field_behavior) = OUTPUT_ONLY];
+
+  // The last update timestamp of the transport order.
+  google.protobuf.Timestamp update_time = 3 [(google.api.field_behavior) = OUTPUT_ONLY];
+
+  // The deletion timestamp of the transport order.
+  google.protobuf.Timestamp delete_time = 4 [(google.api.field_behavior) = OUTPUT_ONLY];
+
+  // The reference ID for this booking from an external system, e.g. an ERP, WMS or TMS.
+  string reference_id = 5 [(google.api.field_behavior) = IMMUTABLE];
+
+  // The state of the order.
+  State state = 6 [(google.api.field_behavior) = OUTPUT_ONLY];
+
+  // The shipments that are connected to the order.
+  repeated Shipment shipments = 7 [(google.api.field_behavior) = REQUIRED];
+
+  // State of the transport order.
+  enum State {
+    // The default value. This value is used if the state is omitted.
+    STATE_UNSPECIFIED = 0;
+
+    // Initial status of an order.
+    PENDING = 1;
+
+    // The order have been accepted and cargo will be transported for customer.
+    ACCEPTED = 2;
+
+    // The order have been rejected and cargo will not be transported for customer.
+    REJECTED = 3;
+  }
+
+  // Shipment in the transport order.
+  message Shipment {
+    // Instructions related to this shipment.
+    string instructions = 1;
+
+    // The customer reference id for this shipment.
+    string reference_id = 2;
+
+    // The pickup time interval.
+    google.type.Interval pickup_interval = 3 [(google.api.field_behavior) = REQUIRED];
+
+    // The delivery time interval.
+    google.type.Interval delivery_interval = 4 [(google.api.field_behavior) = REQUIRED];
+
+    // The reference ID for the pickup location.
+    string pickup_site_reference_id = 5;
+
+    // The reference ID for the delivery location.
+    string delivery_site_reference_id = 6;
+
+    // The line items belonging to this shipment.
+    repeated LineItem line_items = 7;
+
+    // Properties of each load unit in this shipment.
+    message LineItem {
+      // The number of line items of this type.
+      float quantity = 1;
+
+      // A description of this line item.
+      string description = 2;
+
+      // The total weight of the line item.
+      float weight_quantity = 3;
+
+      // The unit of the weight_quantity field.
+      WeightUnit weigh_unit = 4;
+
+      // A weight unit.
+      enum WeightUnit {
+        // The default value. This value is used if the state is omitted.
+        WEIGHT_UNIT_UNSPECIFIED = 0;
+
+        // Kilogram (kg).
+        KG = 1;
+
+        // Pound (lb).
+        LB = 2;
+      }
+    }
+  }
+}

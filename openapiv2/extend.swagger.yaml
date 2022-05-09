@@ -1,0 +1,416 @@
+swagger: "2.0"
+info:
+  title: Einride Extend
+  description: |
+    Based on REST principles, with support for gRPC, the Einride Extend APIs enable integrations and extensions to Einride's Saga platform.
+
+    API design
+    ----------
+
+    The Extend APIs are designed using the [AIP](https://aip.dev) design framework, which means that they are resource-oriented and work like standard [REST](https://en.wikipedia.org/wiki/Representational_state_transfer) APIs.
+
+    API specification
+    -----------------
+
+    The APIs are specified and documented using the [Protocol Buffer](https://developers.google.com/protocol-buffers/docs/proto3) interface definition language.
+
+    Protocols
+    ---------
+
+    Saga's APIs support both gRPC and HTTP protocols.
+
+    ### gRPC
+
+    [gRPC](https://grpc.io) is a high performance, open source universal RPC framework that works across programming languages and platforms.
+
+    To call Saga's APIs via gRPC, you can use the protobuf source files to generate a client for [your preferred language](https://grpc.io/docs/languages).
+
+    The Saga APIs are also available via the [Buf Schema Registry](buf.build/einride/saga), which is a registry for openly sharing gRPC APIs between organizations. You can use one of the [remote generation plugins](https://docs.buf.build/tour/use-remote-generation) provided by Buf.
+
+    ### HTTP
+
+    Saga's APIs are also available as RESTful HTTP endpoints, via automatic [gRPC to HTTP transcoding](https://google.aip.dev/127).
+
+    See the [openapiv2](https://github.com/einride/extend/openapiv2) directory for the latest OpenAPI specifications, or use the API documentation at [extend.saga.einride.tech](https://extend.saga.einride.tech) where you can also try out the REST APIs and make example requests.
+  version: 1-alpha1
+tags:
+- name: BookingService
+schemes:
+- https
+consumes:
+- application/json
+produces:
+- application/json
+paths:
+  /v1/{booking}:
+    get:
+      summary: Get a booking.
+      operationId: BookingService_GetBooking
+      responses:
+        "200":
+          description: A successful response.
+          schema:
+            $ref: '#/definitions/v1alpha1Booking'
+        default:
+          description: An unexpected error response.
+          schema:
+            $ref: '#/definitions/rpcStatus'
+      parameters:
+      - name: booking
+        description: The booking to get.
+        in: path
+        required: true
+        type: string
+        pattern: spaces/[^/]+/bookings/[^/]+
+      tags:
+      - BookingService
+  /v1/{space}/bookings:
+    get:
+      summary: List bookings.
+      operationId: BookingService_ListBookings
+      responses:
+        "200":
+          description: A successful response.
+          schema:
+            $ref: '#/definitions/v1alpha1ListBookingsResponse'
+        default:
+          description: An unexpected error response.
+          schema:
+            $ref: '#/definitions/rpcStatus'
+      parameters:
+      - name: space
+        description: The space to list bookings in.
+        in: path
+        required: true
+        type: string
+        pattern: spaces/[^/]+
+      - name: pageSize
+        description: |-
+          The maximum number of results to return. The service may return fewer than
+          this value.
+          If unspecified, at most 50 results will be returned.
+          The maximum value is 1000; values above 1000 will be coerced to 1000.
+        in: query
+        required: false
+        type: integer
+        format: int32
+      - name: pageToken
+        description: |-
+          A page token, received from a previous call.
+          Provide this to retrieve the subsequent page.
+
+          When paginating, all other parameters provided must match
+          the call that provided the page token.
+        in: query
+        required: false
+        type: string
+      tags:
+      - BookingService
+    post:
+      summary: Create a booking.
+      operationId: BookingService_CreateBooking
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/v1alpha1Booking'
+        default:
+          description: An unexpected error response.
+          schema:
+            $ref: '#/definitions/rpcStatus'
+      parameters:
+      - name: space
+        description: The space to create the booking in.
+        in: path
+        required: true
+        type: string
+        pattern: spaces/[^/]+
+      - name: booking
+        description: The booking to create.
+        in: body
+        required: true
+        schema:
+          $ref: '#/definitions/v1alpha1Booking'
+      tags:
+      - BookingService
+  /v1/{space}/bookings:batchCreate:
+    post:
+      summary: Batch create bookings.
+      operationId: BookingService_BatchCreateBookings
+      responses:
+        "200":
+          description: A successful response.
+          schema:
+            $ref: '#/definitions/v1alpha1BatchCreateBookingsResponse'
+        default:
+          description: An unexpected error response.
+          schema:
+            $ref: '#/definitions/rpcStatus'
+      parameters:
+      - name: space
+        description: The space shared by all bookings being created.
+        in: path
+        required: true
+        type: string
+        pattern: spaces/[^/]+
+      - name: body
+        in: body
+        required: true
+        schema:
+          type: object
+          properties:
+            requests:
+              type: array
+              items:
+                $ref: '#/definitions/v1alpha1CreateBookingRequest'
+              description: |-
+                The request message specifying the resources to create.
+                A maximum of 1000 bookings can be created in a batch.
+              required:
+              - requests
+          description: Request to the BatchCreateBookings method.
+          required:
+          - requests
+      tags:
+      - BookingService
+  /v1/{space}/bookings:batchGet:
+    get:
+      summary: Batch get bookings.
+      operationId: BookingService_BatchGetBookings
+      responses:
+        "200":
+          description: A successful response.
+          schema:
+            $ref: '#/definitions/v1alpha1BatchGetBookingsResponse'
+        default:
+          description: An unexpected error response.
+          schema:
+            $ref: '#/definitions/rpcStatus'
+      parameters:
+      - name: space
+        description: The space shared by all bookings being retrieved.
+        in: path
+        required: true
+        type: string
+        pattern: spaces/[^/]+
+      - name: names
+        description: |-
+          The names of the bookings to retrieve.
+          A maximum of 1000 bookings can be retrieved in a batch.
+          Format: spaces/{space}/bookings/{booking}
+
+          The bookings to retrieve.
+        in: query
+        required: true
+        type: array
+        items:
+          type: string
+        collectionFormat: multi
+      tags:
+      - BookingService
+definitions:
+  BookingShipment:
+    type: object
+    properties:
+      instructions:
+        type: string
+        description: Instructions related to this shipment.
+      referenceId:
+        type: string
+        description: The customer reference id for this shipment.
+      pickupInterval:
+        $ref: '#/definitions/typeInterval'
+        description: The pickup time interval.
+      deliveryInterval:
+        $ref: '#/definitions/typeInterval'
+        description: The delivery time interval.
+      pickupSiteReferenceId:
+        type: string
+        description: The reference ID for the pickup location.
+      deliverySiteReferenceId:
+        type: string
+        description: The reference ID for the delivery location.
+      lineItems:
+        type: array
+        items:
+          $ref: '#/definitions/ShipmentLineItem'
+        description: The line items belonging to this shipment.
+    description: Shipment in the transport order.
+  BookingState:
+    type: string
+    enum:
+    - PENDING
+    - ACCEPTED
+    - REJECTED
+    description: |-
+      State of the transport order.
+
+       - STATE_UNSPECIFIED: The default value. This value is used if the state is omitted.
+       - PENDING: Initial status of an order.
+       - ACCEPTED: The order have been accepted and cargo will be transported for customer.
+       - REJECTED: The order have been rejected and cargo will not be transported for customer.
+  LineItemWeightUnit:
+    type: string
+    enum:
+    - KG
+    - LB
+    description: |-
+      A weight unit.
+
+       - WEIGHT_UNIT_UNSPECIFIED: The default value. This value is used if the state is omitted.
+       - KG: Kilogram (kg).
+       - LB: Pound (lb).
+  ShipmentLineItem:
+    type: object
+    properties:
+      quantity:
+        type: number
+        format: float
+        description: The number of line items of this type.
+      description:
+        type: string
+        description: A description of this line item.
+      weightQuantity:
+        type: number
+        format: float
+        description: The total weight of the line item.
+      weighUnit:
+        $ref: '#/definitions/LineItemWeightUnit'
+        description: The unit of the weight_quantity field.
+    description: Properties of each load unit in this shipment.
+  protobufAny:
+    type: object
+    properties:
+      '@type':
+        type: string
+    additionalProperties: {}
+  rpcStatus:
+    type: object
+    properties:
+      code:
+        type: integer
+        format: int32
+      message:
+        type: string
+      details:
+        type: array
+        items:
+          $ref: '#/definitions/protobufAny'
+  typeInterval:
+    type: object
+    properties:
+      startTime:
+        type: string
+        format: date-time
+        description: |-
+          Optional. Inclusive start of the interval.
+
+          If specified, a Timestamp matching this interval will have to be the same
+          or after the start.
+      endTime:
+        type: string
+        format: date-time
+        description: |-
+          Optional. Exclusive end of the interval.
+
+          If specified, a Timestamp matching this interval will have to be before the
+          end.
+    description: |-
+      Represents a time interval, encoded as a Timestamp start (inclusive) and a
+      Timestamp end (exclusive).
+
+      The start must be less than or equal to the end.
+      When the start equals the end, the interval is empty (matches no time).
+      When both start and end are unspecified, the interval matches any time.
+  v1alpha1BatchCreateBookingsResponse:
+    type: object
+    properties:
+      bookings:
+        type: array
+        items:
+          $ref: '#/definitions/v1alpha1Booking'
+        description: The bookings created.
+    description: Response from the BatchCreateBookings method.
+  v1alpha1BatchGetBookingsResponse:
+    type: object
+    properties:
+      bookings:
+        type: array
+        items:
+          $ref: '#/definitions/v1alpha1Booking'
+        description: Bookings requested.
+    description: Response from the BatchGetBookings method.
+  v1alpha1Booking:
+    type: object
+    properties:
+      name:
+        type: string
+        description: The resource name of the booking.
+      createTime:
+        type: string
+        format: date-time
+        description: The creation timestamp of the transport order.
+        readOnly: true
+      updateTime:
+        type: string
+        format: date-time
+        description: The last update timestamp of the transport order.
+        readOnly: true
+      deleteTime:
+        type: string
+        format: date-time
+        description: The deletion timestamp of the transport order.
+        readOnly: true
+      referenceId:
+        type: string
+        description: The reference ID for this booking from an external system, e.g.
+          an ERP, WMS or TMS.
+      state:
+        $ref: '#/definitions/BookingState'
+        description: The state of the order.
+      shipments:
+        type: array
+        items:
+          $ref: '#/definitions/BookingShipment'
+        description: The shipments that are connected to the order.
+        required:
+        - shipments
+    description: A freight booking.
+    required:
+    - shipments
+  v1alpha1CreateBookingRequest:
+    type: object
+    properties:
+      parent:
+        type: string
+        format: string
+        description: The space to create the booking in.
+        required:
+        - parent
+      booking:
+        $ref: '#/definitions/v1alpha1Booking'
+        description: The booking to create.
+    description: Request to the CreateBooking method.
+    required:
+    - parent
+  v1alpha1ListBookingsResponse:
+    type: object
+    properties:
+      bookings:
+        type: array
+        items:
+          $ref: '#/definitions/v1alpha1Booking'
+        description: The bookings in the specified space.
+      nextPageToken:
+        type: string
+        description: |-
+          A token, which can be sent as `page_token` to retrieve the next page.
+          If this field is omitted, there are no subsequent pages.
+    description: Response from the ListBookings method.
+securityDefinitions:
+  Authorization:
+    type: apiKey
+    name: authorization
+    in: header
+security:
+- Authorization: []

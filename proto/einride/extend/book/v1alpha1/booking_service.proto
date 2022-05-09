@@ -1,0 +1,278 @@
+syntax = "proto3";
+
+package einride.extend.book.v1alpha1;
+
+import "einride/extend/book/v1alpha1/booking.proto";
+import "google/api/annotations.proto";
+import "google/api/client.proto";
+import "google/api/field_behavior.proto";
+import "google/api/resource.proto";
+import "protoc-gen-openapiv2/options/annotations.proto";
+
+// A Saga space.
+option (google.api.resource_definition) = {
+  type: "api.saga.einride.tech/Space"
+  pattern: "spaces/{space}"
+};
+option (grpc.gateway.protoc_gen_openapiv2.options.openapiv2_swagger) = {
+  info: {
+    title: "Einride Extend";
+    version: "1-alpha1";
+    description:
+      "Based on REST principles, with support for gRPC, the Einride Extend APIs enable integrations and extensions to Einride's Saga platform.\n"
+      "\n"
+      "API design\n"
+      "----------\n"
+      "\n"
+      "The Extend APIs are designed using the [AIP](https://aip.dev) design framework, which means that they are resource-oriented and work like standard [REST](https://en.wikipedia.org/wiki/Representational_state_transfer) APIs.\n"
+      "\n"
+      "API specification\n"
+      "-----------------\n"
+      "\n"
+      "The APIs are specified and documented using the [Protocol Buffer](https://developers.google.com/protocol-buffers/docs/proto3) interface definition language.\n"
+      "\n"
+      "Protocols\n"
+      "---------\n"
+      "\n"
+      "Saga's APIs support both gRPC and HTTP protocols.\n"
+      "\n"
+      "### gRPC\n"
+      "\n"
+      "[gRPC](https://grpc.io) is a high performance, open source universal RPC framework that works across programming languages and platforms.\n"
+      "\n"
+      "To call Saga's APIs via gRPC, you can use the protobuf source files to generate a client for [your preferred language](https://grpc.io/docs/languages).\n"
+      "\n"
+      "The Saga APIs are also available via the [Buf Schema Registry](buf.build/einride/saga), which is a registry for openly sharing gRPC APIs between organizations. You can use one of the [remote generation plugins](https://docs.buf.build/tour/use-remote-generation) provided by Buf.\n"
+      "\n"
+      "### HTTP\n"
+      "\n"
+      "Saga's APIs are also available as RESTful HTTP endpoints, via automatic [gRPC to HTTP transcoding](https://google.aip.dev/127).\n"
+      "\n"
+      "See the [openapiv2](https://github.com/einride/extend/openapiv2) directory for the latest OpenAPI specifications, or use the API documentation at [extend.saga.einride.tech](https://extend.saga.einride.tech) where you can also try out the REST APIs and make example requests.\n"
+  };
+  schemes: HTTPS;
+  consumes: "application/json";
+  produces: "application/json";
+  security_definitions: {
+    security: {
+      key: "Authorization";
+      value: {
+        type: TYPE_API_KEY;
+        in: IN_HEADER;
+        name: "authorization";
+      }
+    }
+  }
+  security: {
+    security_requirement: {
+      key: "Authorization";
+      value: {};
+    }
+  }
+};
+
+// Freight booking service.
+service BookingService {
+  option (google.api.default_host) = "api.saga.einride.tech";
+
+  // Create a booking.
+  rpc CreateBooking(CreateBookingRequest) returns (Booking) {
+    option (google.api.http) = {
+      post: "/v1/{parent=spaces/*}/bookings"
+      body: "booking"
+    };
+    option (google.api.method_signature) = "parent,booking";
+    option (grpc.gateway.protoc_gen_openapiv2.options.openapiv2_operation) = {
+      summary: "Create a booking.";
+      responses: {
+        key: "200"
+        value: {
+          description: "OK";
+        }
+      }
+    };
+  }
+
+  // Get a booking.
+  rpc GetBooking(GetBookingRequest) returns (Booking) {
+    option (google.api.http) = {
+      get: "/v1/{name=spaces/*/bookings/*}"
+    };
+    option (google.api.method_signature) = "name";
+  }
+
+  // List bookings.
+  rpc ListBookings(ListBookingsRequest) returns (ListBookingsResponse) {
+    option (google.api.http) = {
+      get: "/v1/{parent=spaces/*}/bookings"
+    };
+    option (google.api.method_signature) = "parent";
+  }
+
+  // Batch get bookings.
+  rpc BatchGetBookings(BatchGetBookingsRequest) returns (BatchGetBookingsResponse) {
+    option (google.api.http) = {
+      get: "/v1/{parent=spaces/*}/bookings:batchGet"
+    };
+  }
+
+  // Batch create bookings.
+  rpc BatchCreateBookings(BatchCreateBookingsRequest) returns (BatchCreateBookingsResponse) {
+    option (google.api.http) = {
+      post: "/v1/{parent=spaces/*}/bookings:batchCreate"
+      body: "*"
+    };
+  }
+}
+
+// Request to the CreateBooking method.
+message CreateBookingRequest {
+  // Resource name of the space to create the booking in.
+  //
+  // Example: "spaces/example"
+  string parent = 1 [
+    (google.api.field_behavior) = REQUIRED,
+    (google.api.resource_reference) = {
+      type: "api.saga.einride.tech/Space"
+    },
+    (grpc.gateway.protoc_gen_openapiv2.options.openapiv2_field) = {
+      description: "The space to create the booking in.",
+      format: "string",
+      field_configuration: {
+        path_param_name: "space"
+      }
+    }
+  ];
+
+  // The booking to create.
+  Booking booking = 2 [(google.api.field_behavior) = REQUIRED];
+}
+
+// Request to the GetBooking method.
+message GetBookingRequest {
+  // The resource name of the booking to retrieve.
+  // Format: spaces/{space}/bookings/{booking}
+  string name = 1 [
+    (google.api.field_behavior) = REQUIRED,
+    (google.api.resource_reference) = {
+      type: "api.saga.einride.tech/Booking"
+    },
+    (grpc.gateway.protoc_gen_openapiv2.options.openapiv2_field) = {
+      description: "The booking to get.",
+      field_configuration: {
+        path_param_name: "booking"
+      }
+    }
+  ];
+}
+
+// Request to the ListBookings method.
+message ListBookingsRequest {
+  // The parent space to list bookings in.
+  // Format: spaces/{space}
+  string parent = 1 [
+    (google.api.field_behavior) = REQUIRED,
+    (google.api.resource_reference) = {
+      child_type: "api.saga.einride.tech/Space"
+    },
+    (grpc.gateway.protoc_gen_openapiv2.options.openapiv2_field) = {
+      description: "The space to list bookings in.",
+      field_configuration: {
+        path_param_name: "space"
+      }
+    }
+  ];
+
+  // The maximum number of results to return. The service may return fewer than
+  // this value.
+  // If unspecified, at most 50 results will be returned.
+  // The maximum value is 1000; values above 1000 will be coerced to 1000.
+  int32 page_size = 2;
+
+  // A page token, received from a previous call.
+  // Provide this to retrieve the subsequent page.
+  //
+  // When paginating, all other parameters provided must match
+  // the call that provided the page token.
+  string page_token = 3;
+}
+
+// Response from the ListBookings method.
+message ListBookingsResponse {
+  // The bookings in the specified space.
+  repeated Booking bookings = 1;
+
+  // A token, which can be sent as `page_token` to retrieve the next page.
+  // If this field is omitted, there are no subsequent pages.
+  string next_page_token = 2;
+}
+
+// Request to the BatchGetBookings method.
+message BatchGetBookingsRequest {
+  // The parent resource shared by all bookings being retrieved.
+  // Format: spaces/{space}
+  // If this is set, the parent of all of the bookings specified in `names`
+  // must match this field.
+  string parent = 1 [
+    (google.api.resource_reference) = {
+      type: "api.saga.einride.tech/Space"
+    },
+    (grpc.gateway.protoc_gen_openapiv2.options.openapiv2_field) = {
+      description: "The space shared by all bookings being retrieved.",
+      field_configuration: {
+        path_param_name: "space"
+      }
+    }
+  ];
+
+  // The names of the bookings to retrieve.
+  // A maximum of 1000 bookings can be retrieved in a batch.
+  // Format: spaces/{space}/bookings/{booking}
+  repeated string names = 2 [
+    (google.api.field_behavior) = REQUIRED,
+    (google.api.resource_reference) = {
+      type: "api.saga.einride.tech/Booking"
+    },
+    (grpc.gateway.protoc_gen_openapiv2.options.openapiv2_field) = {
+      description: "The bookings to retrieve.",
+      field_configuration: {
+        path_param_name: "bookings"
+      }
+    }
+  ];
+}
+
+// Response from the BatchGetBookings method.
+message BatchGetBookingsResponse {
+  // Bookings requested.
+  repeated Booking bookings = 1;
+}
+
+// Request to the BatchCreateBookings method.
+message BatchCreateBookingsRequest {
+  // The parent resource shared by all bookings being created.
+  // Format: spaces/{space}
+  // If this is set, the parent field in the request messages
+  // must either be empty or match this field.
+  string parent = 1 [
+    (google.api.resource_reference) = {
+      type: "api.saga.einride.tech/Space"
+    },
+    (grpc.gateway.protoc_gen_openapiv2.options.openapiv2_field) = {
+      description: "The space shared by all bookings being created.",
+      field_configuration: {
+        path_param_name: "space"
+      }
+    }
+  ];
+
+  // The request message specifying the resources to create.
+  // A maximum of 1000 bookings can be created in a batch.
+  repeated CreateBookingRequest requests = 2 [(google.api.field_behavior) = REQUIRED];
+}
+
+// Response from the BatchCreateBookings method.
+message BatchCreateBookingsResponse {
+  // The bookings created.
+  repeated Booking bookings = 1;
+}
