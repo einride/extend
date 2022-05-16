@@ -252,6 +252,17 @@ definitions:
        - PENDING: Initial status of an order.
        - ACCEPTED: The order have been accepted and cargo will be transported for customer.
        - REJECTED: The order have been rejected and cargo will not be transported for customer.
+  LineItemLoadUnit:
+    type: string
+    enum:
+    - EU_PALLET
+    - US_PALLET
+    description: |-
+      A load unit.
+
+       - LOAD_UNIT_UNSPECIFIED: The default value. This value is used if the load unit is omitted.
+       - EU_PALLET: EU pallet.
+       - US_PALLET: US pallet.
   LineItemWeightUnit:
     type: string
     enum:
@@ -260,24 +271,27 @@ definitions:
     description: |-
       A weight unit.
 
-       - WEIGHT_UNIT_UNSPECIFIED: The default value. This value is used if the state is omitted.
+       - WEIGHT_UNIT_UNSPECIFIED: The default value. This value is used if the weight unit is omitted.
        - KG: Kilogram (kg).
        - LB: Pound (lb).
   ShipmentLineItem:
     type: object
     properties:
-      quantity:
-        type: number
-        format: float
-        description: The number of line items of this type.
       description:
         type: string
         description: A description of this line item.
+      loadQuantity:
+        type: number
+        format: float
+        description: The number of line items of this type.
+      loadUnit:
+        $ref: '#/definitions/LineItemLoadUnit'
+        description: The unit of the load_quantity field.
       weightQuantity:
         type: number
         format: float
         description: The total weight of the line item.
-      weighUnit:
+      weightUnit:
         $ref: '#/definitions/LineItemWeightUnit'
         description: The unit of the weight_quantity field.
     description: Properties of each load unit in this shipment.

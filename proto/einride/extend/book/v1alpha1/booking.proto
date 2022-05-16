@@ -80,21 +80,36 @@ message Booking {
 
     // Properties of each load unit in this shipment.
     message LineItem {
-      // The number of line items of this type.
-      float quantity = 1;
-
       // A description of this line item.
-      string description = 2;
+      string description = 1;
+
+      // The number of line items of this type.
+      float load_quantity = 2;
+
+      // The unit of the load_quantity field.
+      LoadUnit load_unit = 3;
 
       // The total weight of the line item.
-      float weight_quantity = 3;
+      float weight_quantity = 4;
 
       // The unit of the weight_quantity field.
-      WeightUnit weigh_unit = 4;
+      WeightUnit weight_unit = 5;
+
+      // A load unit.
+      enum LoadUnit {
+        // The default value. This value is used if the load unit is omitted.
+        LOAD_UNIT_UNSPECIFIED = 0;
+
+        // EU pallet.
+        EU_PALLET = 1;
+
+        // US pallet.
+        US_PALLET = 2;
+      }
 
       // A weight unit.
       enum WeightUnit {
-        // The default value. This value is used if the state is omitted.
+        // The default value. This value is used if the weight unit is omitted.
         WEIGHT_UNIT_UNSPECIFIED = 0;
 
         // Kilogram (kg).
