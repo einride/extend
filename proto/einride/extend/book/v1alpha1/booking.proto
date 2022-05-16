@@ -54,26 +54,29 @@ message Booking {
 
   // Shipment in the transport order.
   message Shipment {
-    // Instructions related to this shipment.
-    string instructions = 1;
-
     // The customer reference id for this shipment.
-    string reference_id = 2;
-
-    // The pickup time interval.
-    google.type.Interval pickup_interval = 3 [(google.api.field_behavior) = REQUIRED];
-
-    // The delivery time interval.
-    google.type.Interval delivery_interval = 4 [(google.api.field_behavior) = REQUIRED];
+    string reference_id = 1;
 
     // The reference ID for the pickup location.
-    string pickup_site_reference_id = 5;
+    string pickup_site_reference_id = 2;
 
     // The reference ID for the delivery location.
-    string delivery_site_reference_id = 6;
+    string delivery_site_reference_id = 3;
+
+    // The pickup time interval.
+    google.type.Interval pickup_interval = 4 [(google.api.field_behavior) = REQUIRED];
+
+    // The delivery time interval.
+    google.type.Interval delivery_interval = 5 [(google.api.field_behavior) = REQUIRED];
+
+    // Pickup instructions related to this shipment.
+    string pickup_instructions = 6;
+
+    // Delivery instructions related to this shipment.
+    string delivery_instructions = 7;
 
     // The line items belonging to this shipment.
-    repeated LineItem line_items = 7;
+    repeated LineItem line_items = 8;
 
     // Properties of each load unit in this shipment.
     message LineItem {

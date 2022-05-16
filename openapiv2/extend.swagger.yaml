@@ -212,24 +212,27 @@ definitions:
   BookingShipment:
     type: object
     properties:
-      instructions:
-        type: string
-        description: Instructions related to this shipment.
       referenceId:
         type: string
         description: The customer reference id for this shipment.
-      pickupInterval:
-        $ref: '#/definitions/typeInterval'
-        description: The pickup time interval.
-      deliveryInterval:
-        $ref: '#/definitions/typeInterval'
-        description: The delivery time interval.
       pickupSiteReferenceId:
         type: string
         description: The reference ID for the pickup location.
       deliverySiteReferenceId:
         type: string
         description: The reference ID for the delivery location.
+      pickupInterval:
+        $ref: '#/definitions/typeInterval'
+        description: The pickup time interval.
+      deliveryInterval:
+        $ref: '#/definitions/typeInterval'
+        description: The delivery time interval.
+      pickupInstructions:
+        type: string
+        description: Pickup instructions related to this shipment.
+      deliveryInstructions:
+        type: string
+        description: Delivery instructions related to this shipment.
       lineItems:
         type: array
         items:
