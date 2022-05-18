@@ -42,7 +42,7 @@ consumes:
 produces:
 - application/json
 paths:
-  /v1/{booking}:
+  /v1alpha1/{booking}:
     get:
       summary: Get a booking.
       operationId: BookingService_GetBooking
@@ -64,7 +64,7 @@ paths:
         pattern: spaces/[^/]+/bookings/[^/]+
       tags:
       - BookingService
-  /v1/{space}/bookings:
+  /v1alpha1/{space}/bookings:
     get:
       summary: List bookings.
       operationId: BookingService_ListBookings
@@ -133,7 +133,7 @@ paths:
           $ref: '#/definitions/v1alpha1Booking'
       tags:
       - BookingService
-  /v1/{space}/bookings:batchCreate:
+  /v1alpha1/{space}/bookings:batchCreate:
     post:
       summary: Batch create bookings.
       operationId: BookingService_BatchCreateBookings
@@ -173,7 +173,7 @@ paths:
           - requests
       tags:
       - BookingService
-  /v1/{space}/bookings:batchGet:
+  /v1alpha1/{space}/bookings:batchGet:
     get:
       summary: Batch get bookings.
       operationId: BookingService_BatchGetBookings

@@ -78,7 +78,7 @@ service BookingService {
   // Create a booking.
   rpc CreateBooking(CreateBookingRequest) returns (Booking) {
     option (google.api.http) = {
-      post: "/v1/{parent=spaces/*}/bookings"
+      post: "/v1alpha1/{parent=spaces/*}/bookings"
       body: "booking"
     };
     option (google.api.method_signature) = "parent,booking";
@@ -96,7 +96,7 @@ service BookingService {
   // Get a booking.
   rpc GetBooking(GetBookingRequest) returns (Booking) {
     option (google.api.http) = {
-      get: "/v1/{name=spaces/*/bookings/*}"
+      get: "/v1alpha1/{name=spaces/*/bookings/*}"
     };
     option (google.api.method_signature) = "name";
   }
@@ -104,7 +104,7 @@ service BookingService {
   // List bookings.
   rpc ListBookings(ListBookingsRequest) returns (ListBookingsResponse) {
     option (google.api.http) = {
-      get: "/v1/{parent=spaces/*}/bookings"
+      get: "/v1alpha1/{parent=spaces/*}/bookings"
     };
     option (google.api.method_signature) = "parent";
   }
@@ -112,14 +112,14 @@ service BookingService {
   // Batch get bookings.
   rpc BatchGetBookings(BatchGetBookingsRequest) returns (BatchGetBookingsResponse) {
     option (google.api.http) = {
-      get: "/v1/{parent=spaces/*}/bookings:batchGet"
+      get: "/v1alpha1/{parent=spaces/*}/bookings:batchGet"
     };
   }
 
   // Batch create bookings.
   rpc BatchCreateBookings(BatchCreateBookingsRequest) returns (BatchCreateBookingsResponse) {
     option (google.api.http) = {
-      post: "/v1/{parent=spaces/*}/bookings:batchCreate"
+      post: "/v1alpha1/{parent=spaces/*}/bookings:batchCreate"
       body: "*"
     };
   }
