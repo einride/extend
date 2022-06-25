@@ -1,0 +1,54 @@
+<!doctype html>
+<html>
+  <head>
+    <script src="https://cdn.jsdelivr.net/gh/mrin9/RapiPdf@master/dist/rapipdf-min.js"></script>
+  </head>
+  <body>
+    <rapi-pdf
+      spec-url="openapiv2/book.swagger.yaml"
+      button-bg="#121212"
+      pdf-sort-tags="false"
+      pdf-primary-color="#121212"
+      pdf-alternate-color="#787878"
+      pdf-title="API Reference"
+      pdf-footer-text="Einride Copyright"
+      pdf-schema-style="table"
+      include-info="true"
+      include-toc="true"
+      include-security="false"
+      include-api-details="true"
+      include-api-list="false"
+      include-example="false"
+    >
+      <template>
+        {
+          "index": "INDEX",
+          "api": "API",
+          "apiList": "API List",
+          "apiReference": "API Reference",
+          "apiVersion": "API Version",
+          "contact": "CONTACT",
+          "name": "NAME",
+          "email": "EMAIL",
+          "url": "URL",
+          "termsOfService": "Terms of service",
+          "securitySchemes": "SECURITY SCHEMES",
+          "type": "TYPE",
+          "description": "DESCRIPTION",
+          "request": "REQUEST",
+          "requestBody": "REQUEST BODY",
+          "response": "RESPONSE",
+          "responseModel": "RESPONSE MODEL",
+          "statusCode": "STATUS CODE",
+          "deprecated": "DEPRECATED",
+          "allowed": "allowed",
+          "pattern": "pattern",
+          "parameters": "Parameters",
+          "method": "METHOD",
+          "securityAndAuthentication": "Security and Authentication",
+          "noRequestParameters": "No request parameters",
+        }
+      </template>
+    </rapi-pdf>
+  </body>
+</html>
