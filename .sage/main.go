@@ -2,6 +2,7 @@ package main
 
 import (
 	"context"
+	"net/http"
 
 	"go.einride.tech/sage/sg"
 	"go.einride.tech/sage/tools/sgconvco"
@@ -43,4 +44,16 @@ func FormatMarkdown(ctx context.Context) error {
 func GitVerifyNoDiff(ctx context.Context) error {
 	sg.Logger(ctx).Println("verifying that git has no diff...")
 	return sggit.VerifyNoDiff(ctx)
+}
+
+func ServePDF(ctx context.Context) error {
+	const addr = ":8080"
+	httpMux := http.NewServeMux()
+	httpMux.Handle("/openapiv2/", http.StripPrefix("/openapiv2", http.FileServer(http.Dir("./openapiv2"))))
+	httpMux.Handle("/", http.FileServer(http.Dir("./pdf")))
+	sg.Logger(ctx).Printf("listening on %s", addr)
+	return (&http.Server{
+		Addr:    addr,
+		Handler: httpMux,
+	}).ListenAndServe()
 }
