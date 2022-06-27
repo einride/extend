@@ -1,0 +1,355 @@
+syntax = "proto3";
+
+package einride.extend.book.v1beta1;
+
+import "einride/extend/book/v1beta1/location.proto";
+import "einride/extend/book/v1beta1/shipment.proto";
+import "google/api/annotations.proto";
+import "google/api/client.proto";
+import "google/api/field_behavior.proto";
+import "google/api/resource.proto";
+import "protoc-gen-openapiv2/options/annotations.proto";
+
+// A Saga space.
+option (google.api.resource_definition) = {
+  type: "api.saga.einride.tech/Space"
+  pattern: "spaces/{space}"
+};
+// A Saga organization.
+option (google.api.resource_definition) = {
+  type: "api.saga.einride.tech/Organization"
+  pattern: "organizations/{organization}"
+};
+// A Saga user.
+option (google.api.resource_definition) = {
+  type: "api.saga.einride.tech/User"
+  pattern: "organizations/{user}"
+};
+option (grpc.gateway.protoc_gen_openapiv2.options.openapiv2_swagger) = {
+  info: {
+    title: "Einride Extend: Book API";
+    version: "v1beta1";
+    description:
+      "Based on REST principles, with optional support for gRPC, the Einride Extend Book API enables modern API-based integration to Einride Saga for transport booking.\n"
+      "\n"
+      "API design\n"
+      "----------\n"
+      "\n"
+      "The Einride Extend APIs are designed using the [AIP](https://aip.dev) design framework, which means that they are resource-oriented and work like standard [REST](https://en.wikipedia.org/wiki/Representational_state_transfer) APIs.\n"
+      "\n"
+      "### Resource-oriented design\n"
+      "\n"
+      "*See also: [AIP-121: Resource-oriented design](https://google.aip.dev/121)*\n"
+      "\n"
+      "The fundamental building blocks of this API are individually-named resources (nouns) and the relationships and hierarchy that exist between them.\n"
+      "\n"
+      "A number of standard methods (verbs) provide the semantics for common [CRUD](https://en.wikipedia.org/wiki/Create,_read,_update_and_delete) operations. Custom methods are available where custom operations are required, such as for cancelling shipments.\n"
+      "\n"
+      "### Resource names\n"
+      "\n"
+      "*See also: [AIP-122: Resource names](https://google.aip.dev/122)*\n"
+      "\n"
+      "This API exposes resources which users are able to create, retrieve, and manipulate. Resources are named: each resource has a unique identifier that users use to reference that resource, and these names are what users should store as the canonical names for the resources.\n"
+      "\n"
+      "As such, the unique identifier for a resource in this API is called a *resource name*.\n"
+      "\n"
+      "Protocols\n"
+      "---------\n"
+      "\n"
+      "The Einride Extend APIs support both HTTP and gRPC protocols.\n"
+      "\n"
+      "### HTTP\n"
+      "\n"
+      "The Einride Extend APIs are available as RESTful HTTP endpoints.\n"
+      "\n"
+      "See this document for the OpenAPI specifications, or use the API documentation at [extend.saga.einride.tech](https://extend.saga.einride.tech), where you can also try out the REST APIs and make example requests.\n"
+      "\n"
+      "### gRPC\n"
+      "\n"
+      "[gRPC](https://grpc.io) is a high performance, open source universal RPC framework that works across programming languages and platforms.\n"
+      "\n"
+      "To for more information about using Einride Extend APIs via gRPC, please contact your Einride representative.\n"
+      "\n"
+      "Authentication\n"
+      "---------\n"
+      "\n"
+      "The Einride Extend use standard [Bearer token authentication](https://swagger.io/docs/specification/authentication/bearer-authentication/). When using the HTTP APIs, make sure to always provide the following header in all requests:\n"
+      "\n"
+      "\n"
+      "    Authorization: Bearer <token>\n"
+      "\n"
+      "\n"
+      "Where `<token>` is the authentication token for your integration. Please contact your Einride representative to obtain an authentication token for your integration.\n"
+      "\n"
+      "API address\n"
+      "---------\n"
+      "\n"
+      "The Einride Extend API is available via the following root address:\n"
+      "\n"
+      "https://api.saga.einride.tech\n"
+  };
+  schemes: HTTPS;
+  consumes: "application/json";
+  produces: "application/json";
+  security_definitions: {
+    security: {
+      key: "Authorization";
+      value: {
+        type: TYPE_API_KEY;
+        in: IN_HEADER;
+        name: "authorization";
+      }
+    }
+  }
+  security: {
+    security_requirement: {
+      key: "Authorization";
+      value: {};
+    }
+  }
+};
+
+// Book service.
+service BookService {
+  option (google.api.default_host) = "api.saga.einride.tech";
+
+  // Get a shipment.
+  //
+  // This is an AIP standard [Get](https://google.aip.dev/131) method.
+  rpc GetShipment(GetShipmentRequest) returns (Shipment) {
+    option (google.api.http) = {
+      get: "/v1beta1/{name=spaces/*/shipments/*}"
+    };
+    option (google.api.method_signature) = "name";
+  }
+
+  // List shipments in a space.
+  //
+  // This is an AIP standard [List](https://google.aip.dev/132) method.
+  rpc ListShipments(ListShipmentsRequest) returns (ListShipmentsResponse) {
+    option (google.api.http) = {
+      get: "/v1beta1/{parent=spaces/*}/shipments"
+    };
+    option (google.api.method_signature) = "parent";
+  }
+
+  // Create a shipment in a space.
+  //
+  // This is an AIP standard [Create](https://google.aip.dev/133) method.
+  rpc CreateShipment(CreateShipmentRequest) returns (Shipment) {
+    option (google.api.http) = {
+      post: "/v1beta1/{parent=spaces/*}/shipments"
+      body: "shipment"
+    };
+    option (google.api.method_signature) = "parent,shipment";
+  }
+
+  // Cancel a shipment.
+  //
+  // The state of the shipment after canceling is CANCELLED.
+  //
+  // This is an AIP [state](https://google.aip.dev/216) transition method.
+  rpc CancelShipment(CancelShipmentRequest) returns (Shipment) {
+    option (google.api.http) = {
+      post: "/v1beta1/{name=spaces/*/shipments/*}:cancel"
+      body: "*"
+    };
+  }
+
+  // Get a shipping location.
+  //
+  // This is an AIP standard [Get](https://google.aip.dev/131) method.
+  rpc GetLocation(GetLocationRequest) returns (Location) {
+    option (google.api.http) = {
+      get: "/v1beta1/{name=spaces/*/locations/*}"
+    };
+    option (google.api.method_signature) = "name";
+  }
+
+  // List shipping locations in a space.
+  //
+  // This is an AIP standard [List](https://google.aip.dev/132) method.
+  rpc ListLocations(ListLocationsRequest) returns (ListLocationsResponse) {
+    option (google.api.http) = {
+      get: "/v1beta1/{parent=spaces/*}/locations"
+    };
+    option (google.api.method_signature) = "parent";
+  }
+
+  // Create a shipping location in a space.
+  //
+  // This is an AIP standard [Create](https://google.aip.dev/133) method.
+  rpc CreateLocation(CreateLocationRequest) returns (Location) {
+    option (google.api.http) = {
+      post: "/v1beta1/{parent=spaces/*}/locations"
+      body: "location"
+    };
+    option (google.api.method_signature) = "parent,location";
+  }
+}
+
+// Request message for BookService.GetShipment.
+message GetShipmentRequest {
+  // The resource name of the shipment to retrieve.
+  string name = 1 [
+    (google.api.field_behavior) = REQUIRED,
+    (google.api.resource_reference) = {
+      type: "api.saga.einride.tech/Shipment"
+    },
+    (grpc.gateway.protoc_gen_openapiv2.options.openapiv2_field) = {
+      field_configuration: {
+        path_param_name: "shipment"
+      }
+    }
+  ];
+}
+
+// Request message for BookService.ListShipments.
+message ListShipmentsRequest {
+  // The parent space in which to list shipments.
+  string parent = 1 [
+    (google.api.field_behavior) = REQUIRED,
+    (google.api.resource_reference) = {
+      type: "api.saga.einride.tech/Space"
+    },
+    (grpc.gateway.protoc_gen_openapiv2.options.openapiv2_field) = {
+      field_configuration: {
+        path_param_name: "space"
+      }
+    }
+  ];
+
+  // The requested page size.
+  //
+  // The server may return fewer shipments than requested. If unspecified, the
+  // server will pick an appropriate default.
+  int32 page_size = 2;
+
+  // A token identifying a page of results the server should return.
+  //
+  // Typically, this is the value of next_page_token returned from the previous
+  // call to list shipments.
+  string page_token = 3;
+}
+
+// Response message for BookService.ListShipments.
+message ListShipmentsResponse {
+  // The current page of shipments being listed.
+  repeated Shipment shipments = 1;
+
+  // A token to retrieve next page of results.
+  //
+  // Pass this value in the page_token field in the subsequent call to list
+  // shipments to retrieve the next page of results.
+  string next_page_token = 2;
+}
+
+// Request message for BookService.CreateShipment.
+message CreateShipmentRequest {
+  // The parent space in which to create the shipment.
+  string parent = 1 [
+    (google.api.field_behavior) = REQUIRED,
+    (google.api.resource_reference) = {
+      type: "api.saga.einride.tech/Space"
+    },
+    (grpc.gateway.protoc_gen_openapiv2.options.openapiv2_field) = {
+      field_configuration: {
+        path_param_name: "space"
+      }
+    }
+  ];
+
+  // The shipment to create.
+  Shipment shipment = 2 [(google.api.field_behavior) = REQUIRED];
+}
+
+// Request message for BookService.CancelShipment.
+message CancelShipmentRequest {
+  // The resource name of the shipment to cancel.
+  string name = 1 [
+    (google.api.field_behavior) = REQUIRED,
+    (google.api.resource_reference) = {
+      type: "api.saga.einride.tech/Shipment"
+    },
+    (grpc.gateway.protoc_gen_openapiv2.options.openapiv2_field) = {
+      field_configuration: {
+        path_param_name: "shipment"
+      }
+    }
+  ];
+}
+
+// Request message for BookService.GetLocation.
+message GetLocationRequest {
+  // The resource name of the shipping location to retrieve.
+  string name = 1 [
+    (google.api.field_behavior) = REQUIRED,
+    (google.api.resource_reference) = {
+      type: "api.saga.einride.tech/Location"
+    },
+    (grpc.gateway.protoc_gen_openapiv2.options.openapiv2_field) = {
+      field_configuration: {
+        path_param_name: "location"
+      }
+    }
+  ];
+}
+
+// Request message for BookService.ListLocations.
+message ListLocationsRequest {
+  // The parent space in which to list shipping locations.
+  string parent = 1 [
+    (google.api.field_behavior) = REQUIRED,
+    (google.api.resource_reference) = {
+      type: "api.saga.einride.tech/Space"
+    },
+    (grpc.gateway.protoc_gen_openapiv2.options.openapiv2_field) = {
+      field_configuration: {
+        path_param_name: "space"
+      }
+    }
+  ];
+
+  // The requested page size.
+  //
+  // The server may return fewer locations than requested. If unspecified, the
+  // server will pick an appropriate default.
+  int32 page_size = 2;
+
+  // A token identifying a page of results the server should return.
+  //
+  // Typically, this is the value of next_page_token returned from the previous
+  // call to list shipping locations.
+  string page_token = 3;
+}
+
+// Response message for BookService.ListLocations.
+message ListLocationsResponse {
+  // The current page of shipping locations being listed.
+  repeated Location locations = 1;
+
+  // A token to retrieve next page of results.
+  //
+  // Pass this value in the page_token field in the subsequent call to
+  // list shipping locations to retrieve the next page of results.
+  string next_page_token = 2;
+}
+
+// Request message for BookService.CreateLocation.
+message CreateLocationRequest {
+  // The parent space in which to create the shipping location.
+  string parent = 1 [
+    (google.api.field_behavior) = REQUIRED,
+    (google.api.resource_reference) = {
+      type: "api.saga.einride.tech/Space"
+    },
+    (grpc.gateway.protoc_gen_openapiv2.options.openapiv2_field) = {
+      field_configuration: {
+        path_param_name: "space"
+      }
+    }
+  ];
+
+  // The shipping location to create.
+  Location location = 2 [(google.api.field_behavior) = REQUIRED];
+}

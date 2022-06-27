@@ -17,7 +17,7 @@ type Proto sg.Namespace
 func (Proto) Default(ctx context.Context) error {
 	sg.Deps(ctx, Proto.BufFormat, Proto.BufLint, Proto.BufReadme)
 	sg.Deps(ctx, Proto.APILinterLint)
-	sg.Deps(ctx, Proto.BufGenerate, Proto.BufGenerateCLI)
+	sg.Deps(ctx, Proto.BufGenerate, Proto.BufGenerateBook, Proto.BufGenerateCLI)
 	return nil
 }
 
@@ -100,7 +100,24 @@ func (Proto) BufGenerate(ctx context.Context) error {
 		"--template",
 		"buf.gen.yaml",
 		"--path",
-		"einride",
+		"einride/extend/book/v1beta1",
+	)
+	cmd.Dir = sg.FromGitRoot("proto")
+	return cmd.Run()
+}
+
+func (Proto) BufGenerateBook(ctx context.Context) error {
+	sg.Deps(ctx, Proto.ProtocGenOpenAPIV2)
+	sg.Logger(ctx).Println("generating proto stubs...")
+	cmd := sgbuf.Command(
+		ctx,
+		"generate",
+		"--output",
+		sg.FromGitRoot(),
+		"--template",
+		"buf.gen.book.yaml",
+		"--path",
+		"einride/extend/book/v1beta1",
 	)
 	cmd.Dir = sg.FromGitRoot("proto")
 	return cmd.Run()
@@ -123,7 +140,7 @@ func (Proto) BufGenerateCLI(ctx context.Context) error {
 		"--template",
 		"buf.gen.cli.yaml",
 		"--path",
-		"einride",
+		"einride/extend/book/v1beta1",
 	)
 	cmd.Dir = sg.FromGitRoot("proto")
 	if err := cmd.Run(); err != nil {
