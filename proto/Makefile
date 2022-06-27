@@ -33,6 +33,10 @@ buf-format: $(sagefile)
 buf-generate: $(sagefile)
 	@$(sagefile) Proto:BufGenerate
 
+.PHONY: buf-generate-book
+buf-generate-book: $(sagefile)
+	@$(sagefile) Proto:BufGenerateBook
+
 .PHONY: buf-generate-cli
 buf-generate-cli: $(sagefile)
 	@$(sagefile) Proto:BufGenerateCLI
