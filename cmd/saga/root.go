@@ -4,7 +4,7 @@
 package main
 
 import (
-	v1alpha1 "github.com/einride/saga/cmd/saga/einride/extend/book/v1alpha1"
+	v1beta1 "github.com/einride/saga/cmd/saga/einride/extend/book/v1beta1"
 	cobra "github.com/spf13/cobra"
 	cli "go.einride.tech/protoc-gen-go-cli/cli"
 )
@@ -13,7 +13,7 @@ func NewRootCommand() *cobra.Command {
 	cmd := &cobra.Command{
 		Use: "saga",
 	}
-	cmd.AddCommand(v1alpha1.NewBookingServiceCommand("booking"))
+	cmd.AddCommand(v1beta1.NewBookServiceCommand("book"))
 	return cmd
 }
 

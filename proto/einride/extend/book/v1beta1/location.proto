@@ -1,0 +1,64 @@
+syntax = "proto3";
+
+package einride.extend.book.v1beta1;
+
+import "einride/extend/book/v1beta1/address.proto";
+import "google/api/field_behavior.proto";
+import "google/api/resource.proto";
+import "google/protobuf/timestamp.proto";
+import "google/type/latlng.proto";
+
+// A shipping location represents a physical place where shipments can be picked up or delivered to.
+message Location {
+  option (google.api.resource) = {
+    type: "book.saga.einride.tech/Location"
+    pattern: "spaces/{space}/locations/{location}"
+    plural: "locations"
+    singular: "location"
+  };
+  // The resource name of the shipping location.
+  string name = 1 [(google.api.field_behavior) = OUTPUT_ONLY];
+  // Resource name of the space that owns the shipping location.
+  string space = 2 [
+    (google.api.field_behavior) = OUTPUT_ONLY,
+    (google.api.resource_reference) = {
+      type: "api.saga.einride.tech/Space"
+    }
+  ];
+  // Indicates if the shipping location is deleted.
+  bool deleted = 3 [(google.api.field_behavior) = OUTPUT_ONLY];
+  // The creation timestamp of the shipping location.
+  google.protobuf.Timestamp create_time = 4 [(google.api.field_behavior) = OUTPUT_ONLY];
+  // The last update timestamp of the shipping location.
+  // Updated when create/update/delete operation is performed.
+  google.protobuf.Timestamp update_time = 5 [(google.api.field_behavior) = OUTPUT_ONLY];
+  // The deletion timestamp of the shipping location.
+  google.protobuf.Timestamp delete_time = 6 [(google.api.field_behavior) = OUTPUT_ONLY];
+  // This checksum is computed by the server based on the value of other
+  // fields, and may be sent on update and delete requests to ensure the
+  // client has an up-to-date value before proceeding.
+  string etag = 7 [(google.api.field_behavior) = OUTPUT_ONLY];
+
+  // Resource name of the user who created the shipping location, if it was created manually.
+  string creator_user = 8 [
+    (google.api.field_behavior) = OUTPUT_ONLY,
+    (google.api.resource_reference).type = "api.saga.einride.tech/User"
+  ];
+  // Resource name of the organization for which the user created the shipping location, if it was created manually.
+  string creator_organization = 9 [
+    (google.api.field_behavior) = OUTPUT_ONLY,
+    (google.api.resource_reference).type = "api.saga.einride.tech/Organization"
+  ];
+  // The display name of the location.
+  string display_name = 11 [(google.api.field_behavior) = REQUIRED];
+  // The address of the location.
+  Address address = 12 [(google.api.field_behavior) = REQUIRED];
+  // A comment about this location.
+  string comment = 13;
+  // Contacts regarding this location.
+  string contacts = 14;
+  // An external reference for this location.
+  string external_reference_id = 15;
+  // The geographic location of the location.
+  google.type.LatLng lat_lng = 16;
+}

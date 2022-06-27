@@ -1,0 +1,141 @@
+syntax = "proto3";
+
+package einride.extend.book.v1beta1;
+
+import "einride/extend/book/v1beta1/address.proto";
+import "google/api/field_behavior.proto";
+import "google/api/resource.proto";
+import "google/protobuf/timestamp.proto";
+
+// A shipment represents a demand to deliver goods from an origin to a destination.
+message Shipment {
+  option (google.api.resource) = {
+    type: "api.saga.einride.tech/Shipment"
+    pattern: "spaces/{space}/shipments/{shipment}"
+    plural: "shipments"
+    singular: "shipment"
+  };
+  // The resource name of the shipment.
+  string name = 1 [(google.api.field_behavior) = OUTPUT_ONLY];
+  // Resource name of the space that owns the shipment.
+  string space = 2 [
+    (google.api.field_behavior) = OUTPUT_ONLY,
+    (google.api.resource_reference) = {
+      type: "api.saga.einride.tech/Space"
+    }
+  ];
+  // Indicates if the shipment is deleted.
+  bool deleted = 3 [(google.api.field_behavior) = OUTPUT_ONLY];
+  // The creation timestamp of the shipment.
+  google.protobuf.Timestamp create_time = 4 [(google.api.field_behavior) = OUTPUT_ONLY];
+  // The last update timestamp of the shipment.
+  // Updated when create/update/delete operation is performed.
+  google.protobuf.Timestamp update_time = 5 [(google.api.field_behavior) = OUTPUT_ONLY];
+  // The deletion timestamp of the shipment.
+  google.protobuf.Timestamp delete_time = 6 [(google.api.field_behavior) = OUTPUT_ONLY];
+  // This checksum is computed by the server based on the value of other
+  // fields, and may be sent on update and delete requests to ensure the
+  // client has an up-to-date value before proceeding.
+  string etag = 7 [(google.api.field_behavior) = OUTPUT_ONLY];
+
+  // Resource name of the user who created the shipment, if it was created manually.
+  string creator_user = 8 [
+    (google.api.field_behavior) = OUTPUT_ONLY,
+    (google.api.resource_reference).type = "api.saga.einride.tech/User"
+  ];
+  // Resource name of the organization for which the user created the shipment, if it was created manually.
+  string creator_organization = 9 [
+    (google.api.field_behavior) = OUTPUT_ONLY,
+    (google.api.resource_reference).type = "api.saga.einride.tech/Organization"
+  ];
+  // Origin from where the shipment was created, e.g. BOOK_APP, DELIVER_APP, BOOKCTL
+  string creator_origin = 10 [(google.api.field_behavior) = OUTPUT_ONLY];
+  // An external reference for this shipment.
+  string external_reference_id = 11 [(google.api.field_behavior) = IMMUTABLE];
+
+  // Shipment stops
+  repeated Stop stops = 12;
+
+  // Shipment units
+  repeated Unit units = 13;
+
+  // Shipment state
+  State state = 14 [(google.api.field_behavior) = OUTPUT_ONLY];
+
+  // Shipment state
+  enum State {
+    // Unspecified shipment state.
+    STATE_UNSPECIFIED = 0;
+    // Shipment is active and open for modification (initial state).
+    ACTIVE = 1;
+    // Shipment is ready for pickup.
+    RELEASED = 2;
+    // Shipment is cancelled.
+    CANCELLED = 3;
+  }
+}
+
+// A stop is where goods are picked up or delivered.
+message Stop {
+  // The id of the stop.
+  string id = 1 [(google.api.field_behavior) = OUTPUT_ONLY];
+  // The destination of the stop.
+  oneof destination {
+    // The location resource name of the stop.
+    string location = 2 [(google.api.resource_reference) = {
+      type: "api.saga.einride.tech/Location"
+    }];
+    // The address of the stop.
+    Address address = 3;
+  }
+  // Type of stop.
+  Type type = 4 [(google.api.field_behavior) = REQUIRED];
+  // Instructions on the stop, for example which trailer to pick up or park the trailer at space 123 at lot B.
+  string instructions = 5;
+  // State of the stop.
+  State state = 6 [(google.api.field_behavior) = OUTPUT_ONLY];
+  // IDs of units picked up or delivered at stop.
+  repeated string unit_ids = 7 [(google.api.field_behavior) = OUTPUT_ONLY];
+
+  // Stop state
+  enum State {
+    // Unspecified stop state
+    STATE_UNSPECIFIED = 0;
+    // Stop is not reached yet
+    AWAITING = 1;
+    // Stop is in progress, goods are currently delivered or picked up.
+    IN_PROGRESS = 2;
+    // Stop is done, goods are delivered or picked up.
+    DONE = 3;
+  }
+
+  // Stop type
+  enum Type {
+    // Unspecified stop type
+    TYPE_UNSPECIFIED = 0;
+    // Stop where goods are picked up
+    PICKUP = 1;
+    // Stop where goods are delivered
+    DELIVER = 2;
+  }
+}
+
+// A unit is a holder of goods such as a EUR-pallet.
+message Unit {
+  // The id of the unit
+  string id = 1 [(google.api.field_behavior) = OUTPUT_ONLY];
+  // Type of unit
+  string type = 2 [(google.api.field_behavior) = REQUIRED];
+  // Unique tracking ID
+  string tracking_id = 3 [(google.api.field_behavior) = OUTPUT_ONLY];
+  // Weight in kilograms
+  float weight_kg = 4;
+  // External reference
+  string external_reference = 5;
+  // Description of the unit
+  string description = 6;
+  // ID of stop where unit is picked up
+  string pickup_stop_id = 7 [(google.api.field_behavior) = OUTPUT_ONLY];
+  // ID of stop where unit is delivered
+  string deliver_stop_id = 8 [(google.api.field_behavior) = OUTPUT_ONLY];
+}
