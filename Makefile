@@ -37,6 +37,10 @@ format-markdown: $(sagefile)
 git-verify-no-diff: $(sagefile)
 	@$(sagefile) GitVerifyNoDiff
 
+.PHONY: serve-pdf
+serve-pdf: $(sagefile)
+	@$(sagefile) ServePDF
+
 .PHONY: proto
 proto:
 	$(MAKE) -C proto -f Makefile

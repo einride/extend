@@ -1,0 +1,25 @@
+syntax = "proto3";
+
+package einride.extend.book.v1beta1;
+
+import "google/api/field_behavior.proto";
+
+// Address
+message Address {
+  // Address reference ID
+  string reference_id = 1 [(google.api.field_behavior) = IMMUTABLE];
+  // Address recipient
+  string recipient = 2 [(google.api.field_behavior) = REQUIRED];
+  // Address care of (C/O)
+  string co = 3;
+  // Address line 1
+  string address_line1 = 4 [(google.api.field_behavior) = REQUIRED];
+  // Address line 2
+  string address_line2 = 5;
+  // Address postal code
+  string postal_code = 6 [(google.api.field_behavior) = REQUIRED];
+  // Address city
+  string city = 7 [(google.api.field_behavior) = REQUIRED];
+  // Address region code
+  string region_code = 8 [(google.api.field_behavior) = REQUIRED];
+}
