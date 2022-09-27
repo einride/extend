@@ -173,7 +173,7 @@ message ListBookingsRequest {
   string parent = 1 [
     (google.api.field_behavior) = REQUIRED,
     (google.api.resource_reference) = {
-      child_type: "api.saga.einride.tech/Space"
+      type: "api.saga.einride.tech/Space"
     },
     (grpc.gateway.protoc_gen_openapiv2.options.openapiv2_field) = {
       description: "The space to list bookings in.",

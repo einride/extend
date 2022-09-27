@@ -22,13 +22,19 @@ const _ = grpc.SupportPackageIsVersion7
 //
 // For semantics around ctx use and closing/ending streaming RPCs, please refer to https://pkg.go.dev/google.golang.org/grpc/?tab=doc#ClientConn.NewStream.
 type ShipmentServiceClient interface {
-	// List shipments in a space.
-	// See: https://google.aip.dev/132 (Standard methods: List).
-	ListShipments(ctx context.Context, in *ListShipmentsRequest, opts ...grpc.CallOption) (*ListShipmentsResponse, error)
 	// Create a shipment in a space.
-	// See: https://google.aip.dev/133 (Standard methods: Create).
+	//
+	// This is an AIP standard [Create](https://google.aip.dev/133) method.
 	CreateShipment(ctx context.Context, in *CreateShipmentRequest, opts ...grpc.CallOption) (*Shipment, error)
-	// Release shipment.
+	// Get a shipment.
+	//
+	// This is an AIP standard [Get](https://google.aip.dev/131) method.
+	GetShipment(ctx context.Context, in *GetShipmentRequest, opts ...grpc.CallOption) (*Shipment, error)
+	// Release a shipment.
+	//
+	// The state of the shipment after releasing it is RELEASED.
+	//
+	// This is an AIP [state](https://google.aip.dev/216) transition method.
 	ReleaseShipment(ctx context.Context, in *ReleaseShipmentRequest, opts ...grpc.CallOption) (*Shipment, error)
 }
 
@@ -40,18 +46,18 @@ func NewShipmentServiceClient(cc grpc.ClientConnInterface) ShipmentServiceClient
 	return &shipmentServiceClient{cc}
 }
 
-func (c *shipmentServiceClient) ListShipments(ctx context.Context, in *ListShipmentsRequest, opts ...grpc.CallOption) (*ListShipmentsResponse, error) {
-	out := new(ListShipmentsResponse)
-	err := c.cc.Invoke(ctx, "/einride.extend.book.v1beta1.ShipmentService/ListShipments", in, out, opts...)
+func (c *shipmentServiceClient) CreateShipment(ctx context.Context, in *CreateShipmentRequest, opts ...grpc.CallOption) (*Shipment, error) {
+	out := new(Shipment)
+	err := c.cc.Invoke(ctx, "/einride.extend.book.v1beta1.ShipmentService/CreateShipment", in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
 	return out, nil
 }
 
-func (c *shipmentServiceClient) CreateShipment(ctx context.Context, in *CreateShipmentRequest, opts ...grpc.CallOption) (*Shipment, error) {
+func (c *shipmentServiceClient) GetShipment(ctx context.Context, in *GetShipmentRequest, opts ...grpc.CallOption) (*Shipment, error) {
 	out := new(Shipment)
-	err := c.cc.Invoke(ctx, "/einride.extend.book.v1beta1.ShipmentService/CreateShipment", in, out, opts...)
+	err := c.cc.Invoke(ctx, "/einride.extend.book.v1beta1.ShipmentService/GetShipment", in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
@@ -71,13 +77,19 @@ func (c *shipmentServiceClient) ReleaseShipment(ctx context.Context, in *Release
 // All implementations must embed UnimplementedShipmentServiceServer
 // for forward compatibility
 type ShipmentServiceServer interface {
-	// List shipments in a space.
-	// See: https://google.aip.dev/132 (Standard methods: List).
-	ListShipments(context.Context, *ListShipmentsRequest) (*ListShipmentsResponse, error)
 	// Create a shipment in a space.
-	// See: https://google.aip.dev/133 (Standard methods: Create).
+	//
+	// This is an AIP standard [Create](https://google.aip.dev/133) method.
 	CreateShipment(context.Context, *CreateShipmentRequest) (*Shipment, error)
-	// Release shipment.
+	// Get a shipment.
+	//
+	// This is an AIP standard [Get](https://google.aip.dev/131) method.
+	GetShipment(context.Context, *GetShipmentRequest) (*Shipment, error)
+	// Release a shipment.
+	//
+	// The state of the shipment after releasing it is RELEASED.
+	//
+	// This is an AIP [state](https://google.aip.dev/216) transition method.
 	ReleaseShipment(context.Context, *ReleaseShipmentRequest) (*Shipment, error)
 	mustEmbedUnimplementedShipmentServiceServer()
 }
@@ -86,11 +98,11 @@ type ShipmentServiceServer interface {
 type UnimplementedShipmentServiceServer struct {
 }
 
-func (UnimplementedShipmentServiceServer) ListShipments(context.Context, *ListShipmentsRequest) (*ListShipmentsResponse, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method ListShipments not implemented")
-}
 func (UnimplementedShipmentServiceServer) CreateShipment(context.Context, *CreateShipmentRequest) (*Shipment, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method CreateShipment not implemented")
+}
+func (UnimplementedShipmentServiceServer) GetShipment(context.Context, *GetShipmentRequest) (*Shipment, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method GetShipment not implemented")
 }
 func (UnimplementedShipmentServiceServer) ReleaseShipment(context.Context, *ReleaseShipmentRequest) (*Shipment, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method ReleaseShipment not implemented")
@@ -108,24 +120,6 @@ func RegisterShipmentServiceServer(s grpc.ServiceRegistrar, srv ShipmentServiceS
 	s.RegisterService(&ShipmentService_ServiceDesc, srv)
 }
 
-func _ShipmentService_ListShipments_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(ListShipmentsRequest)
-	if err := dec(in); err != nil {
-		return nil, err
-	}
-	if interceptor == nil {
-		return srv.(ShipmentServiceServer).ListShipments(ctx, in)
-	}
-	info := &grpc.UnaryServerInfo{
-		Server:     srv,
-		FullMethod: "/einride.extend.book.v1beta1.ShipmentService/ListShipments",
-	}
-	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(ShipmentServiceServer).ListShipments(ctx, req.(*ListShipmentsRequest))
-	}
-	return interceptor(ctx, in, info, handler)
-}
-
 func _ShipmentService_CreateShipment_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
 	in := new(CreateShipmentRequest)
 	if err := dec(in); err != nil {
@@ -140,6 +134,24 @@ func _ShipmentService_CreateShipment_Handler(srv interface{}, ctx context.Contex
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
 		return srv.(ShipmentServiceServer).CreateShipment(ctx, req.(*CreateShipmentRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _ShipmentService_GetShipment_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(GetShipmentRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(ShipmentServiceServer).GetShipment(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/einride.extend.book.v1beta1.ShipmentService/GetShipment",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(ShipmentServiceServer).GetShipment(ctx, req.(*GetShipmentRequest))
 	}
 	return interceptor(ctx, in, info, handler)
 }
@@ -170,12 +182,12 @@ var ShipmentService_ServiceDesc = grpc.ServiceDesc{
 	HandlerType: (*ShipmentServiceServer)(nil),
 	Methods: []grpc.MethodDesc{
 		{
-			MethodName: "ListShipments",
-			Handler:    _ShipmentService_ListShipments_Handler,
-		},
-		{
 			MethodName: "CreateShipment",
 			Handler:    _ShipmentService_CreateShipment_Handler,
+		},
+		{
+			MethodName: "GetShipment",
+			Handler:    _ShipmentService_GetShipment_Handler,
 		},
 		{
 			MethodName: "ReleaseShipment",
