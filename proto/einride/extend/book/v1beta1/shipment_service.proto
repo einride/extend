@@ -2,7 +2,6 @@ syntax = "proto3";
 
 package einride.extend.book.v1beta1;
 
-import "einride/extend/book/v1beta1/location.proto";
 import "einride/extend/book/v1beta1/shipment.proto";
 import "google/api/annotations.proto";
 import "google/api/client.proto";
@@ -25,12 +24,22 @@ option (google.api.resource_definition) = {
   type: "api.saga.einride.tech/User"
   pattern: "organizations/{user}"
 };
+// A Saga sender.
+option (google.api.resource_definition) = {
+  type: "api.saga.einride.tech/Sender"
+  pattern: "spaces/{space}/senders/{sender}"
+};
+// A Saga booking.
+option (google.api.resource_definition) = {
+  type: "api.saga.einride.tech/Booking"
+  pattern: "spaces/{space}/bookings/{booking}"
+};
 option (grpc.gateway.protoc_gen_openapiv2.options.openapiv2_swagger) = {
   info: {
-    title: "Einride Extend: Book API";
+    title: "Einride Extend: Shipment API";
     version: "v1beta1";
     description:
-      "Based on REST principles, with optional support for gRPC, the Einride Extend Book API enables modern API-based integration to Einride Saga for transport booking.\n"
+      "Based on REST principles, with optional support for gRPC, the Einride Extend Shipment API enables modern API-based integration to Einride Saga for transport booking.\n"
       "\n"
       "API design\n"
       "----------\n"
@@ -109,29 +118,9 @@ option (grpc.gateway.protoc_gen_openapiv2.options.openapiv2_swagger) = {
   }
 };
 
-// Book service.
-service BookService {
+// Shipment service.
+service ShipmentService {
   option (google.api.default_host) = "api.saga.einride.tech";
-
-  // Get a shipment.
-  //
-  // This is an AIP standard [Get](https://google.aip.dev/131) method.
-  rpc GetShipment(GetShipmentRequest) returns (Shipment) {
-    option (google.api.http) = {
-      get: "/v1beta1/{name=spaces/*/shipments/*}"
-    };
-    option (google.api.method_signature) = "name";
-  }
-
-  // List shipments in a space.
-  //
-  // This is an AIP standard [List](https://google.aip.dev/132) method.
-  rpc ListShipments(ListShipmentsRequest) returns (ListShipmentsResponse) {
-    option (google.api.http) = {
-      get: "/v1beta1/{parent=spaces/*}/shipments"
-    };
-    option (google.api.method_signature) = "parent";
-  }
 
   // Create a shipment in a space.
   //
@@ -144,104 +133,27 @@ service BookService {
     option (google.api.method_signature) = "parent,shipment";
   }
 
-  // Cancel a shipment.
-  //
-  // The state of the shipment after canceling is CANCELLED.
-  //
-  // This is an AIP [state](https://google.aip.dev/216) transition method.
-  rpc CancelShipment(CancelShipmentRequest) returns (Shipment) {
-    option (google.api.http) = {
-      post: "/v1beta1/{name=spaces/*/shipments/*}:cancel"
-      body: "*"
-    };
-  }
-
-  // Get a shipping location.
+  // Get a shipment.
   //
   // This is an AIP standard [Get](https://google.aip.dev/131) method.
-  rpc GetLocation(GetLocationRequest) returns (Location) {
+  rpc GetShipment(GetShipmentRequest) returns (Shipment) {
     option (google.api.http) = {
-      get: "/v1beta1/{name=spaces/*/locations/*}"
+      get: "/v1beta1/{name=spaces/*/shipments/*}"
     };
     option (google.api.method_signature) = "name";
   }
 
-  // List shipping locations in a space.
+  // Release a shipment.
   //
-  // This is an AIP standard [List](https://google.aip.dev/132) method.
-  rpc ListLocations(ListLocationsRequest) returns (ListLocationsResponse) {
+  // The state of the shipment after releasing it is RELEASED.
+  //
+  // This is an AIP [state](https://google.aip.dev/216) transition method.
+  rpc ReleaseShipment(ReleaseShipmentRequest) returns (Shipment) {
     option (google.api.http) = {
-      get: "/v1beta1/{parent=spaces/*}/locations"
+      post: "/v1beta1/{name=spaces/*/shipments/*}:release"
+      body: "*"
     };
-    option (google.api.method_signature) = "parent";
   }
-
-  // Create a shipping location in a space.
-  //
-  // This is an AIP standard [Create](https://google.aip.dev/133) method.
-  rpc CreateLocation(CreateLocationRequest) returns (Location) {
-    option (google.api.http) = {
-      post: "/v1beta1/{parent=spaces/*}/locations"
-      body: "location"
-    };
-    option (google.api.method_signature) = "parent,location";
-  }
-}
-
-// Request message for BookService.GetShipment.
-message GetShipmentRequest {
-  // The resource name of the shipment to retrieve.
-  string name = 1 [
-    (google.api.field_behavior) = REQUIRED,
-    (google.api.resource_reference) = {
-      type: "api.saga.einride.tech/Shipment"
-    },
-    (grpc.gateway.protoc_gen_openapiv2.options.openapiv2_field) = {
-      field_configuration: {
-        path_param_name: "shipment"
-      }
-    }
-  ];
-}
-
-// Request message for BookService.ListShipments.
-message ListShipmentsRequest {
-  // The parent space in which to list shipments.
-  string parent = 1 [
-    (google.api.field_behavior) = REQUIRED,
-    (google.api.resource_reference) = {
-      type: "api.saga.einride.tech/Space"
-    },
-    (grpc.gateway.protoc_gen_openapiv2.options.openapiv2_field) = {
-      field_configuration: {
-        path_param_name: "space"
-      }
-    }
-  ];
-
-  // The requested page size.
-  //
-  // The server may return fewer shipments than requested. If unspecified, the
-  // server will pick an appropriate default.
-  int32 page_size = 2;
-
-  // A token identifying a page of results the server should return.
-  //
-  // Typically, this is the value of next_page_token returned from the previous
-  // call to list shipments.
-  string page_token = 3;
-}
-
-// Response message for BookService.ListShipments.
-message ListShipmentsResponse {
-  // The current page of shipments being listed.
-  repeated Shipment shipments = 1;
-
-  // A token to retrieve next page of results.
-  //
-  // Pass this value in the page_token field in the subsequent call to list
-  // shipments to retrieve the next page of results.
-  string next_page_token = 2;
 }
 
 // Request message for BookService.CreateShipment.
@@ -263,9 +175,9 @@ message CreateShipmentRequest {
   Shipment shipment = 2 [(google.api.field_behavior) = REQUIRED];
 }
 
-// Request message for BookService.CancelShipment.
-message CancelShipmentRequest {
-  // The resource name of the shipment to cancel.
+// Request message for BookService.GetShipment.
+message GetShipmentRequest {
+  // The resource name of the shipment to retrieve.
   string name = 1 [
     (google.api.field_behavior) = REQUIRED,
     (google.api.resource_reference) = {
@@ -279,77 +191,18 @@ message CancelShipmentRequest {
   ];
 }
 
-// Request message for BookService.GetLocation.
-message GetLocationRequest {
-  // The resource name of the shipping location to retrieve.
+// Request message for BookService.ReleaseShipment.
+message ReleaseShipmentRequest {
+  // The resource name of the shipment to release.
   string name = 1 [
     (google.api.field_behavior) = REQUIRED,
     (google.api.resource_reference) = {
-      type: "api.saga.einride.tech/Location"
+      type: "api.saga.einride.tech/Shipment"
     },
     (grpc.gateway.protoc_gen_openapiv2.options.openapiv2_field) = {
       field_configuration: {
-        path_param_name: "location"
+        path_param_name: "shipment"
       }
     }
   ];
-}
-
-// Request message for BookService.ListLocations.
-message ListLocationsRequest {
-  // The parent space in which to list shipping locations.
-  string parent = 1 [
-    (google.api.field_behavior) = REQUIRED,
-    (google.api.resource_reference) = {
-      type: "api.saga.einride.tech/Space"
-    },
-    (grpc.gateway.protoc_gen_openapiv2.options.openapiv2_field) = {
-      field_configuration: {
-        path_param_name: "space"
-      }
-    }
-  ];
-
-  // The requested page size.
-  //
-  // The server may return fewer locations than requested. If unspecified, the
-  // server will pick an appropriate default.
-  int32 page_size = 2;
-
-  // A token identifying a page of results the server should return.
-  //
-  // Typically, this is the value of next_page_token returned from the previous
-  // call to list shipping locations.
-  string page_token = 3;
-}
-
-// Response message for BookService.ListLocations.
-message ListLocationsResponse {
-  // The current page of shipping locations being listed.
-  repeated Location locations = 1;
-
-  // A token to retrieve next page of results.
-  //
-  // Pass this value in the page_token field in the subsequent call to
-  // list shipping locations to retrieve the next page of results.
-  string next_page_token = 2;
-}
-
-// Request message for BookService.CreateLocation.
-message CreateLocationRequest {
-  // The parent space in which to create the shipping location.
-  string parent = 1 [
-    (google.api.field_behavior) = REQUIRED,
-    (google.api.resource_reference) = {
-      type: "api.saga.einride.tech/Space"
-    },
-    (grpc.gateway.protoc_gen_openapiv2.options.openapiv2_field) = {
-      field_configuration: {
-        path_param_name: "space"
-      }
-    }
-  ];
-
-  // The shipping location to create.
-  Location location = 2 [(google.api.field_behavior) = REQUIRED];
 }

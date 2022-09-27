@@ -2,7 +2,6 @@ syntax = "proto3";
 
 package einride.extend.book.v1beta1;
 
-import "einride/extend/book/v1beta1/address.proto";
 import "google/api/field_behavior.proto";
 import "google/api/resource.proto";
 import "google/protobuf/timestamp.proto";
@@ -24,118 +23,202 @@ message Shipment {
       type: "api.saga.einride.tech/Space"
     }
   ];
-  // Indicates if the shipment is deleted.
-  bool deleted = 3 [(google.api.field_behavior) = OUTPUT_ONLY];
+  // Resource name of the sender of the shipment.
+  string sender = 3 [
+    (google.api.field_behavior) = REQUIRED,
+    (google.api.resource_reference) = {
+      type: "api.saga.einride.tech/Sender"
+    }
+  ];
   // The creation timestamp of the shipment.
   google.protobuf.Timestamp create_time = 4 [(google.api.field_behavior) = OUTPUT_ONLY];
   // The last update timestamp of the shipment.
   // Updated when create/update/delete operation is performed.
   google.protobuf.Timestamp update_time = 5 [(google.api.field_behavior) = OUTPUT_ONLY];
-  // The deletion timestamp of the shipment.
+  // The deletion timestamp of the shipment. Set if the shipment is deleted.
   google.protobuf.Timestamp delete_time = 6 [(google.api.field_behavior) = OUTPUT_ONLY];
-  // This checksum is computed by the server based on the value of other
-  // fields, and may be sent on update and delete requests to ensure the
-  // client has an up-to-date value before proceeding.
-  string etag = 7 [(google.api.field_behavior) = OUTPUT_ONLY];
 
-  // Resource name of the user who created the shipment, if it was created manually.
-  string creator_user = 8 [
-    (google.api.field_behavior) = OUTPUT_ONLY,
-    (google.api.resource_reference).type = "api.saga.einride.tech/User"
-  ];
-  // Resource name of the organization for which the user created the shipment, if it was created manually.
-  string creator_organization = 9 [
-    (google.api.field_behavior) = OUTPUT_ONLY,
-    (google.api.resource_reference).type = "api.saga.einride.tech/Organization"
-  ];
-  // Origin from where the shipment was created, e.g. BOOK_APP, DELIVER_APP, BOOKCTL
-  string creator_origin = 10 [(google.api.field_behavior) = OUTPUT_ONLY];
-  // An external reference for this shipment.
-  string external_reference_id = 11 [(google.api.field_behavior) = IMMUTABLE];
+  // A generated tracking ID for this shipment.
+  string tracking_id = 7 [(google.api.field_behavior) = OUTPUT_ONLY];
 
-  // Shipment stops
-  repeated Stop stops = 12;
+  // The location where the shipment is picked up. Supply when creating shipment if different from the sender location.
+  Location pickup_location = 8;
+
+  // Instructions for the pickup.
+  string pickup_instructions = 9;
+
+  // The shipment should be picked up after this time
+  google.protobuf.Timestamp requested_pickup_start_time = 10;
+
+  // The shipment should be picked up before this time
+  google.protobuf.Timestamp requested_pickup_end_time = 11;
+
+  // The location where the shipment is delivered to.
+  Location delivery_location = 12 [(google.api.field_behavior) = REQUIRED];
+
+  // Instructions for the delivery.
+  string delivery_instructions = 13;
+
+  // The shipment should be delivered after this time
+  google.protobuf.Timestamp requested_delivery_start_time = 14;
+
+  // The shipment should be delivered before this time
+  google.protobuf.Timestamp requested_delivery_end_time = 15;
 
   // Shipment units
-  repeated Unit units = 13;
+  repeated Unit units = 16 [(google.api.field_behavior) = REQUIRED];
+
+  // An external reference for this shipment.
+  string external_reference_id = 17 [(google.api.field_behavior) = IMMUTABLE];
+
+  // Resource name of the booking this shipment relates to.
+  string booking = 18 [(google.api.resource_reference) = {
+    type: "api.saga.einride.tech/Booking"
+  }];
 
   // Shipment state
-  State state = 14 [(google.api.field_behavior) = OUTPUT_ONLY];
+  // Can be set to ACTIVE (default) or RELEASED when creating a shipment.
+  State state = 19;
 
   // Shipment state
   enum State {
     // Unspecified shipment state.
     STATE_UNSPECIFIED = 0;
-    // Shipment is active and open for modification (initial state).
+    // Shipment is active (initial state).
     ACTIVE = 1;
     // Shipment is ready for pickup.
     RELEASED = 2;
-    // Shipment is cancelled.
-    CANCELLED = 3;
+  }
+
+  // Shipment delivery state
+  DeliveryState delivery_state = 20 [(google.api.field_behavior) = OUTPUT_ONLY];
+
+  // Shipment delivery state
+  enum DeliveryState {
+    // Unspecified shipment delivery state
+    DELIVERY_STATE_UNSPECIFIED = 0;
+    // Shipment delivery hasn't started
+    AWAITING = 1;
+    // Shipment is in transit
+    IN_TRANSIT = 2;
+    // Shipment is delivered
+    DELIVERED = 3;
   }
 }
 
-// A stop is where goods are picked up or delivered.
-message Stop {
-  // The id of the stop.
-  string id = 1 [(google.api.field_behavior) = OUTPUT_ONLY];
-  // The destination of the stop.
-  oneof destination {
-    // The location resource name of the stop.
-    string location = 2 [(google.api.resource_reference) = {
-      type: "api.saga.einride.tech/Location"
-    }];
-    // The address of the stop.
-    Address address = 3;
-  }
-  // Type of stop.
-  Type type = 4 [(google.api.field_behavior) = REQUIRED];
-  // Instructions on the stop, for example which trailer to pick up or park the trailer at space 123 at lot B.
-  string instructions = 5;
-  // State of the stop.
-  State state = 6 [(google.api.field_behavior) = OUTPUT_ONLY];
-  // IDs of units picked up or delivered at stop.
-  repeated string unit_ids = 7 [(google.api.field_behavior) = OUTPUT_ONLY];
-
-  // Stop state
-  enum State {
-    // Unspecified stop state
-    STATE_UNSPECIFIED = 0;
-    // Stop is not reached yet
-    AWAITING = 1;
-    // Stop is in progress, goods are currently delivered or picked up.
-    IN_PROGRESS = 2;
-    // Stop is done, goods are delivered or picked up.
-    DONE = 3;
-  }
-
-  // Stop type
-  enum Type {
-    // Unspecified stop type
-    TYPE_UNSPECIFIED = 0;
-    // Stop where goods are picked up
-    PICKUP = 1;
-    // Stop where goods are delivered
-    DELIVER = 2;
-  }
+// A location is where goods are picked up or delivered.
+message Location {
+  // Address recipient
+  string address_recipient = 1 [(google.api.field_behavior) = REQUIRED];
+  // Address care of (C/O)
+  string address_co = 2;
+  // Address line 1
+  string address_line1 = 3 [(google.api.field_behavior) = REQUIRED];
+  // Address line 2
+  string address_line2 = 4;
+  // Address postal code
+  string address_postal_code = 5 [(google.api.field_behavior) = REQUIRED];
+  // Address city
+  string address_city = 6 [(google.api.field_behavior) = REQUIRED];
+  // Address country code (ISO 3166-1 alpha-2
+  // https://en.wikipedia.org/wiki/ISO_3166-1_alpha-2
+  string address_country_code = 7 [(google.api.field_behavior) = REQUIRED];
+  // Address state code
+  string address_state_code = 8;
+  // The displayed name of the location.
+  string display_name = 9;
+  // Location contact information.
+  string contacts = 10;
+  // The latitude of the location in degrees. It must be in the range [-90.0, +90.0].
+  double latitude = 11;
+  // The longitude of the location in degrees. It must be in the range [-180.0, +180.0].
+  double longitude = 12;
 }
 
 // A unit is a holder of goods such as a EUR-pallet.
 message Unit {
-  // The id of the unit
-  string id = 1 [(google.api.field_behavior) = OUTPUT_ONLY];
   // Type of unit
-  string type = 2 [(google.api.field_behavior) = REQUIRED];
-  // Unique tracking ID
-  string tracking_id = 3 [(google.api.field_behavior) = OUTPUT_ONLY];
-  // Weight in kilograms
-  float weight_kg = 4;
-  // External reference
-  string external_reference = 5;
+  Type type = 1 [(google.api.field_behavior) = REQUIRED];
+  // External reference ID of the unit
+  string external_reference_id = 2;
   // Description of the unit
-  string description = 6;
-  // ID of stop where unit is picked up
-  string pickup_stop_id = 7 [(google.api.field_behavior) = OUTPUT_ONLY];
-  // ID of stop where unit is delivered
-  string deliver_stop_id = 8 [(google.api.field_behavior) = OUTPUT_ONLY];
+  string description = 3;
+  // Unique unit tracking ID
+  string tracking_id = 4 [(google.api.field_behavior) = OUTPUT_ONLY];
+  // Unit weight
+  Weight weight = 5 [(google.api.field_behavior) = REQUIRED];
+  // Unit length
+  Length length = 6;
+  // Unit height
+  Length height = 7;
+  // Unit width
+  Length width = 8;
+  // Unit volume
+  Volume volume = 9;
+
+  // Unit type
+  enum Type {
+    // Unspecified type
+    TYPE_UNSPECIFIED = 0;
+    // Euro pallet unit type
+    EURO_PALLET = 1;
+    // US pallet unit type
+    US_PALLET = 2;
+    // Loading meter unit type
+    LOADING_METER = 3;
+  }
+
+  // Weight specified in different units
+  message Weight {
+    // Weight value
+    double value = 1 [(google.api.field_behavior) = REQUIRED];
+    // Weight unit
+    Unit unit = 2 [(google.api.field_behavior) = REQUIRED];
+
+    // Weight units
+    enum Unit {
+      // Unspecified unit
+      UNIT_UNSPECIFIED = 0;
+      // Kilograms
+      KG = 1;
+      // Pounds
+      LBS = 2;
+    }
+  }
+
+  // Length specified in different units
+  message Length {
+    // Length value
+    double value = 1 [(google.api.field_behavior) = REQUIRED];
+    // Length unit
+    Unit unit = 2 [(google.api.field_behavior) = REQUIRED];
+
+    // Length units
+    enum Unit {
+      // Unspecified unit
+      UNIT_UNSPECIFIED = 0;
+      // Centimeters
+      CM = 1;
+      // Inches
+      IN = 2;
+    }
+  }
+
+  // Volume specified in different units
+  message Volume {
+    // Volume value
+    double value = 1 [(google.api.field_behavior) = REQUIRED];
+    // Volume unit
+    Unit unit = 2 [(google.api.field_behavior) = REQUIRED];
+
+    // Volume units
+    enum Unit {
+      // Unspecified unit
+      UNIT_UNSPECIFIED = 0;
+      // Cubic meters
+      CBM = 1;
+      // Cubic feet
+      CBFT = 2;
+    }
+  }
 }
