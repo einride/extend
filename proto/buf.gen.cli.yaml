@@ -3,26 +3,21 @@ version: v1
 managed:
   enabled: true
   go_package_prefix:
-    default: github.com/einride/saga/cmd/saga
+    default: github.com/einride/saga/cmd/saga/gen
     except:
       - buf.build/googleapis/googleapis
       - buf.build/grpc-ecosystem/grpc-gateway
 
 plugins:
   - name: go
-    out: cmd/saga
-    opt: module=github.com/einride/saga/cmd/saga
+    out: cmd/saga/gen
+    opt: module=github.com/einride/saga/cmd/saga/gen
 
-  - name: go-grpc
-    out: cmd/saga
-    opt: module=github.com/einride/saga/cmd/saga
-
-  - name: go-cli
-    out: cmd/saga
+  - name: go-aip-cli
+    out: cmd/saga/gen
     strategy: all
     opt:
-      - module=github.com/einride/saga/cmd/saga
+      - module=github.com/einride/saga/cmd/saga/gen
       - root=saga
-      - main=true
       - hosts=prod=api.saga.einride.tech
       - default_host=prod
