@@ -83,9 +83,9 @@ default: $(sagefile)
 protoc-gen-go: $(sagefile)
 	@$(sagefile) Proto:ProtocGenGo
 
-.PHONY: protoc-gen-go-cli
-protoc-gen-go-cli: $(sagefile)
-	@$(sagefile) Proto:ProtocGenGoCLI
+.PHONY: protoc-gen-go-aip-cli
+protoc-gen-go-aip-cli: $(sagefile)
+	@$(sagefile) Proto:ProtocGenGoAipCli
 
 .PHONY: protoc-gen-open-apiv-2
 protoc-gen-open-apiv-2: $(sagefile)

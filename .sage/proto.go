@@ -76,11 +76,11 @@ func (Proto) ProtocGenOpenAPIV2(ctx context.Context) error {
 	return err
 }
 
-func (Proto) ProtocGenGoCLI(ctx context.Context) error {
+func (Proto) ProtocGenGoAipCli(ctx context.Context) error {
 	sg.Logger(ctx).Println("installing...")
 	_, err := sgtool.GoInstallWithModfile(
 		ctx,
-		"go.einride.tech/protoc-gen-go-cli",
+		"go.einride.tech/aip-cli/cmd/protoc-gen-go-aip-cli",
 		sg.FromGitRoot("cmd", "saga", "go.mod"),
 	)
 	return err
@@ -129,9 +129,12 @@ func (Proto) BufGenerateCLI(ctx context.Context) error {
 		sgprotoc.PrepareCommand,
 		sgprotocgengogrpc.PrepareCommand,
 		Proto.ProtocGenGo,
-		Proto.ProtocGenGoCLI,
+		Proto.ProtocGenGoAipCli,
 	)
 	sg.Logger(ctx).Println("generating protobuf stubs...")
+	if err := os.RemoveAll(sg.FromGitRoot("cmd", "saga", "gen")); err != nil {
+		return err
+	}
 	cmd := sgbuf.Command(
 		ctx,
 		"generate",
