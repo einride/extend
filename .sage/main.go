@@ -8,6 +8,7 @@ import (
 	"go.einride.tech/sage/tools/sgconvco"
 	"go.einride.tech/sage/tools/sggit"
 	"go.einride.tech/sage/tools/sgmarkdownfmt"
+	"go.einride.tech/sage/tools/sgyamlfmt"
 )
 
 func main() {
@@ -16,6 +17,7 @@ func main() {
 			Path:          sg.FromGitRoot("Makefile"),
 			DefaultTarget: Default,
 		},
+
 		sg.Makefile{
 			Path:          sg.FromGitRoot("proto", "Makefile"),
 			Namespace:     Proto{},
@@ -25,7 +27,7 @@ func main() {
 }
 
 func Default(ctx context.Context) error {
-	sg.Deps(ctx, ConvcoCheck, FormatMarkdown)
+	sg.Deps(ctx, ConvcoCheck, FormatMarkdown, FormatYaml)
 	sg.Deps(ctx, Proto.Default)
 	sg.Deps(ctx, GitVerifyNoDiff)
 	return nil
@@ -39,6 +41,11 @@ func ConvcoCheck(ctx context.Context) error {
 func FormatMarkdown(ctx context.Context) error {
 	sg.Logger(ctx).Println("formatting Markdown files...")
 	return sgmarkdownfmt.Command(ctx, "-w", ".").Run()
+}
+
+func FormatYaml(ctx context.Context) error {
+	sg.Logger(ctx).Println("formatting YAML files...")
+	return sgyamlfmt.Run(ctx)
 }
 
 func GitVerifyNoDiff(ctx context.Context) error {
