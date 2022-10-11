@@ -2,7 +2,7 @@
 // versions:
 // - protoc-gen-go-grpc v1.2.0
 // - protoc             (unknown)
-// source: einride/extend/book/v1beta1/shipment_service.proto
+// source: einride/saga/extend/book/v1beta1/shipment_service.proto
 
 package bookv1beta1
 
@@ -48,7 +48,7 @@ func NewShipmentServiceClient(cc grpc.ClientConnInterface) ShipmentServiceClient
 
 func (c *shipmentServiceClient) CreateShipment(ctx context.Context, in *CreateShipmentRequest, opts ...grpc.CallOption) (*Shipment, error) {
 	out := new(Shipment)
-	err := c.cc.Invoke(ctx, "/einride.extend.book.v1beta1.ShipmentService/CreateShipment", in, out, opts...)
+	err := c.cc.Invoke(ctx, "/einride.saga.extend.book.v1beta1.ShipmentService/CreateShipment", in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
@@ -57,7 +57,7 @@ func (c *shipmentServiceClient) CreateShipment(ctx context.Context, in *CreateSh
 
 func (c *shipmentServiceClient) GetShipment(ctx context.Context, in *GetShipmentRequest, opts ...grpc.CallOption) (*Shipment, error) {
 	out := new(Shipment)
-	err := c.cc.Invoke(ctx, "/einride.extend.book.v1beta1.ShipmentService/GetShipment", in, out, opts...)
+	err := c.cc.Invoke(ctx, "/einride.saga.extend.book.v1beta1.ShipmentService/GetShipment", in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
@@ -66,7 +66,7 @@ func (c *shipmentServiceClient) GetShipment(ctx context.Context, in *GetShipment
 
 func (c *shipmentServiceClient) ReleaseShipment(ctx context.Context, in *ReleaseShipmentRequest, opts ...grpc.CallOption) (*Shipment, error) {
 	out := new(Shipment)
-	err := c.cc.Invoke(ctx, "/einride.extend.book.v1beta1.ShipmentService/ReleaseShipment", in, out, opts...)
+	err := c.cc.Invoke(ctx, "/einride.saga.extend.book.v1beta1.ShipmentService/ReleaseShipment", in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
@@ -128,7 +128,7 @@ func _ShipmentService_CreateShipment_Handler(srv interface{}, ctx context.Contex
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: "/einride.extend.book.v1beta1.ShipmentService/CreateShipment",
+		FullMethod: "/einride.saga.extend.book.v1beta1.ShipmentService/CreateShipment",
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
 		return srv.(ShipmentServiceServer).CreateShipment(ctx, req.(*CreateShipmentRequest))
@@ -146,7 +146,7 @@ func _ShipmentService_GetShipment_Handler(srv interface{}, ctx context.Context, 
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: "/einride.extend.book.v1beta1.ShipmentService/GetShipment",
+		FullMethod: "/einride.saga.extend.book.v1beta1.ShipmentService/GetShipment",
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
 		return srv.(ShipmentServiceServer).GetShipment(ctx, req.(*GetShipmentRequest))
@@ -164,7 +164,7 @@ func _ShipmentService_ReleaseShipment_Handler(srv interface{}, ctx context.Conte
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: "/einride.extend.book.v1beta1.ShipmentService/ReleaseShipment",
+		FullMethod: "/einride.saga.extend.book.v1beta1.ShipmentService/ReleaseShipment",
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
 		return srv.(ShipmentServiceServer).ReleaseShipment(ctx, req.(*ReleaseShipmentRequest))
@@ -176,7 +176,7 @@ func _ShipmentService_ReleaseShipment_Handler(srv interface{}, ctx context.Conte
 // It's only intended for direct use with grpc.RegisterService,
 // and not to be introspected or modified (even as a copy)
 var ShipmentService_ServiceDesc = grpc.ServiceDesc{
-	ServiceName: "einride.extend.book.v1beta1.ShipmentService",
+	ServiceName: "einride.saga.extend.book.v1beta1.ShipmentService",
 	HandlerType: (*ShipmentServiceServer)(nil),
 	Methods: []grpc.MethodDesc{
 		{
@@ -193,5 +193,5 @@ var ShipmentService_ServiceDesc = grpc.ServiceDesc{
 		},
 	},
 	Streams:  []grpc.StreamDesc{},
-	Metadata: "einride/extend/book/v1beta1/shipment_service.proto",
+	Metadata: "einride/saga/extend/book/v1beta1/shipment_service.proto",
 }

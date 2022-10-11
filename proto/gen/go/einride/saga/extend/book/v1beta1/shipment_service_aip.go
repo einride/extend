@@ -3,7 +3,7 @@
 // versions:
 // 	protoc-gen-go-aip development
 // 	protoc (unknown)
-// source: einride/extend/book/v1beta1/shipment_service.proto
+// source: einride/saga/extend/book/v1beta1/shipment_service.proto
 
 package bookv1beta1
 

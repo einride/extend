@@ -3,7 +3,7 @@
 // versions:
 // 	protoc-gen-go-aip development
 // 	protoc (unknown)
-// source: einride/extend/book/v1alpha1/booking_service.proto
+// source: einride/saga/extend/book/v1alpha1/booking_service.proto
 
 package bookv1alpha1
 

@@ -21,7 +21,7 @@ type Proto sg.Namespace
 func (Proto) Default(ctx context.Context) error {
 	sg.Deps(ctx, Proto.BufFormat, Proto.BufLint, Proto.BufReadme)
 	sg.Deps(ctx, Proto.APILinterLint)
-	sg.Deps(ctx, Proto.BufGenerateBook, Proto.BufGenerateCLI)
+	sg.Deps(ctx, Proto.BufGenerate, Proto.BufGenerateBook, Proto.BufGenerateCLI)
 	return nil
 }
 
