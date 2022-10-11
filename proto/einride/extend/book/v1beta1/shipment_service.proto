@@ -3,6 +3,7 @@ syntax = "proto3";
 package einride.extend.book.v1beta1;
 
 import "einride/extend/book/v1beta1/shipment.proto";
+import "einride/iam/v1/annotations.proto";
 import "google/api/annotations.proto";
 import "google/api/client.proto";
 import "google/api/field_behavior.proto";
@@ -131,6 +132,13 @@ service ShipmentService {
       body: "shipment"
     };
     option (google.api.method_signature) = "parent,shipment";
+    option (einride.iam.v1.method_authorization) = {
+      permission: "book.shipments.create"
+      before: {
+        expression: "test(caller, request.parent)"
+        description: "The caller must have permission to create a shipment in the parent space."
+      }
+    };
   }
 
   // Get a shipment.
@@ -141,6 +149,13 @@ service ShipmentService {
       get: "/v1beta1/{name=spaces/*/shipments/*}"
     };
     option (google.api.method_signature) = "name";
+    option (einride.iam.v1.method_authorization) = {
+      permission: "book.shipments.get"
+      before: {
+        expression: "test(caller, request.name)"
+        description: "The caller must have permission to get the shipment"
+      }
+    };
   }
 
   // Release a shipment.
@@ -152,6 +167,14 @@ service ShipmentService {
     option (google.api.http) = {
       post: "/v1beta1/{name=spaces/*/shipments/*}:release"
       body: "*"
+    };
+    option (google.api.method_signature) = "name";
+    option (einride.iam.v1.method_authorization) = {
+      permission: "book.shipments.release"
+      before: {
+        expression: "test(caller, request.name)"
+        description: "The caller must have permission to release shipment."
+      }
     };
   }
 }
