@@ -1,6 +1,6 @@
 syntax = "proto3";
 
-package einride.extend.book.v1beta1;
+package einride.saga.extend.book.v1alpha1;
 
 import "einride/serviceconfig/v1/annotations.proto";
 

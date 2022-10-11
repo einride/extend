@@ -1,8 +1,8 @@
 syntax = "proto3";
 
-package einride.extend.book.v1alpha1;
+package einride.saga.extend.book.v1alpha1;
 
-import "einride/extend/book/v1alpha1/booking.proto";
+import "einride/saga/extend/book/v1alpha1/booking.proto";
 import "google/api/annotations.proto";
 import "google/api/client.proto";
 import "google/api/field_behavior.proto";

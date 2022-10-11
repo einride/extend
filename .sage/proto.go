@@ -147,7 +147,7 @@ func (Proto) BufGenerateBook(ctx context.Context) error {
 		"--template",
 		"buf.gen.book.yaml",
 		"--path",
-		"einride/extend/book/v1beta1",
+		"einride/saga/extend/book/v1beta1",
 	)
 	cmd.Dir = sg.FromGitRoot("proto")
 	return cmd.Run()
@@ -173,7 +173,7 @@ func (Proto) BufGenerateCLI(ctx context.Context) error {
 		"--template",
 		"buf.gen.cli.yaml",
 		"--path",
-		"einride/extend/book/v1beta1",
+		"einride/saga/extend/book/v1beta1",
 	)
 	cmd.Dir = sg.FromGitRoot("proto")
 	if err := cmd.Run(); err != nil {
