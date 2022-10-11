@@ -2,7 +2,7 @@
 // versions:
 // - protoc-gen-go-grpc v1.2.0
 // - protoc             (unknown)
-// source: einride/extend/book/v1alpha1/booking_service.proto
+// source: einride/saga/extend/book/v1alpha1/booking_service.proto
 
 package bookv1alpha1
 
@@ -44,7 +44,7 @@ func NewBookingServiceClient(cc grpc.ClientConnInterface) BookingServiceClient {
 
 func (c *bookingServiceClient) CreateBooking(ctx context.Context, in *CreateBookingRequest, opts ...grpc.CallOption) (*Booking, error) {
 	out := new(Booking)
-	err := c.cc.Invoke(ctx, "/einride.extend.book.v1alpha1.BookingService/CreateBooking", in, out, opts...)
+	err := c.cc.Invoke(ctx, "/einride.saga.extend.book.v1alpha1.BookingService/CreateBooking", in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
@@ -53,7 +53,7 @@ func (c *bookingServiceClient) CreateBooking(ctx context.Context, in *CreateBook
 
 func (c *bookingServiceClient) GetBooking(ctx context.Context, in *GetBookingRequest, opts ...grpc.CallOption) (*Booking, error) {
 	out := new(Booking)
-	err := c.cc.Invoke(ctx, "/einride.extend.book.v1alpha1.BookingService/GetBooking", in, out, opts...)
+	err := c.cc.Invoke(ctx, "/einride.saga.extend.book.v1alpha1.BookingService/GetBooking", in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
@@ -62,7 +62,7 @@ func (c *bookingServiceClient) GetBooking(ctx context.Context, in *GetBookingReq
 
 func (c *bookingServiceClient) ListBookings(ctx context.Context, in *ListBookingsRequest, opts ...grpc.CallOption) (*ListBookingsResponse, error) {
 	out := new(ListBookingsResponse)
-	err := c.cc.Invoke(ctx, "/einride.extend.book.v1alpha1.BookingService/ListBookings", in, out, opts...)
+	err := c.cc.Invoke(ctx, "/einride.saga.extend.book.v1alpha1.BookingService/ListBookings", in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
@@ -71,7 +71,7 @@ func (c *bookingServiceClient) ListBookings(ctx context.Context, in *ListBooking
 
 func (c *bookingServiceClient) BatchGetBookings(ctx context.Context, in *BatchGetBookingsRequest, opts ...grpc.CallOption) (*BatchGetBookingsResponse, error) {
 	out := new(BatchGetBookingsResponse)
-	err := c.cc.Invoke(ctx, "/einride.extend.book.v1alpha1.BookingService/BatchGetBookings", in, out, opts...)
+	err := c.cc.Invoke(ctx, "/einride.saga.extend.book.v1alpha1.BookingService/BatchGetBookings", in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
@@ -80,7 +80,7 @@ func (c *bookingServiceClient) BatchGetBookings(ctx context.Context, in *BatchGe
 
 func (c *bookingServiceClient) BatchCreateBookings(ctx context.Context, in *BatchCreateBookingsRequest, opts ...grpc.CallOption) (*BatchCreateBookingsResponse, error) {
 	out := new(BatchCreateBookingsResponse)
-	err := c.cc.Invoke(ctx, "/einride.extend.book.v1alpha1.BookingService/BatchCreateBookings", in, out, opts...)
+	err := c.cc.Invoke(ctx, "/einride.saga.extend.book.v1alpha1.BookingService/BatchCreateBookings", in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
@@ -144,7 +144,7 @@ func _BookingService_CreateBooking_Handler(srv interface{}, ctx context.Context,
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: "/einride.extend.book.v1alpha1.BookingService/CreateBooking",
+		FullMethod: "/einride.saga.extend.book.v1alpha1.BookingService/CreateBooking",
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
 		return srv.(BookingServiceServer).CreateBooking(ctx, req.(*CreateBookingRequest))
@@ -162,7 +162,7 @@ func _BookingService_GetBooking_Handler(srv interface{}, ctx context.Context, de
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: "/einride.extend.book.v1alpha1.BookingService/GetBooking",
+		FullMethod: "/einride.saga.extend.book.v1alpha1.BookingService/GetBooking",
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
 		return srv.(BookingServiceServer).GetBooking(ctx, req.(*GetBookingRequest))
@@ -180,7 +180,7 @@ func _BookingService_ListBookings_Handler(srv interface{}, ctx context.Context, 
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: "/einride.extend.book.v1alpha1.BookingService/ListBookings",
+		FullMethod: "/einride.saga.extend.book.v1alpha1.BookingService/ListBookings",
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
 		return srv.(BookingServiceServer).ListBookings(ctx, req.(*ListBookingsRequest))
@@ -198,7 +198,7 @@ func _BookingService_BatchGetBookings_Handler(srv interface{}, ctx context.Conte
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: "/einride.extend.book.v1alpha1.BookingService/BatchGetBookings",
+		FullMethod: "/einride.saga.extend.book.v1alpha1.BookingService/BatchGetBookings",
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
 		return srv.(BookingServiceServer).BatchGetBookings(ctx, req.(*BatchGetBookingsRequest))
@@ -216,7 +216,7 @@ func _BookingService_BatchCreateBookings_Handler(srv interface{}, ctx context.Co
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: "/einride.extend.book.v1alpha1.BookingService/BatchCreateBookings",
+		FullMethod: "/einride.saga.extend.book.v1alpha1.BookingService/BatchCreateBookings",
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
 		return srv.(BookingServiceServer).BatchCreateBookings(ctx, req.(*BatchCreateBookingsRequest))
@@ -228,7 +228,7 @@ func _BookingService_BatchCreateBookings_Handler(srv interface{}, ctx context.Co
 // It's only intended for direct use with grpc.RegisterService,
 // and not to be introspected or modified (even as a copy)
 var BookingService_ServiceDesc = grpc.ServiceDesc{
-	ServiceName: "einride.extend.book.v1alpha1.BookingService",
+	ServiceName: "einride.saga.extend.book.v1alpha1.BookingService",
 	HandlerType: (*BookingServiceServer)(nil),
 	Methods: []grpc.MethodDesc{
 		{
@@ -253,5 +253,5 @@ var BookingService_ServiceDesc = grpc.ServiceDesc{
 		},
 	},
 	Streams:  []grpc.StreamDesc{},
-	Metadata: "einride/extend/book/v1alpha1/booking_service.proto",
+	Metadata: "einride/saga/extend/book/v1alpha1/booking_service.proto",
 }
