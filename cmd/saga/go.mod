@@ -7,12 +7,13 @@ require (
 	github.com/spf13/cobra v1.5.0
 	go.buf.build/protocolbuffers/go/einride/grpc-service-config v1.3.3
 	go.einride.tech/aip-cli v0.18.0
+	go.einride.tech/iam v0.46.0
 	google.golang.org/genproto v0.0.0-20220916172020-2692e8806bfa
 	google.golang.org/protobuf v1.28.1
 )
 
 require (
-	cloud.google.com/go v0.99.0 // indirect
+	cloud.google.com/go/compute v1.7.0 // indirect
 	github.com/antlr/antlr4/runtime/Go/antlr v0.0.0-20220418222510-f25a4f6275ed // indirect
 	github.com/davecgh/go-spew v1.1.1 // indirect
 	github.com/golang/glog v1.0.0 // indirect
