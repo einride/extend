@@ -5,6 +5,7 @@ go 1.19
 require (
 	github.com/grpc-ecosystem/grpc-gateway/v2 v2.11.3
 	github.com/spf13/cobra v1.5.0
+	go.buf.build/protocolbuffers/go/einride/grpc-service-config v1.3.3
 	go.einride.tech/aip-cli v0.18.0
 	google.golang.org/genproto v0.0.0-20220916172020-2692e8806bfa
 	google.golang.org/protobuf v1.28.1

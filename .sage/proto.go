@@ -9,15 +9,19 @@ import (
 	"go.einride.tech/sage/tools/sgapilinter"
 	"go.einride.tech/sage/tools/sgbuf"
 	"go.einride.tech/sage/tools/sgprotoc"
+	"go.einride.tech/sage/tools/sgprotocgengoaiptest"
 	"go.einride.tech/sage/tools/sgprotocgengogrpc"
+	"go.einride.tech/sage/tools/sgprotocgengogrpcserviceconfig"
 )
+
+const cli = "saga"
 
 type Proto sg.Namespace
 
 func (Proto) Default(ctx context.Context) error {
 	sg.Deps(ctx, Proto.BufFormat, Proto.BufLint, Proto.BufReadme)
 	sg.Deps(ctx, Proto.APILinterLint)
-	sg.Deps(ctx, Proto.BufGenerate, Proto.BufGenerateBook, Proto.BufGenerateCLI)
+	sg.Deps(ctx, Proto.BufGenerateBook, Proto.BufGenerateCLI)
 	return nil
 }
 
@@ -66,7 +70,7 @@ func (Proto) ProtocGenGo(ctx context.Context) error {
 	return err
 }
 
-func (Proto) ProtocGenOpenAPIV2(ctx context.Context) error {
+func (Proto) ProtocGenOpenApiV2(ctx context.Context) error {
 	sg.Logger(ctx).Println("installing...")
 	_, err := sgtool.GoInstallWithModfile(
 		ctx,
@@ -86,28 +90,54 @@ func (Proto) ProtocGenGoAipCli(ctx context.Context) error {
 	return err
 }
 
-func (Proto) BufGenerate(ctx context.Context) error {
-	sg.Deps(ctx, Proto.ProtocGenOpenAPIV2)
-	sg.Logger(ctx).Println("generating proto stubs...")
-	if err := os.RemoveAll(sg.FromGitRoot("openapiv2")); err != nil {
+func (Proto) ProtocGenGoAip(ctx context.Context) error {
+	sg.Logger(ctx).Println("installing...")
+	_, err := sgtool.GoInstallWithModfile(
+		ctx,
+		"go.einride.tech/aip/cmd/protoc-gen-go-aip",
+		sg.FromGitRoot("go.mod"),
+	)
+	return err
+}
+
+func (Proto) ProtocGenGoIam(ctx context.Context) error {
+	sg.Logger(ctx).Println("building binary...")
+	_, err := sgtool.GoInstallWithModfile(
+		ctx,
+		"go.einride.tech/iam/cmd/protoc-gen-go-iam",
+		sg.FromGitRoot("go.mod"),
+	)
+	return err
+}
+
+func (Proto) CleanGenerated(ctx context.Context) error {
+	sg.Logger(ctx).Println("cleaning generated files...")
+	if err := os.RemoveAll(sg.FromGitRoot("proto", "gen")); err != nil {
 		return err
 	}
-	cmd := sgbuf.Command(
+	return os.RemoveAll(sg.FromGitRoot("cmd", cli, "gen"))
+}
+
+func (Proto) BufGenerate(ctx context.Context) error {
+	sg.Deps(
 		ctx,
-		"generate",
-		"--output",
-		sg.FromGitRoot(),
-		"--template",
-		"buf.gen.yaml",
-		"--path",
-		"einride/extend/book/v1beta1",
+		Proto.ProtocGenGo,
+		Proto.ProtocGenGoAip,
+		Proto.ProtocGenGoIam,
+		sgprotocgengogrpc.PrepareCommand,
+		sgprotocgengoaiptest.PrepareCommand,
+		sgprotocgengogrpcserviceconfig.PrepareCommand,
+	)
+	sg.Logger(ctx).Println("generating proto stubs...")
+	cmd := sgbuf.Command(
+		ctx, "generate", "--output", sg.FromGitRoot(), "--template", "buf.gen.yaml", "--path", "einride",
 	)
 	cmd.Dir = sg.FromGitRoot("proto")
 	return cmd.Run()
 }
 
 func (Proto) BufGenerateBook(ctx context.Context) error {
-	sg.Deps(ctx, Proto.ProtocGenOpenAPIV2)
+	sg.Deps(ctx, Proto.ProtocGenOpenApiV2)
 	sg.Logger(ctx).Println("generating proto stubs...")
 	cmd := sgbuf.Command(
 		ctx,

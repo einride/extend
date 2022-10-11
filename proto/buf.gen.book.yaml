@@ -7,6 +7,8 @@ managed:
     except:
       - buf.build/googleapis/googleapis
       - buf.build/grpc-ecosystem/grpc-gateway
+    override:
+      buf.build/einride/grpc-service-config: go.buf.build/protocolbuffers/go/einride/grpc-service-config
 
 plugins:
   - name: openapiv2

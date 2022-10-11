@@ -3,17 +3,43 @@ version: v1
 managed:
   enabled: true
   go_package_prefix:
-    default: github.com/einride/saga/cmd/saga
+    default: github.com/einride/extend/proto/gen
     except:
       - buf.build/googleapis/googleapis
-      - buf.build/grpc-ecosystem/grpc-gateway
+    override:
+      buf.build/einride/grpc-service-config: go.buf.build/protocolbuffers/go/einride/grpc-service-config
+      buf.build/grpc-ecosystem/grpc-gateway: github.com/grpc-ecosystem/grpc-gateway/v2
 
 plugins:
-  - name: openapiv2
-    out: openapiv2
-    strategy: all
+  - name: go
+    out: proto/gen
     opt:
-      - output_format=yaml
-      - allow_merge=true
-      - merge_file_name=extend
-      - omit_enum_default_value=true
+      - module=github.com/einride/extend/proto/gen
+
+  - name: go-iam
+    out: proto/gen
+    opt:
+      - module=github.com/einride/extend/proto/gen
+
+  - name: go-aip
+    out: proto/gen
+    opt:
+      - module=github.com/einride/extend/proto/gen
+
+  - name: go-aip-test
+    out: proto/gen
+    opt:
+      - module=github.com/einride/extend/proto/gen
+
+  - name: go-grpc
+    out: proto/gen
+    opt:
+      - module=github.com/einride/extend/proto/gen
+      - require_unimplemented_servers=false
+
+  - name: go-grpc-service-config
+    out: proto/gen
+    opt:
+      - module=github.com/einride/extend/proto/gen
+      - validate=true
+      - required=true

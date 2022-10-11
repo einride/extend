@@ -75,6 +75,10 @@ buf-push: $(sagefile)
 buf-readme: $(sagefile)
 	@$(sagefile) Proto:BufReadme
 
+.PHONY: clean-generated
+clean-generated: $(sagefile)
+	@$(sagefile) Proto:CleanGenerated
+
 .PHONY: default
 default: $(sagefile)
 	@$(sagefile) Proto:Default
@@ -83,10 +87,18 @@ default: $(sagefile)
 protoc-gen-go: $(sagefile)
 	@$(sagefile) Proto:ProtocGenGo
 
+.PHONY: protoc-gen-go-aip
+protoc-gen-go-aip: $(sagefile)
+	@$(sagefile) Proto:ProtocGenGoAip
+
 .PHONY: protoc-gen-go-aip-cli
 protoc-gen-go-aip-cli: $(sagefile)
 	@$(sagefile) Proto:ProtocGenGoAipCli
 
-.PHONY: protoc-gen-open-apiv-2
-protoc-gen-open-apiv-2: $(sagefile)
-	@$(sagefile) Proto:ProtocGenOpenAPIV2
+.PHONY: protoc-gen-go-iam
+protoc-gen-go-iam: $(sagefile)
+	@$(sagefile) Proto:ProtocGenGoIam
+
+.PHONY: protoc-gen-open-api-v-2
+protoc-gen-open-api-v-2: $(sagefile)
+	@$(sagefile) Proto:ProtocGenOpenApiV2
