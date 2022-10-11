@@ -1,9 +1,9 @@
 syntax = "proto3";
 
-package einride.extend.book.v1beta1;
+package einride.saga.extend.book.v1beta1;
 
-import "einride/extend/book/v1beta1/shipment.proto";
 import "einride/iam/v1/annotations.proto";
+import "einride/saga/extend/book/v1beta1/shipment.proto";
 import "google/api/annotations.proto";
 import "google/api/client.proto";
 import "google/api/field_behavior.proto";
