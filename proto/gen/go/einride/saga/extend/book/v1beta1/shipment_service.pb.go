@@ -7,8 +7,8 @@
 package bookv1beta1
 
 import (
-	_ "github.com/einride/extend/proto/gen/go/einride/iam/v1"
 	_ "github.com/grpc-ecosystem/grpc-gateway/v2/protoc-gen-openapiv2/options"
+	_ "go.einride.tech/iam/proto/gen/einride/iam/v1"
 	_ "google.golang.org/genproto/googleapis/api/annotations"
 	protoreflect "google.golang.org/protobuf/reflect/protoreflect"
 	protoimpl "google.golang.org/protobuf/runtime/protoimpl"
