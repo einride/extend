@@ -21,7 +21,7 @@ type Proto sg.Namespace
 func (Proto) Default(ctx context.Context) error {
 	sg.Deps(ctx, Proto.BufFormat, Proto.BufLint, Proto.BufReadme)
 	sg.Deps(ctx, Proto.APILinterLint)
-	sg.Deps(ctx, Proto.BufGenerate, Proto.BufGenerateBook, Proto.BufGenerateCLI)
+	sg.Deps(ctx, Proto.BufGenerate, Proto.BufGenerateBook, Proto.BufGenerateAuth, Proto.BufGenerateCLI)
 	return nil
 }
 
@@ -131,6 +131,23 @@ func (Proto) BufGenerate(ctx context.Context) error {
 	sg.Logger(ctx).Println("generating proto stubs...")
 	cmd := sgbuf.Command(
 		ctx, "generate", "--output", sg.FromGitRoot(), "--template", "buf.gen.yaml", "--path", "einride",
+	)
+	cmd.Dir = sg.FromGitRoot("proto")
+	return cmd.Run()
+}
+
+func (Proto) BufGenerateAuth(ctx context.Context) error {
+	sg.Deps(ctx, Proto.ProtocGenOpenApiV2)
+	sg.Logger(ctx).Println("generating proto stubs...")
+	cmd := sgbuf.Command(
+		ctx,
+		"generate",
+		"--output",
+		sg.FromGitRoot(),
+		"--template",
+		"buf.gen.auth.yaml",
+		"--path",
+		"einride/saga/extend/auth/v1alpha1",
 	)
 	cmd.Dir = sg.FromGitRoot("proto")
 	return cmd.Run()
