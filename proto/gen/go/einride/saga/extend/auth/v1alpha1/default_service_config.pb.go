@@ -7,7 +7,7 @@
 package authv1alpha1
 
 import (
-	_ "go.buf.build/protocolbuffers/go/einride/grpc-service-config/einride/serviceconfig/v1"
+	_ "go.einride.tech/grpc-service-config/gen/einride/serviceconfig/v1"
 	protoreflect "google.golang.org/protobuf/reflect/protoreflect"
 	protoimpl "google.golang.org/protobuf/runtime/protoimpl"
 	reflect "reflect"
