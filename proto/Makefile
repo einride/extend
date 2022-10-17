@@ -55,6 +55,10 @@ buf-format: $(sagefile)
 buf-generate: $(sagefile)
 	@$(sagefile) Proto:BufGenerate
 
+.PHONY: buf-generate-auth
+buf-generate-auth: $(sagefile)
+	@$(sagefile) Proto:BufGenerateAuth
+
 .PHONY: buf-generate-book
 buf-generate-book: $(sagefile)
 	@$(sagefile) Proto:BufGenerateBook
