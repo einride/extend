@@ -181,7 +181,6 @@ definitions:
     properties:
       unit:
         $ref: '#/definitions/UnitLengthUnit'
-        title: Length unit
       value:
         type: number
         format: double
@@ -189,6 +188,7 @@ definitions:
     title: Length specified in different units
     required:
       - value
+      - unit
   UnitLengthUnit:
     type: string
     enum:
@@ -204,7 +204,6 @@ definitions:
     properties:
       unit:
         $ref: '#/definitions/UnitVolumeUnit'
-        title: Volume unit
       value:
         type: number
         format: double
@@ -212,6 +211,7 @@ definitions:
     title: Volume specified in different units
     required:
       - value
+      - unit
   UnitVolumeUnit:
     type: string
     enum:
@@ -227,7 +227,6 @@ definitions:
     properties:
       unit:
         $ref: '#/definitions/UnitWeightUnit'
-        title: Weight unit
       value:
         type: number
         format: double
@@ -235,6 +234,7 @@ definitions:
     title: Weight specified in different units
     required:
       - value
+      - unit
   UnitWeightUnit:
     type: string
     enum:
@@ -277,9 +277,6 @@ definitions:
       contacts:
         type: string
         description: Location contact information.
-      displayName:
-        type: string
-        description: The displayed name of the location.
       latitude:
         type: number
         format: double
@@ -306,27 +303,25 @@ definitions:
         title: External reference ID of the unit
       height:
         $ref: '#/definitions/UnitLength'
-        title: Unit height
       length:
         $ref: '#/definitions/UnitLength'
-        title: Unit length
       trackingId:
         type: string
         title: Unique unit tracking ID
         readOnly: true
       type:
-        $ref: '#/definitions/v1beta1UnitType'
+        type: string
         title: Type of unit
       volume:
         $ref: '#/definitions/UnitVolume'
-        title: Unit volume
       weight:
         $ref: '#/definitions/UnitWeight'
-        title: Unit weight
       width:
         $ref: '#/definitions/UnitLength'
-        title: Unit width
     description: A unit is a holder of goods such as a EUR-pallet.
+    required:
+      - type
+      - weight
   protobufAny:
     type: object
     properties:
@@ -366,10 +361,8 @@ definitions:
         description: Instructions for the delivery.
       deliveryLocation:
         $ref: '#/definitions/bookv1beta1Location'
-        description: The location where the shipment is delivered to.
       deliveryState:
         $ref: '#/definitions/ShipmentDeliveryState'
-        title: Shipment delivery state
       externalReferenceId:
         type: string
         description: An external reference for this shipment.
@@ -382,7 +375,6 @@ definitions:
         description: Instructions for the pickup.
       pickupLocation:
         $ref: '#/definitions/bookv1beta1Location'
-        description: The location where the shipment is picked up. Supply when creating shipment if different from the sender location.
       requestedDeliveryEndTime:
         type: string
         format: date-time
@@ -408,9 +400,6 @@ definitions:
         readOnly: true
       state:
         $ref: '#/definitions/ShipmentState'
-        description: |-
-          Shipment state
-          Can be set to ACTIVE (default) or RELEASED when creating a shipment.
       trackingId:
         type: string
         description: A generated tracking ID for this shipment.
@@ -430,19 +419,8 @@ definitions:
     description: A shipment represents a demand to deliver goods from an origin to a destination.
     required:
       - sender
+      - deliveryLocation
       - units
-  v1beta1UnitType:
-    type: string
-    enum:
-      - EURO_PALLET
-      - US_PALLET
-      - LOADING_METER
-    description: |-
-      - TYPE_UNSPECIFIED: Unspecified type
-       - EURO_PALLET: Euro pallet unit type
-       - US_PALLET: US pallet unit type
-       - LOADING_METER: Loading meter unit type
-    title: Unit type
 securityDefinitions:
   Authorization:
     type: apiKey
