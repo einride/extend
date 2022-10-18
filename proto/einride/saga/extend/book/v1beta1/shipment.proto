@@ -125,20 +125,18 @@ message Location {
   string address_country_code = 7 [(google.api.field_behavior) = REQUIRED];
   // Address state code
   string address_state_code = 8;
-  // The displayed name of the location.
-  string display_name = 9;
   // Location contact information.
-  string contacts = 10;
+  string contacts = 9;
   // The latitude of the location in degrees. It must be in the range [-90.0, +90.0].
-  double latitude = 11;
+  double latitude = 10;
   // The longitude of the location in degrees. It must be in the range [-180.0, +180.0].
-  double longitude = 12;
+  double longitude = 11;
 }
 
 // A unit is a holder of goods such as a EUR-pallet.
 message Unit {
   // Type of unit
-  Type type = 1 [(google.api.field_behavior) = REQUIRED];
+  string type = 1 [(google.api.field_behavior) = REQUIRED];
   // External reference ID of the unit
   string external_reference_id = 2;
   // Description of the unit
@@ -155,18 +153,6 @@ message Unit {
   Length width = 8;
   // Unit volume
   Volume volume = 9;
-
-  // Unit type
-  enum Type {
-    // Unspecified type
-    TYPE_UNSPECIFIED = 0;
-    // Euro pallet unit type
-    EURO_PALLET = 1;
-    // US pallet unit type
-    US_PALLET = 2;
-    // Loading meter unit type
-    LOADING_METER = 3;
-  }
 
   // Weight specified in different units
   message Weight {

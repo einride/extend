@@ -33,7 +33,6 @@ func NewShipmentServiceCommand(config aipcli.Config) *cobra.Command {
 				"einride.saga.extend.book.v1beta1.Location.address_recipient":             " Address recipient\n",
 				"einride.saga.extend.book.v1beta1.Location.address_state_code":            " Address state code\n",
 				"einride.saga.extend.book.v1beta1.Location.contacts":                      " Location contact information.\n",
-				"einride.saga.extend.book.v1beta1.Location.display_name":                  " The displayed name of the location.\n",
 				"einride.saga.extend.book.v1beta1.Location.latitude":                      " The latitude of the location in degrees. It must be in the range [-90.0, +90.0].\n",
 				"einride.saga.extend.book.v1beta1.Location.longitude":                     " The longitude of the location in degrees. It must be in the range [-180.0, +180.0].\n",
 				"einride.saga.extend.book.v1beta1.Shipment.booking":                       " Resource name of the booking this shipment relates to.\n",
