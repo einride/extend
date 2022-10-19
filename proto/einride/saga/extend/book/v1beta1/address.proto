@@ -1,0 +1,33 @@
+syntax = "proto3";
+
+package einride.saga.extend.book.v1beta1;
+
+import "google/api/field_behavior.proto";
+import "google/type/latlng.proto";
+
+// An Address is where goods are picked up or delivered.
+message Address {
+  // Recipient
+  string recipient = 1 [(google.api.field_behavior) = REQUIRED];
+  // Care of (C/O)
+  string co = 2;
+  // Address line 1
+  string line1 = 3 [(google.api.field_behavior) = REQUIRED];
+  // Address line 2
+  string line2 = 4;
+  // Postal code
+  string postal_code = 5 [(google.api.field_behavior) = REQUIRED];
+  // City
+  string city = 6 [(google.api.field_behavior) = REQUIRED];
+  // Region code (Unicode CLDR region code)
+  // https://cldr.unicode.org/
+  string region_code = 7 [(google.api.field_behavior) = REQUIRED];
+  // State code
+  string state_code = 8;
+  // The displayed name of the address
+  string display_name = 9;
+  // Contact information
+  string contact_info = 10;
+  // The geographic location of the address
+  google.type.LatLng lat_lng = 11;
+}
