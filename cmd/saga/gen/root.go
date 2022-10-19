@@ -16,6 +16,7 @@ func NewModuleCommand(use string, short string, commands ...*cobra.Command) *cob
 		append(
 			[]*cobra.Command{
 				v1beta1.NewShipmentServiceCommand(config),
+				v1beta1.NewShipmentTrackingEventServiceCommand(config),
 			},
 			commands...,
 		)...,
