@@ -22,6 +22,7 @@ func (Proto) Default(ctx context.Context) error {
 	sg.Deps(ctx, Proto.BufFormat, Proto.BufLint, Proto.BufReadme)
 	sg.Deps(ctx, Proto.APILinterLint)
 	sg.Deps(ctx, Proto.BufGenerate, Proto.BufGenerateBook, Proto.BufGenerateAuth, Proto.BufGenerateCLI)
+	sg.Deps(ctx, Proto.GoModTidy)
 	return nil
 }
 
@@ -199,4 +200,11 @@ func (Proto) BufGenerateCLI(ctx context.Context) error {
 	cmd = sg.Command(ctx, "go", "mod", "tidy")
 	cmd.Dir = sg.FromGitRoot("cmd", "saga")
 	return cmd.Run()
+}
+
+func (Proto) GoModTidy(ctx context.Context) error {
+	sg.Logger(ctx).Println("tidying Go module files...")
+	command := sg.Command(ctx, "go", "mod", "tidy", "-v")
+	command.Dir = sg.FromGitRoot("cmd", cli)
+	return command.Run()
 }
