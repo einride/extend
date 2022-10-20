@@ -87,6 +87,10 @@ clean-generated: $(sagefile)
 default: $(sagefile)
 	@$(sagefile) Proto:Default
 
+.PHONY: go-mod-tidy
+go-mod-tidy: $(sagefile)
+	@$(sagefile) Proto:GoModTidy
+
 .PHONY: protoc-gen-go
 protoc-gen-go: $(sagefile)
 	@$(sagefile) Proto:ProtocGenGo
