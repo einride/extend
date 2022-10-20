@@ -63,6 +63,10 @@ format-yaml: $(sagefile)
 git-verify-no-diff: $(sagefile)
 	@$(sagefile) GitVerifyNoDiff
 
+.PHONY: go-mod-tidy
+go-mod-tidy: $(sagefile)
+	@$(sagefile) GoModTidy
+
 .PHONY: serve-pdf
 serve-pdf: $(sagefile)
 	@$(sagefile) ServePDF
