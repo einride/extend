@@ -29,8 +29,16 @@ func main() {
 func Default(ctx context.Context) error {
 	sg.Deps(ctx, ConvcoCheck, FormatMarkdown, FormatYaml)
 	sg.Deps(ctx, Proto.Default)
+	sg.Deps(ctx, GoModTidy)
 	sg.Deps(ctx, GitVerifyNoDiff)
 	return nil
+}
+
+func GoModTidy(ctx context.Context) error {
+	sg.Logger(ctx).Println("tidying Go module files...")
+	command := sg.Command(ctx, "go", "mod", "tidy", "-v")
+	command.Dir = sg.FromGitRoot()
+	return command.Run()
 }
 
 func ConvcoCheck(ctx context.Context) error {
