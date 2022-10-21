@@ -2,6 +2,7 @@ syntax = "proto3";
 
 package einride.saga.extend.book.v1beta1;
 
+import "einride/saga/extend/book/v1beta1/address.proto";
 import "google/api/field_behavior.proto";
 import "google/api/resource.proto";
 import "google/protobuf/timestamp.proto";
@@ -41,8 +42,9 @@ message Shipment {
   // A generated tracking ID for this shipment.
   string tracking_id = 7 [(google.api.field_behavior) = OUTPUT_ONLY];
 
-  // The location where the shipment is picked up. Supply when creating shipment if different from the sender location.
-  Location pickup_location = 8;
+  // The address where the shipment is picked up.
+  // Supply when creating shipment if different from the sender default pickup address.
+  Address pickup_address = 8;
 
   // Instructions for the pickup.
   string pickup_instructions = 9;
@@ -53,8 +55,8 @@ message Shipment {
   // The shipment should be picked up before this time
   google.protobuf.Timestamp requested_pickup_end_time = 11;
 
-  // The location where the shipment is delivered to.
-  Location delivery_location = 12 [(google.api.field_behavior) = REQUIRED];
+  // The address where the shipment is delivered to.
+  Address delivery_address = 12 [(google.api.field_behavior) = REQUIRED];
 
   // Instructions for the delivery.
   string delivery_instructions = 13;
@@ -104,33 +106,6 @@ message Shipment {
     // Shipment is delivered
     DELIVERED = 3;
   }
-}
-
-// A location is where goods are picked up or delivered.
-message Location {
-  // Address recipient
-  string address_recipient = 1 [(google.api.field_behavior) = REQUIRED];
-  // Address care of (C/O)
-  string address_co = 2;
-  // Address line 1
-  string address_line1 = 3 [(google.api.field_behavior) = REQUIRED];
-  // Address line 2
-  string address_line2 = 4;
-  // Address postal code
-  string address_postal_code = 5 [(google.api.field_behavior) = REQUIRED];
-  // Address city
-  string address_city = 6 [(google.api.field_behavior) = REQUIRED];
-  // Address country code (ISO 3166-1 alpha-2
-  // https://en.wikipedia.org/wiki/ISO_3166-1_alpha-2
-  string address_country_code = 7 [(google.api.field_behavior) = REQUIRED];
-  // Address state code
-  string address_state_code = 8;
-  // Location contact information.
-  string contacts = 9;
-  // The latitude of the location in degrees. It must be in the range [-90.0, +90.0].
-  double latitude = 10;
-  // The longitude of the location in degrees. It must be in the range [-180.0, +180.0].
-  double longitude = 11;
 }
 
 // A unit is a holder of goods such as a EUR-pallet.
