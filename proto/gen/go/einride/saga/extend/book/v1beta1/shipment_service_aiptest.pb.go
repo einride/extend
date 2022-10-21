@@ -122,15 +122,15 @@ func (fx *ShipmentTestSuiteConfig) testCreate(t *testing.T) {
 			})
 			assert.Equal(t, codes.InvalidArgument, status.Code(err), err)
 		})
-		t.Run(".pickup_location.address_recipient", func(t *testing.T) {
+		t.Run(".pickup_address.recipient", func(t *testing.T) {
 			fx.maybeSkip(t)
 			parent := fx.nextParent(t, false)
 			msg := fx.Create(parent)
-			container := msg.GetPickupLocation()
+			container := msg.GetPickupAddress()
 			if container == nil {
 				t.Skip("not reachable")
 			}
-			fd := container.ProtoReflect().Descriptor().Fields().ByName("address_recipient")
+			fd := container.ProtoReflect().Descriptor().Fields().ByName("recipient")
 			container.ProtoReflect().Clear(fd)
 			_, err := fx.service.CreateShipment(fx.ctx, &CreateShipmentRequest{
 				Parent:   parent,
@@ -138,15 +138,15 @@ func (fx *ShipmentTestSuiteConfig) testCreate(t *testing.T) {
 			})
 			assert.Equal(t, codes.InvalidArgument, status.Code(err), err)
 		})
-		t.Run(".pickup_location.address_line1", func(t *testing.T) {
+		t.Run(".pickup_address.line1", func(t *testing.T) {
 			fx.maybeSkip(t)
 			parent := fx.nextParent(t, false)
 			msg := fx.Create(parent)
-			container := msg.GetPickupLocation()
+			container := msg.GetPickupAddress()
 			if container == nil {
 				t.Skip("not reachable")
 			}
-			fd := container.ProtoReflect().Descriptor().Fields().ByName("address_line1")
+			fd := container.ProtoReflect().Descriptor().Fields().ByName("line1")
 			container.ProtoReflect().Clear(fd)
 			_, err := fx.service.CreateShipment(fx.ctx, &CreateShipmentRequest{
 				Parent:   parent,
@@ -154,15 +154,15 @@ func (fx *ShipmentTestSuiteConfig) testCreate(t *testing.T) {
 			})
 			assert.Equal(t, codes.InvalidArgument, status.Code(err), err)
 		})
-		t.Run(".pickup_location.address_postal_code", func(t *testing.T) {
+		t.Run(".pickup_address.postal_code", func(t *testing.T) {
 			fx.maybeSkip(t)
 			parent := fx.nextParent(t, false)
 			msg := fx.Create(parent)
-			container := msg.GetPickupLocation()
+			container := msg.GetPickupAddress()
 			if container == nil {
 				t.Skip("not reachable")
 			}
-			fd := container.ProtoReflect().Descriptor().Fields().ByName("address_postal_code")
+			fd := container.ProtoReflect().Descriptor().Fields().ByName("postal_code")
 			container.ProtoReflect().Clear(fd)
 			_, err := fx.service.CreateShipment(fx.ctx, &CreateShipmentRequest{
 				Parent:   parent,
@@ -170,15 +170,15 @@ func (fx *ShipmentTestSuiteConfig) testCreate(t *testing.T) {
 			})
 			assert.Equal(t, codes.InvalidArgument, status.Code(err), err)
 		})
-		t.Run(".pickup_location.address_city", func(t *testing.T) {
+		t.Run(".pickup_address.city", func(t *testing.T) {
 			fx.maybeSkip(t)
 			parent := fx.nextParent(t, false)
 			msg := fx.Create(parent)
-			container := msg.GetPickupLocation()
+			container := msg.GetPickupAddress()
 			if container == nil {
 				t.Skip("not reachable")
 			}
-			fd := container.ProtoReflect().Descriptor().Fields().ByName("address_city")
+			fd := container.ProtoReflect().Descriptor().Fields().ByName("city")
 			container.ProtoReflect().Clear(fd)
 			_, err := fx.service.CreateShipment(fx.ctx, &CreateShipmentRequest{
 				Parent:   parent,
@@ -186,15 +186,15 @@ func (fx *ShipmentTestSuiteConfig) testCreate(t *testing.T) {
 			})
 			assert.Equal(t, codes.InvalidArgument, status.Code(err), err)
 		})
-		t.Run(".pickup_location.address_country_code", func(t *testing.T) {
+		t.Run(".pickup_address.region_code", func(t *testing.T) {
 			fx.maybeSkip(t)
 			parent := fx.nextParent(t, false)
 			msg := fx.Create(parent)
-			container := msg.GetPickupLocation()
+			container := msg.GetPickupAddress()
 			if container == nil {
 				t.Skip("not reachable")
 			}
-			fd := container.ProtoReflect().Descriptor().Fields().ByName("address_country_code")
+			fd := container.ProtoReflect().Descriptor().Fields().ByName("region_code")
 			container.ProtoReflect().Clear(fd)
 			_, err := fx.service.CreateShipment(fx.ctx, &CreateShipmentRequest{
 				Parent:   parent,
@@ -202,7 +202,7 @@ func (fx *ShipmentTestSuiteConfig) testCreate(t *testing.T) {
 			})
 			assert.Equal(t, codes.InvalidArgument, status.Code(err), err)
 		})
-		t.Run(".delivery_location", func(t *testing.T) {
+		t.Run(".delivery_address", func(t *testing.T) {
 			fx.maybeSkip(t)
 			parent := fx.nextParent(t, false)
 			msg := fx.Create(parent)
@@ -210,7 +210,7 @@ func (fx *ShipmentTestSuiteConfig) testCreate(t *testing.T) {
 			if container == nil {
 				t.Skip("not reachable")
 			}
-			fd := container.ProtoReflect().Descriptor().Fields().ByName("delivery_location")
+			fd := container.ProtoReflect().Descriptor().Fields().ByName("delivery_address")
 			container.ProtoReflect().Clear(fd)
 			_, err := fx.service.CreateShipment(fx.ctx, &CreateShipmentRequest{
 				Parent:   parent,

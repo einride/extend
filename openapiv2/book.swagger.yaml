@@ -305,53 +305,6 @@ definitions:
        - KG: Kilograms
        - LBS: Pounds
     title: Weight units
-  bookv1beta1Location:
-    type: object
-    properties:
-      addressCity:
-        type: string
-        title: Address city
-      addressCo:
-        type: string
-        title: Address care of (C/O)
-      addressCountryCode:
-        type: string
-        title: |-
-          Address country code (ISO 3166-1 alpha-2
-          https://en.wikipedia.org/wiki/ISO_3166-1_alpha-2
-      addressLine1:
-        type: string
-        title: Address line 1
-      addressLine2:
-        type: string
-        title: Address line 2
-      addressPostalCode:
-        type: string
-        title: Address postal code
-      addressRecipient:
-        type: string
-        title: Address recipient
-      addressStateCode:
-        type: string
-        title: Address state code
-      contacts:
-        type: string
-        description: Location contact information.
-      latitude:
-        type: number
-        format: double
-        description: The latitude of the location in degrees. It must be in the range [-90.0, +90.0].
-      longitude:
-        type: number
-        format: double
-        description: The longitude of the location in degrees. It must be in the range [-180.0, +180.0].
-    description: A location is where goods are picked up or delivered.
-    required:
-      - addressRecipient
-      - addressLine1
-      - addressPostalCode
-      - addressCity
-      - addressCountryCode
   bookv1beta1Unit:
     type: object
     properties:
@@ -477,11 +430,11 @@ definitions:
         format: date-time
         description: The deletion timestamp of the shipment. Set if the shipment is deleted.
         readOnly: true
+      deliveryAddress:
+        $ref: '#/definitions/v1beta1Address'
       deliveryInstructions:
         type: string
         description: Instructions for the delivery.
-      deliveryLocation:
-        $ref: '#/definitions/bookv1beta1Location'
       deliveryState:
         $ref: '#/definitions/ShipmentDeliveryState'
       externalReferenceId:
@@ -491,11 +444,11 @@ definitions:
         type: string
         description: The resource name of the shipment.
         readOnly: true
+      pickupAddress:
+        $ref: '#/definitions/v1beta1Address'
       pickupInstructions:
         type: string
         description: Instructions for the pickup.
-      pickupLocation:
-        $ref: '#/definitions/bookv1beta1Location'
       requestedDeliveryEndTime:
         type: string
         format: date-time
@@ -540,7 +493,7 @@ definitions:
     description: A shipment represents a demand to deliver goods from an origin to a destination.
     required:
       - sender
-      - deliveryLocation
+      - deliveryAddress
       - units
   v1beta1ShipmentTrackingEvent:
     type: object
