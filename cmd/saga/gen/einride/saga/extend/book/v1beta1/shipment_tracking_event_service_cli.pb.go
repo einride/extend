@@ -51,5 +51,29 @@ func NewShipmentTrackingEventServiceCommand(config aipcli.Config) *cobra.Command
 				"google.type.LatLng.longitude":                                                                " The longitude in degrees. It must be in the range [-180.0, +180.0].\n",
 			},
 		),
+		aipcli.NewMethodCommand(
+			config,
+			File_einride_saga_extend_book_v1beta1_shipment_tracking_event_service_proto.
+				Services().ByName("ShipmentTrackingEventService").Methods().ByName("GetShipmentTrackingEvent"),
+			&GetShipmentTrackingEventRequest{},
+			&ShipmentTrackingEvent{},
+			map[protoreflect.FullName]string{
+				"einride.saga.extend.book.v1beta1.GetShipmentTrackingEventRequest.name":                  " The resource name of the shipment tracking event to retrieve.\n Format: spaces/{space}/shipments/{shipment}/trackingEvents/{shipmentTrackingEvent}\n",
+				"einride.saga.extend.book.v1beta1.ShipmentTrackingEventService.GetShipmentTrackingEvent": " Get a shipment tracking event.\n\n This is an AIP standard [Get](https://google.aip.dev/131) method.\n",
+			},
+		),
+		aipcli.NewMethodCommand(
+			config,
+			File_einride_saga_extend_book_v1beta1_shipment_tracking_event_service_proto.
+				Services().ByName("ShipmentTrackingEventService").Methods().ByName("ListShipmentTrackingEvents"),
+			&ListShipmentTrackingEventsRequest{},
+			&ListShipmentTrackingEventsResponse{},
+			map[protoreflect.FullName]string{
+				"einride.saga.extend.book.v1beta1.ListShipmentTrackingEventsRequest.page_size":             " Requested page size. Server may return fewer shipment tracking events than requested.\n If unspecified, server will pick an appropriate default.\n",
+				"einride.saga.extend.book.v1beta1.ListShipmentTrackingEventsRequest.page_token":            " A token identifying a page of results the server should return.\n Typically, this is the value of\n [ListShipmentTrackingEventsResponse.page_token][einride.saga.extend.book.v1beta1.ListShipmentTrackingEventsResponse.page_token]\n returned from the previous call to `ListShipmentTrackingEvents` method.\n",
+				"einride.saga.extend.book.v1beta1.ListShipmentTrackingEventsRequest.parent":                " The resource name of the parent, which owns this collection of shipment tracking events.\n Format: spaces/{space}/shipments/{shipment}/trackingEvents\n",
+				"einride.saga.extend.book.v1beta1.ShipmentTrackingEventService.ListShipmentTrackingEvents": " List shipment tracking events for a shipment.\n The events are ordered by ascending occurred_time.\n\n See: https://google.aip.dev/132 (Standard methods: List).\n",
+			},
+		),
 	)
 }
