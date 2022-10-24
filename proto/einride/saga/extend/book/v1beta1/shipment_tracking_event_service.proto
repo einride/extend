@@ -2,6 +2,7 @@ syntax = "proto3";
 
 package einride.saga.extend.book.v1beta1;
 
+import "einride/iam/v1/annotations.proto";
 import "einride/saga/extend/book/v1beta1/shipment_tracking_event.proto";
 import "google/api/annotations.proto";
 import "google/api/client.proto";
@@ -106,6 +107,48 @@ service ShipmentTrackingEventService {
       body: "shipment_tracking_event"
     };
     option (google.api.method_signature) = "parent,shipment_tracking_event";
+    option (einride.iam.v1.method_authorization) = {
+      permission: "book.shipmentTrackingEvent.create"
+      before: {
+        expression: "test(caller, request.parent)"
+        description: "The caller must have permission to create the shipment tracking event"
+      }
+    };
+  }
+
+  // Get a shipment tracking event.
+  //
+  // This is an AIP standard [Get](https://google.aip.dev/131) method.
+  rpc GetShipmentTrackingEvent(GetShipmentTrackingEventRequest) returns (ShipmentTrackingEvent) {
+    option (google.api.http) = {
+      get: "/v1beta1/{name=spaces/*/shipments/*/trackingEvents/*}"
+    };
+    option (google.api.method_signature) = "name";
+    option (einride.iam.v1.method_authorization) = {
+      permission: "book.shipmentTrackingEvent.get"
+      before: {
+        expression: "test(caller, request.name)"
+        description: "The caller must have permission to get the shipment tracking event"
+      }
+    };
+  }
+
+  // List shipment tracking events for a shipment.
+  // The events are ordered by ascending occurred_time.
+  //
+  // See: https://google.aip.dev/132 (Standard methods: List).
+  rpc ListShipmentTrackingEvents(ListShipmentTrackingEventsRequest) returns (ListShipmentTrackingEventsResponse) {
+    option (google.api.http) = {
+      get: "/v1beta1/{parent=spaces/*/shipments/*}/trackingEvents"
+    };
+    option (google.api.method_signature) = "parent";
+    option (einride.iam.v1.method_authorization) = {
+      permission: "book.shipmentTrackingEvent.list"
+      before: {
+        expression: "test(caller, request.parent)"
+        description: "The caller must have permission to list all shipment tracking events for the parent shipment."
+      }
+    };
   }
 }
 
@@ -126,4 +169,55 @@ message CreateShipmentTrackingEventRequest {
 
   // The shipment tracking event
   ShipmentTrackingEvent shipment_tracking_event = 2 [(google.api.field_behavior) = REQUIRED];
+}
+
+// Request message for ShipmentTrackingEventService.GetShipmentTrackingEvent.
+message GetShipmentTrackingEventRequest {
+  // The resource name of the shipment tracking event to retrieve.
+  // Format: spaces/{space}/shipments/{shipment}/trackingEvents/{shipmentTrackingEvent}
+  string name = 1 [
+    (google.api.field_behavior) = REQUIRED,
+    (google.api.resource_reference) = {
+      type: "api.saga.einride.tech/ShipmentTrackingEvent"
+    },
+    (grpc.gateway.protoc_gen_openapiv2.options.openapiv2_field) = {
+      field_configuration: {
+        path_param_name: "shipmentTrackingEvent"
+      }
+    }
+  ];
+}
+
+// Request message for ShipmentTrackingEventService.ListShipmentTrackingEvents.
+message ListShipmentTrackingEventsRequest {
+  // The resource name of the parent, which owns this collection of shipment tracking events.
+  // Format: spaces/{space}/shipments/{shipment}/trackingEvents
+  string parent = 1 [
+    (google.api.field_behavior) = REQUIRED,
+    (google.api.resource_reference) = {
+      type: "api.saga.einride.tech/Shipment"
+    }
+  ];
+
+  // Requested page size. Server may return fewer shipment tracking events than requested.
+  // If unspecified, server will pick an appropriate default.
+  int32 page_size = 2;
+
+  // A token identifying a page of results the server should return.
+  // Typically, this is the value of
+  // [ListShipmentTrackingEventsResponse.page_token][einride.saga.extend.book.v1beta1.ListShipmentTrackingEventsResponse.page_token]
+  // returned from the previous call to `ListShipmentTrackingEvents` method.
+  string page_token = 3;
+}
+
+// Response message for ShipmentTrackingEventService.ListShipmentTrackingEvents.
+message ListShipmentTrackingEventsResponse {
+  // The list of shipment tracking events.
+  repeated ShipmentTrackingEvent shipment_tracking_events = 1;
+
+  // A token to retrieve next page of results.  Pass this value in the
+  // [ListShipmentTrackingEventsRequest.page_token][einride.saga.extend.book.v1beta1.ListShipmentTrackingEventsRequest.page_token]
+  // field in the subsequent call to `ListShipmentTrackingEvents` method to retrieve the next
+  // page of results.
+  string next_page_token = 2;
 }

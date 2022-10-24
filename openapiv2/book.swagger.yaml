@@ -70,6 +70,50 @@ consumes:
 produces:
   - application/json
 paths:
+  /v1beta1/{parent}/trackingEvents:
+    get:
+      summary: |-
+        List shipment tracking events for a shipment.
+        The events are ordered by ascending occurred_time.
+      description: 'See: https://google.aip.dev/132 (Standard methods: List).'
+      operationId: ShipmentTrackingEventService_ListShipmentTrackingEvents
+      responses:
+        "200":
+          description: A successful response.
+          schema:
+            $ref: '#/definitions/v1beta1ListShipmentTrackingEventsResponse'
+        default:
+          description: An unexpected error response.
+          schema:
+            $ref: '#/definitions/rpcStatus'
+      parameters:
+        - name: parent
+          description: |-
+            The resource name of the parent, which owns this collection of shipment tracking events.
+            Format: spaces/{space}/shipments/{shipment}/trackingEvents
+          in: path
+          required: true
+          type: string
+          pattern: spaces/[^/]+/shipments/[^/]+
+        - name: pageSize
+          description: |-
+            Requested page size. Server may return fewer shipment tracking events than requested.
+            If unspecified, server will pick an appropriate default.
+          in: query
+          required: false
+          type: integer
+          format: int32
+        - name: pageToken
+          description: |-
+            A token identifying a page of results the server should return.
+            Typically, this is the value of
+            [ListShipmentTrackingEventsResponse.page_token][einride.saga.extend.book.v1beta1.ListShipmentTrackingEventsResponse.page_token]
+            returned from the previous call to `ListShipmentTrackingEvents` method.
+          in: query
+          required: false
+          type: string
+      tags:
+        - ShipmentTrackingEventService
   /v1beta1/{shipment}:
     get:
       summary: Get a shipment.
@@ -154,6 +198,31 @@ paths:
             description: Request message for BookService.ReleaseShipment.
       tags:
         - ShipmentService
+  /v1beta1/{shipmentTrackingEvent}:
+    get:
+      summary: Get a shipment tracking event.
+      description: This is an AIP standard [Get](https://google.aip.dev/131) method.
+      operationId: ShipmentTrackingEventService_GetShipmentTrackingEvent
+      responses:
+        "200":
+          description: A successful response.
+          schema:
+            $ref: '#/definitions/v1beta1ShipmentTrackingEvent'
+        default:
+          description: An unexpected error response.
+          schema:
+            $ref: '#/definitions/rpcStatus'
+      parameters:
+        - name: shipmentTrackingEvent
+          description: |-
+            The resource name of the shipment tracking event to retrieve.
+            Format: spaces/{space}/shipments/{shipment}/trackingEvents/{shipmentTrackingEvent}
+          in: path
+          required: true
+          type: string
+          pattern: spaces/[^/]+/shipments/[^/]+/trackingEvents/[^/]+
+      tags:
+        - ShipmentTrackingEventService
   /v1beta1/{space}/shipments:
     post:
       summary: Create a shipment in a space.
@@ -414,6 +483,22 @@ definitions:
       - postalCode
       - city
       - regionCode
+  v1beta1ListShipmentTrackingEventsResponse:
+    type: object
+    properties:
+      nextPageToken:
+        type: string
+        description: |-
+          A token to retrieve next page of results.  Pass this value in the
+          [ListShipmentTrackingEventsRequest.page_token][einride.saga.extend.book.v1beta1.ListShipmentTrackingEventsRequest.page_token]
+          field in the subsequent call to `ListShipmentTrackingEvents` method to retrieve the next
+          page of results.
+      shipmentTrackingEvents:
+        type: array
+        items:
+          $ref: '#/definitions/v1beta1ShipmentTrackingEvent'
+        description: The list of shipment tracking events.
+    description: Response message for ShipmentTrackingEventService.ListShipmentTrackingEvents.
   v1beta1Shipment:
     type: object
     properties:

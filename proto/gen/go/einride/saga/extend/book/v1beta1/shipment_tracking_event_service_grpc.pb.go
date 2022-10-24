@@ -26,6 +26,15 @@ type ShipmentTrackingEventServiceClient interface {
 	//
 	// This is an AIP standard [Create](https://google.aip.dev/133) method.
 	CreateShipmentTrackingEvent(ctx context.Context, in *CreateShipmentTrackingEventRequest, opts ...grpc.CallOption) (*ShipmentTrackingEvent, error)
+	// Get a shipment tracking event.
+	//
+	// This is an AIP standard [Get](https://google.aip.dev/131) method.
+	GetShipmentTrackingEvent(ctx context.Context, in *GetShipmentTrackingEventRequest, opts ...grpc.CallOption) (*ShipmentTrackingEvent, error)
+	// List shipment tracking events for a shipment.
+	// The events are ordered by ascending occurred_time.
+	//
+	// See: https://google.aip.dev/132 (Standard methods: List).
+	ListShipmentTrackingEvents(ctx context.Context, in *ListShipmentTrackingEventsRequest, opts ...grpc.CallOption) (*ListShipmentTrackingEventsResponse, error)
 }
 
 type shipmentTrackingEventServiceClient struct {
@@ -45,6 +54,24 @@ func (c *shipmentTrackingEventServiceClient) CreateShipmentTrackingEvent(ctx con
 	return out, nil
 }
 
+func (c *shipmentTrackingEventServiceClient) GetShipmentTrackingEvent(ctx context.Context, in *GetShipmentTrackingEventRequest, opts ...grpc.CallOption) (*ShipmentTrackingEvent, error) {
+	out := new(ShipmentTrackingEvent)
+	err := c.cc.Invoke(ctx, "/einride.saga.extend.book.v1beta1.ShipmentTrackingEventService/GetShipmentTrackingEvent", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *shipmentTrackingEventServiceClient) ListShipmentTrackingEvents(ctx context.Context, in *ListShipmentTrackingEventsRequest, opts ...grpc.CallOption) (*ListShipmentTrackingEventsResponse, error) {
+	out := new(ListShipmentTrackingEventsResponse)
+	err := c.cc.Invoke(ctx, "/einride.saga.extend.book.v1beta1.ShipmentTrackingEventService/ListShipmentTrackingEvents", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 // ShipmentTrackingEventServiceServer is the server API for ShipmentTrackingEventService service.
 // All implementations should embed UnimplementedShipmentTrackingEventServiceServer
 // for forward compatibility
@@ -53,6 +80,15 @@ type ShipmentTrackingEventServiceServer interface {
 	//
 	// This is an AIP standard [Create](https://google.aip.dev/133) method.
 	CreateShipmentTrackingEvent(context.Context, *CreateShipmentTrackingEventRequest) (*ShipmentTrackingEvent, error)
+	// Get a shipment tracking event.
+	//
+	// This is an AIP standard [Get](https://google.aip.dev/131) method.
+	GetShipmentTrackingEvent(context.Context, *GetShipmentTrackingEventRequest) (*ShipmentTrackingEvent, error)
+	// List shipment tracking events for a shipment.
+	// The events are ordered by ascending occurred_time.
+	//
+	// See: https://google.aip.dev/132 (Standard methods: List).
+	ListShipmentTrackingEvents(context.Context, *ListShipmentTrackingEventsRequest) (*ListShipmentTrackingEventsResponse, error)
 }
 
 // UnimplementedShipmentTrackingEventServiceServer should be embedded to have forward compatible implementations.
@@ -61,6 +97,12 @@ type UnimplementedShipmentTrackingEventServiceServer struct {
 
 func (UnimplementedShipmentTrackingEventServiceServer) CreateShipmentTrackingEvent(context.Context, *CreateShipmentTrackingEventRequest) (*ShipmentTrackingEvent, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method CreateShipmentTrackingEvent not implemented")
+}
+func (UnimplementedShipmentTrackingEventServiceServer) GetShipmentTrackingEvent(context.Context, *GetShipmentTrackingEventRequest) (*ShipmentTrackingEvent, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method GetShipmentTrackingEvent not implemented")
+}
+func (UnimplementedShipmentTrackingEventServiceServer) ListShipmentTrackingEvents(context.Context, *ListShipmentTrackingEventsRequest) (*ListShipmentTrackingEventsResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method ListShipmentTrackingEvents not implemented")
 }
 
 // UnsafeShipmentTrackingEventServiceServer may be embedded to opt out of forward compatibility for this service.
@@ -92,6 +134,42 @@ func _ShipmentTrackingEventService_CreateShipmentTrackingEvent_Handler(srv inter
 	return interceptor(ctx, in, info, handler)
 }
 
+func _ShipmentTrackingEventService_GetShipmentTrackingEvent_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(GetShipmentTrackingEventRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(ShipmentTrackingEventServiceServer).GetShipmentTrackingEvent(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/einride.saga.extend.book.v1beta1.ShipmentTrackingEventService/GetShipmentTrackingEvent",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(ShipmentTrackingEventServiceServer).GetShipmentTrackingEvent(ctx, req.(*GetShipmentTrackingEventRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _ShipmentTrackingEventService_ListShipmentTrackingEvents_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(ListShipmentTrackingEventsRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(ShipmentTrackingEventServiceServer).ListShipmentTrackingEvents(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/einride.saga.extend.book.v1beta1.ShipmentTrackingEventService/ListShipmentTrackingEvents",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(ShipmentTrackingEventServiceServer).ListShipmentTrackingEvents(ctx, req.(*ListShipmentTrackingEventsRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
 // ShipmentTrackingEventService_ServiceDesc is the grpc.ServiceDesc for ShipmentTrackingEventService service.
 // It's only intended for direct use with grpc.RegisterService,
 // and not to be introspected or modified (even as a copy)
@@ -102,6 +180,14 @@ var ShipmentTrackingEventService_ServiceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "CreateShipmentTrackingEvent",
 			Handler:    _ShipmentTrackingEventService_CreateShipmentTrackingEvent_Handler,
+		},
+		{
+			MethodName: "GetShipmentTrackingEvent",
+			Handler:    _ShipmentTrackingEventService_GetShipmentTrackingEvent_Handler,
+		},
+		{
+			MethodName: "ListShipmentTrackingEvents",
+			Handler:    _ShipmentTrackingEventService_ListShipmentTrackingEvents_Handler,
 		},
 	},
 	Streams:  []grpc.StreamDesc{},
