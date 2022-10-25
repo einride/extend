@@ -1,6 +1,6 @@
 syntax = "proto3";
 
-package einride.saga.extend.auth.v1alpha1;
+package einride.saga.extend.auth.v1alpha2;
 
 import "einride/iam/v1/annotations.proto";
 import "google/api/annotations.proto";
@@ -18,7 +18,7 @@ option (google.api.resource_definition) = {
 option (grpc.gateway.protoc_gen_openapiv2.options.openapiv2_swagger) = {
   info: {
     title: "Einride Extend: Authentication API";
-    version: "v1alpha1";
+    version: "v1alpha2";
     description:
       "Based on REST principles, with optional support for gRPC, the Einride Extend API enables modern API-based integration to Einride Saga.\n"
       "\n"
@@ -90,15 +90,14 @@ option (grpc.gateway.protoc_gen_openapiv2.options.openapiv2_swagger) = {
 };
 
 // Authentication service.
-// DEPRECATED: use v1alpha2 instead.
 service AuthenticationService {
   option (google.api.default_host) = "api.saga.einride.tech";
 
   // Exchange secret for access token.
   rpc ExchangeSecret(ExchangeSecretRequest) returns (ExchangeSecretResponse) {
     option (google.api.http) = {
-      post: "/v1alpha1/{user=users/*}:exchangeSecret"
-      body: "secret"
+      post: "/v1alpha2/{user=users/*}:exchangeSecret"
+      body: "*"
     };
     option (einride.iam.v1.method_authorization).none = true;
   }
@@ -142,6 +141,6 @@ message ExchangeSecretResponse {
   // on subsequent API calls.
   string access_token = 1;
 
-  // Expiration time of the access token.
-  google.protobuf.Timestamp expiration_time = 2;
+  // Expire time of the access token.
+  google.protobuf.Timestamp expire_time = 2 [(google.api.field_behavior) = OUTPUT_ONLY];
 }
