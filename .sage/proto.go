@@ -147,7 +147,7 @@ func (Proto) BufGenerateAuth(ctx context.Context) error {
 		"--template",
 		"buf.gen.auth.yaml",
 		"--path",
-		"einride/saga/extend/auth/v1alpha1",
+		"einride/saga/extend/auth/v1alpha2",
 	)
 	cmd.Dir = sg.FromGitRoot("proto")
 	return cmd.Run()
