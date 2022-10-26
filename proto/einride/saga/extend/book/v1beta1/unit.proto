@@ -1,0 +1,83 @@
+syntax = "proto3";
+
+package einride.saga.extend.book.v1beta1;
+
+import "google/api/field_behavior.proto";
+import "google/api/resource.proto";
+import "google/protobuf/timestamp.proto";
+
+// A unit is a holder of goods such as a EUR-pallet.
+message Unit {
+  // Type of unit
+  string type = 1 [(google.api.field_behavior) = REQUIRED];
+  // External reference ID of the unit
+  string external_reference_id = 2;
+  // Description of the unit
+  string description = 3;
+  // Unique unit tracking ID
+  string tracking_id = 4 [(google.api.field_behavior) = OUTPUT_ONLY];
+  // Unit weight
+  Weight weight = 5 [(google.api.field_behavior) = REQUIRED];
+  // Unit length
+  Length length = 6;
+  // Unit height
+  Length height = 7;
+  // Unit width
+  Length width = 8;
+  // Unit volume
+  Volume volume = 9;
+
+  // Weight specified in different units
+  message Weight {
+    // Weight value
+    double value = 1 [(google.api.field_behavior) = REQUIRED];
+    // Weight unit
+    Unit unit = 2 [(google.api.field_behavior) = REQUIRED];
+
+    // Weight units
+    enum Unit {
+      // Unspecified unit
+      UNIT_UNSPECIFIED = 0;
+      // Kilograms
+      KG = 1;
+      // Pounds
+      LBS = 2;
+    }
+  }
+
+  // Length specified in different units
+  message Length {
+    // Length value
+    double value = 1 [(google.api.field_behavior) = REQUIRED];
+    // Length unit
+    Unit unit = 2 [(google.api.field_behavior) = REQUIRED];
+
+    // Length units
+    enum Unit {
+      // Unspecified unit
+      UNIT_UNSPECIFIED = 0;
+      // Centimeters
+      CM = 1;
+      // Inches
+      IN = 2;
+    }
+  }
+
+  // Volume specified in different units
+  message Volume {
+    // Volume value
+    double value = 1 [(google.api.field_behavior) = REQUIRED];
+    // Volume unit
+    Unit unit = 2 [(google.api.field_behavior) = REQUIRED];
+
+    // Volume units
+    enum Unit {
+      // Unspecified unit
+      UNIT_UNSPECIFIED = 0;
+      // Cubic meters
+      CBM = 1;
+      // Cubic feet
+      CBFT = 2;
+    }
+  }
+}
