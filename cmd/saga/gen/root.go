@@ -2,6 +2,8 @@
 package saga
 
 import (
+	v1alpha2 "github.com/einride/saga/cmd/saga/gen/einride/saga/extend/auth/v1alpha2"
+	v1alpha1 "github.com/einride/saga/cmd/saga/gen/einride/saga/extend/book/v1alpha1"
 	v1beta1 "github.com/einride/saga/cmd/saga/gen/einride/saga/extend/book/v1beta1"
 	cobra "github.com/spf13/cobra"
 	aipcli "go.einride.tech/aip-cli/aipcli"
@@ -15,6 +17,8 @@ func NewModuleCommand(use string, short string, commands ...*cobra.Command) *cob
 		config,
 		append(
 			[]*cobra.Command{
+				v1alpha2.NewAuthenticationServiceCommand(config),
+				v1alpha1.NewBookingServiceCommand(config),
 				v1beta1.NewShipmentServiceCommand(config),
 				v1beta1.NewShipmentTrackingEventServiceCommand(config),
 			},
@@ -24,5 +28,5 @@ func NewModuleCommand(use string, short string, commands ...*cobra.Command) *cob
 }
 
 func NewConfig() aipcli.Config {
-	return aipcli.Config{Hosts: map[string]string{"prod": "api.saga.einride.tech"}, DefaultHost: "prod", Root: "saga", GoogleCloudIdentityTokens: false}
+	return aipcli.Config{Hosts: map[string]string{"eu-prod": "eu.api.saga.einride.tech", "us-prod": "us.api.saga.einride.tech"}, DefaultHost: "us-prod", Root: "saga", GoogleCloudIdentityTokens: false}
 }
