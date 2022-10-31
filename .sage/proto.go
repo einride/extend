@@ -23,6 +23,7 @@ func (Proto) Default(ctx context.Context) error {
 	sg.Deps(ctx, Proto.APILinterLint)
 	sg.Deps(ctx, Proto.BufGenerate, Proto.BufGenerateBook, Proto.BufGenerateAuth, Proto.BufGenerateCLI)
 	sg.Deps(ctx, Proto.GoModTidy)
+	sg.Deps(ctx, Proto.InstallCLI)
 	return nil
 }
 
@@ -191,7 +192,7 @@ func (Proto) BufGenerateCLI(ctx context.Context) error {
 		"--template",
 		"buf.gen.cli.yaml",
 		"--path",
-		"einride/saga/extend/book/v1beta1",
+		"einride",
 	)
 	cmd.Dir = sg.FromGitRoot("proto")
 	if err := cmd.Run(); err != nil {
@@ -207,4 +208,15 @@ func (Proto) GoModTidy(ctx context.Context) error {
 	command := sg.Command(ctx, "go", "mod", "tidy", "-v")
 	command.Dir = sg.FromGitRoot("cmd", cli)
 	return command.Run()
+}
+
+func (Proto) InstallCLI(ctx context.Context) error {
+	sg.Logger(ctx).Println("installing latest version of saga ctl...")
+	cmd := sg.Command(ctx, "go", "install", ".")
+	cmd.Dir = sg.FromGitRoot("cmd", "saga")
+	if err := cmd.Run(); err != nil {
+		return err
+	}
+	sg.Logger(ctx).Println("installed! run `saga completion --help` to configure auto-complete")
+	return nil
 }

@@ -22,5 +22,6 @@ plugins:
     opt:
       - module=github.com/einride/saga/cmd/saga/gen
       - root=saga
-      - hosts=prod=api.saga.einride.tech
-      - default_host=prod
+      - hosts=eu-prod=eu.api.saga.einride.tech
+      - hosts=us-prod=us.api.saga.einride.tech
+      - default_host=us-prod
