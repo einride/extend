@@ -91,6 +91,10 @@ default: $(sagefile)
 go-mod-tidy: $(sagefile)
 	@$(sagefile) Proto:GoModTidy
 
+.PHONY: install-cli
+install-cli: $(sagefile)
+	@$(sagefile) Proto:InstallCLI
+
 .PHONY: protoc-gen-go
 protoc-gen-go: $(sagefile)
 	@$(sagefile) Proto:ProtocGenGo
