@@ -27,6 +27,8 @@ go.einride.tech/grpc-service-config v0.8.0 h1:WlUV7ASkBlTJ5AKUSXEMCOhKjtzibHVora
 go.einride.tech/grpc-service-config v0.8.0/go.mod h1:bonKFXg4nkRbIOAhM1+01Xry+v8o9OkxGWXf6x1SEa8=
 go.einride.tech/iam v0.46.0 h1:izbIDH0Ij7f91Z90s8kxyivapnJBBjZlqZuyoDQDFAU=
 go.einride.tech/iam v0.46.0/go.mod h1:GBN7TKdczA4ZciFXRSUBwOcvYGFXFK6+qwxmMGY4g+I=
+go.einride.tech/protobuf-sensitive v0.3.0 h1:CRIEF833SXINoCaZp7V8GqB+65bLgNGzVH+bdyPRNM4=
+go.einride.tech/protobuf-sensitive v0.3.0/go.mod h1:nwu0o4M/iWVo24hAn+3PDs6Ja2Mw3g8oDgyy7Rzw8k0=
 golang.org/x/crypto v0.0.0-20190308221718-c2843e01d9a2/go.mod h1:djNgcEr1/C05ACkg1iLfiJU5Ep61QUkGW8qpdssI0+w=
 golang.org/x/crypto v0.0.0-20191011191535-87dc89f01550/go.mod h1:yigFU9vqHzYiE8UmvKecakEJjdnWj3jj499lnFckfCI=
 golang.org/x/crypto v0.0.0-20200622213623-75b288015ac9/go.mod h1:LzIPMQfyMNhhGPhUkYOs5KpL4U8rLKemX1yGLhDgUto=
