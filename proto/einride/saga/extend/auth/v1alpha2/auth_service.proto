@@ -3,6 +3,7 @@ syntax = "proto3";
 package einride.saga.extend.auth.v1alpha2;
 
 import "einride/iam/v1/annotations.proto";
+import "einride/sensitive/v1/annotations.proto";
 import "google/api/annotations.proto";
 import "google/api/client.proto";
 import "google/api/field_behavior.proto";
@@ -125,6 +126,7 @@ message ExchangeSecretRequest {
   // The secret.
   string secret = 2 [
     (google.api.field_behavior) = REQUIRED,
+    (einride.sensitive.v1.sensitive) = true,
     (grpc.gateway.protoc_gen_openapiv2.options.openapiv2_field) = {
       description: "The API user secret.",
       format: "password",
