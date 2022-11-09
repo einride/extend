@@ -9,8 +9,9 @@ package authv1beta1
 
 import (
 	fmt "fmt"
-	resourcename "go.einride.tech/aip/resourcename"
 	strings "strings"
+
+	resourcename "go.einride.tech/aip/resourcename"
 )
 
 type UserResourceName struct {

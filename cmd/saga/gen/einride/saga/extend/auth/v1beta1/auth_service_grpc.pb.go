@@ -2,9 +2,9 @@
 // versions:
 // - protoc-gen-go-grpc v1.2.0
 // - protoc             (unknown)
-// source: einride/saga/extend/auth/v1alpha1/auth_service.proto
+// source: einride/saga/extend/auth/v1beta1/auth_service.proto
 
-package authv1alpha1
+package authv1beta1
 
 import (
 	context "context"
@@ -36,7 +36,7 @@ func NewAuthenticationServiceClient(cc grpc.ClientConnInterface) AuthenticationS
 
 func (c *authenticationServiceClient) ExchangeSecret(ctx context.Context, in *ExchangeSecretRequest, opts ...grpc.CallOption) (*ExchangeSecretResponse, error) {
 	out := new(ExchangeSecretResponse)
-	err := c.cc.Invoke(ctx, "/einride.saga.extend.auth.v1alpha1.AuthenticationService/ExchangeSecret", in, out, opts...)
+	err := c.cc.Invoke(ctx, "/einride.saga.extend.auth.v1beta1.AuthenticationService/ExchangeSecret", in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
@@ -80,7 +80,7 @@ func _AuthenticationService_ExchangeSecret_Handler(srv interface{}, ctx context.
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: "/einride.saga.extend.auth.v1alpha1.AuthenticationService/ExchangeSecret",
+		FullMethod: "/einride.saga.extend.auth.v1beta1.AuthenticationService/ExchangeSecret",
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
 		return srv.(AuthenticationServiceServer).ExchangeSecret(ctx, req.(*ExchangeSecretRequest))
@@ -92,7 +92,7 @@ func _AuthenticationService_ExchangeSecret_Handler(srv interface{}, ctx context.
 // It's only intended for direct use with grpc.RegisterService,
 // and not to be introspected or modified (even as a copy)
 var AuthenticationService_ServiceDesc = grpc.ServiceDesc{
-	ServiceName: "einride.saga.extend.auth.v1alpha1.AuthenticationService",
+	ServiceName: "einride.saga.extend.auth.v1beta1.AuthenticationService",
 	HandlerType: (*AuthenticationServiceServer)(nil),
 	Methods: []grpc.MethodDesc{
 		{
@@ -101,5 +101,5 @@ var AuthenticationService_ServiceDesc = grpc.ServiceDesc{
 		},
 	},
 	Streams:  []grpc.StreamDesc{},
-	Metadata: "einride/saga/extend/auth/v1alpha1/auth_service.proto",
+	Metadata: "einride/saga/extend/auth/v1beta1/auth_service.proto",
 }
