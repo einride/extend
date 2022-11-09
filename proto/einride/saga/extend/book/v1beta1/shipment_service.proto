@@ -30,11 +30,6 @@ option (google.api.resource_definition) = {
   type: "api.saga.einride.tech/Sender"
   pattern: "spaces/{space}/senders/{sender}"
 };
-// A Saga booking.
-option (google.api.resource_definition) = {
-  type: "api.saga.einride.tech/Booking"
-  pattern: "spaces/{space}/bookings/{booking}"
-};
 option (grpc.gateway.protoc_gen_openapiv2.options.openapiv2_swagger) = {
   info: {
     title: "Einride Extend: Shipment API";

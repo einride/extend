@@ -3,9 +3,9 @@
 // versions:
 // 	protoc-gen-go-aip development
 // 	protoc (unknown)
-// source: einride/saga/extend/book/v1alpha1/booking.proto
+// source: einride/saga/extend/book/v1beta1/booking.proto
 
-package bookv1alpha1
+package bookv1beta1
 
 import (
 	fmt "fmt"
@@ -14,16 +14,25 @@ import (
 )
 
 type BookingResourceName struct {
-	Organization string
-	Booking      string
+	Space   string
+	Booking string
+}
+
+func (n SpaceResourceName) BookingResourceName(
+	booking string,
+) BookingResourceName {
+	return BookingResourceName{
+		Space:   n.Space,
+		Booking: booking,
+	}
 }
 
 func (n BookingResourceName) Validate() error {
-	if n.Organization == "" {
-		return fmt.Errorf("organization: empty")
+	if n.Space == "" {
+		return fmt.Errorf("space: empty")
 	}
-	if strings.IndexByte(n.Organization, '/') != -1 {
-		return fmt.Errorf("organization: contains illegal character '/'")
+	if strings.IndexByte(n.Space, '/') != -1 {
+		return fmt.Errorf("space: contains illegal character '/'")
 	}
 	if n.Booking == "" {
 		return fmt.Errorf("booking: empty")
@@ -35,13 +44,13 @@ func (n BookingResourceName) Validate() error {
 }
 
 func (n BookingResourceName) ContainsWildcard() bool {
-	return false || n.Organization == "-" || n.Booking == "-"
+	return false || n.Space == "-" || n.Booking == "-"
 }
 
 func (n BookingResourceName) String() string {
 	return resourcename.Sprint(
-		"organizations/{organization}/bookings/{booking}",
-		n.Organization,
+		"spaces/{space}/bookings/{booking}",
+		n.Space,
 		n.Booking,
 	)
 }
@@ -56,8 +65,14 @@ func (n BookingResourceName) MarshalString() (string, error) {
 func (n *BookingResourceName) UnmarshalString(name string) error {
 	return resourcename.Sscan(
 		name,
-		"organizations/{organization}/bookings/{booking}",
-		&n.Organization,
+		"spaces/{space}/bookings/{booking}",
+		&n.Space,
 		&n.Booking,
 	)
+}
+
+func (n BookingResourceName) SpaceResourceName() SpaceResourceName {
+	return SpaceResourceName{
+		Space: n.Space,
+	}
 }
