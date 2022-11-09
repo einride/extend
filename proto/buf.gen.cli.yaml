@@ -10,6 +10,7 @@ managed:
     override:
       buf.build/einride/grpc-service-config: go.einride.tech/grpc-service-config/gen
       buf.build/einride/iam: go.einride.tech/iam/proto/gen
+      buf.build/einride/sensitive: go.einride.tech/protobuf-sensitive/gen
 
 plugins:
   - name: go
@@ -24,4 +25,9 @@ plugins:
       - root=saga
       - hosts=eu-prod=eu.api.saga.einride.tech
       - hosts=us-prod=us.api.saga.einride.tech
-      - default_host=us-prod
+
+  - name: go-grpc
+    out: cmd/saga/gen
+    opt:
+      - module=github.com/einride/saga/cmd/saga/gen
+      - require_unimplemented_servers=false
