@@ -3,8 +3,6 @@ syntax = "proto3";
 package einride.saga.extend.book.v1beta1;
 
 import "google/api/field_behavior.proto";
-import "google/api/resource.proto";
-import "google/protobuf/timestamp.proto";
 
 // A unit is a holder of goods such as a EUR-pallet.
 message Unit {

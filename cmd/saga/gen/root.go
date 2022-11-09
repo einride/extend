@@ -3,7 +3,6 @@ package saga
 
 import (
 	v1beta1 "github.com/einride/saga/cmd/saga/gen/einride/saga/extend/auth/v1beta1"
-	v1alpha1 "github.com/einride/saga/cmd/saga/gen/einride/saga/extend/book/v1alpha1"
 	v1beta11 "github.com/einride/saga/cmd/saga/gen/einride/saga/extend/book/v1beta1"
 	cobra "github.com/spf13/cobra"
 	aipcli "go.einride.tech/aip-cli/aipcli"
@@ -18,7 +17,7 @@ func NewModuleCommand(use string, short string, commands ...*cobra.Command) *cob
 		append(
 			[]*cobra.Command{
 				v1beta1.NewAuthenticationServiceCommand(config),
-				v1alpha1.NewBookingServiceCommand(config),
+				v1beta11.NewBookingServiceCommand(config),
 				v1beta11.NewShipmentServiceCommand(config),
 				v1beta11.NewShipmentTrackingEventServiceCommand(config),
 			},

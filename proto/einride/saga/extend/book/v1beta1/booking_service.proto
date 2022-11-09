@@ -1,0 +1,86 @@
+syntax = "proto3";
+
+package einride.saga.extend.book.v1beta1;
+
+import "einride/iam/v1/annotations.proto";
+import "einride/saga/extend/book/v1beta1/booking.proto";
+import "google/api/annotations.proto";
+import "google/api/client.proto";
+import "google/api/field_behavior.proto";
+import "google/api/resource.proto";
+import "protoc-gen-openapiv2/options/annotations.proto";
+
+// Booking service.
+service BookingService {
+  option (google.api.default_host) = "api.saga.einride.tech";
+
+  // Create a booking in a space.
+  //
+  // This is an AIP standard [Create](https://google.aip.dev/133) method.
+  rpc CreateBooking(CreateBookingRequest) returns (Booking) {
+    option (google.api.http) = {
+      post: "/v1beta1/{parent=spaces/*}/bookings"
+      body: "booking"
+    };
+    option (google.api.method_signature) = "parent,booking";
+    option (einride.iam.v1.method_authorization) = {
+      permission: "book.bookings.create"
+      before: {
+        expression: "test(caller, request.parent)"
+        description: "The caller must have permission to create a booking in the parent space."
+      }
+    };
+  }
+
+  // Get a booking.
+  //
+  // This is an AIP standard [Get](https://google.aip.dev/131) method.
+  rpc GetBooking(GetBookingRequest) returns (Booking) {
+    option (google.api.http) = {
+      get: "/v1beta1/{name=spaces/*/bookings/*}"
+    };
+    option (google.api.method_signature) = "name";
+    option (einride.iam.v1.method_authorization) = {
+      permission: "book.bookings.get"
+      before: {
+        expression: "test(caller, request.name)"
+        description: "The caller must have permission to get the booking"
+      }
+    };
+  }
+}
+
+// The request message to create a booking.
+message CreateBookingRequest {
+  // The parent space in which to create the booking.
+  string parent = 1 [
+    (google.api.field_behavior) = REQUIRED,
+    (google.api.resource_reference) = {
+      type: "api.saga.einride.tech/Space"
+    },
+    (grpc.gateway.protoc_gen_openapiv2.options.openapiv2_field) = {
+      field_configuration: {
+        path_param_name: "space"
+      }
+    }
+  ];
+
+  // The booking to create.
+  Booking booking = 2 [(google.api.field_behavior) = REQUIRED];
+}
+
+// The request message to get a booking.
+message GetBookingRequest {
+  // The resource name of the booking to retrieve.
+  string name = 1 [
+    (google.api.field_behavior) = REQUIRED,
+    (google.api.resource_reference) = {
+      type: "api.saga.einride.tech/Booking"
+    },
+    (grpc.gateway.protoc_gen_openapiv2.options.openapiv2_field) = {
+      field_configuration: {
+        path_param_name: "booking"
+      }
+    }
+  ];
+}

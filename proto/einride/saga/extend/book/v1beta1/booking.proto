@@ -1,0 +1,114 @@
+syntax = "proto3";
+
+package einride.saga.extend.book.v1beta1;
+
+import "einride/saga/extend/book/v1beta1/address.proto";
+import "einride/saga/extend/book/v1beta1/unit.proto";
+import "google/api/field_behavior.proto";
+import "google/api/resource.proto";
+import "google/protobuf/timestamp.proto";
+
+// A booking represents an estimated demand to deliver goods.
+message Booking {
+  option (google.api.resource) = {
+    type: "api.saga.einride.tech/Booking"
+    pattern: "spaces/{space}/bookings/{booking}"
+    plural: "bookings"
+    singular: "booking"
+  };
+  // The resource name of the booking.
+  string name = 1;
+  // Resource name of the space that owns the booking.
+  string space = 2 [
+    (google.api.field_behavior) = OUTPUT_ONLY,
+    (google.api.resource_reference) = {
+      type: "api.saga.einride.tech/Space"
+    }
+  ];
+  // Resource name of the sender of the booking.
+  string sender = 3 [
+    (google.api.field_behavior) = REQUIRED,
+    (google.api.resource_reference) = {
+      type: "api.saga.einride.tech/Sender"
+    }
+  ];
+  // The creation timestamp of the booking.
+  google.protobuf.Timestamp create_time = 4 [(google.api.field_behavior) = OUTPUT_ONLY];
+  // The last update timestamp of the booking.
+  // Updated when create/update/delete operation is performed.
+  google.protobuf.Timestamp update_time = 5 [(google.api.field_behavior) = OUTPUT_ONLY];
+  // The deletion timestamp of the booking. Set if the booking is deleted.
+  google.protobuf.Timestamp delete_time = 6 [(google.api.field_behavior) = OUTPUT_ONLY];
+
+  // The type of service to create a booking for. Set to pending upon creation.
+  ServiceType service_type = 7 [(google.api.field_behavior) = REQUIRED];
+  // The state of the booking.
+  State state = 8 [(google.api.field_behavior) = OUTPUT_ONLY];
+  // A sequenced booking must be transported in the provided stop order (pre planned). Default false.
+  bool sequenced = 9;
+  // External reference ID is a unique identifier that can be set by the client.
+  string external_reference_id = 10;
+  // Flag indicating if a shipment should be created automatically for this booking based on its stops. Default false.
+  bool auto_create_shipments = 11;
+  // Flag indicating if a shipment should be released automatically for this booking. Default false.
+  bool auto_release_shipments = 12;
+  // The units included in this booking.
+  repeated Unit units = 13 [(google.api.field_behavior) = REQUIRED];
+  // The stops included in this booking.
+  repeated Stop stops = 14 [(google.api.field_behavior) = REQUIRED];
+  // Tracking ID for the booking.
+  string tracking_id = 15 [(google.api.field_behavior) = OUTPUT_ONLY];
+
+  // The state of the booking.
+  enum State {
+    // Unspecified state
+    STATE_UNSPECIFIED = 0;
+    // The booking is received. Awaiting accept/reject.
+    PENDING = 1;
+    // The booking is accepted.
+    ACCEPTED = 2;
+    // The booking is rejected.
+    REJECTED = 3;
+  }
+
+  // The service type of the booking.
+  enum ServiceType {
+    // Unspecified service type.
+    SERVICE_TYPE_UNSPECIFIED = 0;
+    // Service type FTL.
+    FULL_TRUCK_LOAD = 1;
+    // Service type distribution.
+    DISTRIBUTION = 2;
+    // Service type shuttle.
+    SHUTTLE = 3;
+    // Service type milk run.
+    MILK_RUN = 4;
+  }
+
+  // A stop is an address where an event is going to happen. The event could be
+  // to deliver goods, charge the vehicle etc.
+  message Stop {
+    // The address of this stop.
+    Address address = 1 [(google.api.field_behavior) = REQUIRED];
+    // The type of stop.
+    Type stop_type = 2 [(google.api.field_behavior) = REQUIRED];
+    // Instructions for this stop.
+    string instructions = 3;
+    // The earliest time to arrive this stop.
+    google.protobuf.Timestamp requested_start_time = 4;
+    // The latest time to depart this stop.
+    google.protobuf.Timestamp requested_end_time = 5;
+    // The unit external reference id associated with this stop. E.g. for a pickup stop this will hold the units to pickup.
+    repeated string unit_external_reference_ids = 6 [(google.api.field_behavior) = REQUIRED];
+
+    // Type describes the reason for the stop. E.g. a stop to deliver or pickup.
+    enum Type {
+      // Unknown type.
+      TYPE_UNSPECIFIED = 0;
+      // Stop to pick up goods.
+      PICKUP = 1;
+      // Stop to deliver goods.
+      DELIVER = 2;
+    }
+  }
+}
