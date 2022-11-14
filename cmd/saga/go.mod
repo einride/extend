@@ -4,7 +4,7 @@ go 1.19
 
 require (
 	github.com/adrg/xdg v0.4.0
-	github.com/grpc-ecosystem/grpc-gateway/v2 v2.12.0
+	github.com/grpc-ecosystem/grpc-gateway/v2 v2.13.0
 	github.com/spf13/cobra v1.6.1
 	go.einride.tech/aip-cli v0.18.2
 	go.einride.tech/grpc-service-config v0.8.0
