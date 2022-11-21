@@ -44,30 +44,22 @@ message ShipmentTrackingEvent {
   enum EventCode {
     // Unspecified
     EVENT_CODE_UNSPECIFIED = 0;
-    // Pre-advice
-    PRE_ADVICE = 1;
-    // Accepted
-    ACCEPTED = 2;
-    // Rejected
-    REJECTED = 3;
-    // Failed
-    FAILED = 4;
-    // Released
-    RELEASED = 5;
-    // Departed
-    DEPARTED = 6;
-    // In transit
-    IN_TRANSIT = 7;
-    // Arrived at hub
-    ARRIVED_AT_HUB = 8;
-    // Arrived at destination
-    ARRIVED_AT_DESTINATION = 9;
-    // Delivered
-    DELIVERED = 10;
-    // Delivery attempt failed
-    DELIVERY_ATTEMPT_FAILED = 11;
-    // Damaged goods
-    DAMAGED_GOODS = 12;
+    // Arrived at pickup.
+    ARRIVED_AT_PICKUP = 1;
+    // Departed pickup.
+    DEPARTED_PICKUP = 2;
+    // Arrived at delivery.
+    ARRIVED_AT_DELIVERY = 3;
+    // Departed delivery.
+    DEPARTED_DELIVERY = 4;
+    // Started at pickup.
+    STARTED_AT_PICKUP = 5;
+    // Completed pickup.
+    COMPLETED_PICKUP = 6;
+    // Started at delivery.
+    STARTED_AT_DELIVERY = 7;
+    // Completed delivery.
+    COMPLETED_DELIVERY = 8;
   }
 
   // When the event occurred.
