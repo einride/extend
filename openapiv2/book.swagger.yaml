@@ -377,32 +377,24 @@ definitions:
   ShipmentTrackingEventEventCode:
     type: string
     enum:
-      - PRE_ADVICE
-      - ACCEPTED
-      - REJECTED
-      - FAILED
-      - RELEASED
-      - DEPARTED
-      - IN_TRANSIT
-      - ARRIVED_AT_HUB
-      - ARRIVED_AT_DESTINATION
-      - DELIVERED
-      - DELIVERY_ATTEMPT_FAILED
-      - DAMAGED_GOODS
+      - ARRIVED_AT_PICKUP
+      - DEPARTED_PICKUP
+      - ARRIVED_AT_DELIVERY
+      - DEPARTED_DELIVERY
+      - STARTED_AT_PICKUP
+      - COMPLETED_PICKUP
+      - STARTED_AT_DELIVERY
+      - COMPLETED_DELIVERY
     description: |-
       - EVENT_CODE_UNSPECIFIED: Unspecified
-       - PRE_ADVICE: Pre-advice
-       - ACCEPTED: Accepted
-       - REJECTED: Rejected
-       - FAILED: Failed
-       - RELEASED: Released
-       - DEPARTED: Departed
-       - IN_TRANSIT: In transit
-       - ARRIVED_AT_HUB: Arrived at hub
-       - ARRIVED_AT_DESTINATION: Arrived at destination
-       - DELIVERED: Delivered
-       - DELIVERY_ATTEMPT_FAILED: Delivery attempt failed
-       - DAMAGED_GOODS: Damaged goods
+       - ARRIVED_AT_PICKUP: Arrived at pickup.
+       - DEPARTED_PICKUP: Departed pickup.
+       - ARRIVED_AT_DELIVERY: Arrived at delivery.
+       - DEPARTED_DELIVERY: Departed delivery.
+       - STARTED_AT_PICKUP: Started at pickup.
+       - COMPLETED_PICKUP: Completed pickup.
+       - STARTED_AT_DELIVERY: Started at delivery.
+       - COMPLETED_DELIVERY: Completed delivery.
     title: Event code
   UnitLength:
     type: object
