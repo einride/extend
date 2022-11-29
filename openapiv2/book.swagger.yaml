@@ -799,10 +799,24 @@ definitions:
           The last update timestamp of the ShipmentTrackingEvent.
           Updated when create/update/delete operation is performed.
         readOnly: true
+      vehicle:
+        $ref: '#/definitions/v1beta1Vehicle'
     description: A shipment tracking event represents an event on a shipment.
     required:
       - code
       - occurredTime
+  v1beta1Vehicle:
+    type: object
+    properties:
+      driverReferenceId:
+        type: string
+        title: Driver reference id
+      vehicleReferenceId:
+        type: string
+        title: Vehicle reference id
+    title: Holds vehicle information if needed by the shipment tracking event
+    required:
+      - vehicleReferenceId
 securityDefinitions:
   Authorization:
     type: apiKey

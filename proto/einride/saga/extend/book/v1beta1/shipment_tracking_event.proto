@@ -70,4 +70,14 @@ message ShipmentTrackingEvent {
 
   // Description for the ShipmentTrackingEvent.
   string description = 9;
+
+  // On what vehicle did this event occur
+  Vehicle vehicle = 10;
+}
+// Holds vehicle information if needed by the shipment tracking event
+message Vehicle {
+  // Vehicle reference id
+  string vehicle_reference_id = 1 [(google.api.field_behavior) = REQUIRED];
+  // Driver reference id
+  string driver_reference_id = 2;
 }
