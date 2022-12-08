@@ -40,24 +40,37 @@ message Booking {
   // The deletion timestamp of the booking. Set if the booking is deleted.
   google.protobuf.Timestamp delete_time = 6 [(google.api.field_behavior) = OUTPUT_ONLY];
 
-  // The type of service to create a booking for. Set to pending upon creation.
-  ServiceType service_type = 7 [(google.api.field_behavior) = REQUIRED];
-  // The state of the booking.
-  State state = 8 [(google.api.field_behavior) = OUTPUT_ONLY];
+  // Booking type. Defaults to PROVISIONAL.
+  BookingType type = 7;
+  // The type of service to create a booking for.
+  ServiceType service_type = 8 [(google.api.field_behavior) = REQUIRED];
   // A sequenced booking must be transported in the provided stop order (pre planned). Default false.
   bool sequenced = 9;
   // External reference ID is a unique identifier that can be set by the client.
   string external_reference_id = 10;
-  // Flag indicating if a shipment should be created automatically for this booking based on its stops. Default false.
-  bool auto_create_shipments = 11;
-  // Flag indicating if a shipment should be released automatically for this booking. Default false.
-  bool auto_release_shipments = 12;
+  // The rule that is applied when a confirmed booking is accepted. Defaults to no auto rule.
+  AutomationRule automation_rule = 11;
+
   // The units included in this booking.
-  repeated Unit units = 13 [(google.api.field_behavior) = REQUIRED];
+  repeated Unit units = 12 [(google.api.field_behavior) = REQUIRED];
   // The stops included in this booking.
-  repeated Stop stops = 14 [(google.api.field_behavior) = REQUIRED];
+  repeated Stop stops = 13 [(google.api.field_behavior) = REQUIRED];
+
   // Tracking ID for the booking.
-  string tracking_id = 15 [(google.api.field_behavior) = OUTPUT_ONLY];
+  string tracking_id = 14 [(google.api.field_behavior) = OUTPUT_ONLY];
+  // The state of the booking. Set to PENDING upon creation.
+  // A booking is then either accepted or rejected.
+  State state = 15 [(google.api.field_behavior) = OUTPUT_ONLY];
+
+  // The booking type.
+  enum BookingType {
+    // Unspecified booking type
+    BOOKING_TYPE_UNSPECIFIED = 0;
+    // The booking is provisional and can be updated.
+    PROVISIONAL = 1;
+    // The booking is confirmed and can not be updated.
+    CONFIRMED = 2;
+  }
 
   // The state of the booking.
   enum State {
@@ -83,6 +96,17 @@ message Booking {
     SHUTTLE = 3;
     // Service type milk run.
     MILK_RUN = 4;
+  }
+
+  // The rule that is applied when a confirmed booking is accepted.
+  enum AutomationRule {
+    // Unspecified auto rule.
+    AUTOMATION_RULE_UNSPECIFIED = 0;
+    // When the confirmed booking is accepted, shipments will be created automatically from its stops and units.
+    CREATE_SHIPMENTS = 1;
+    // When the confirmed booking is accepted, shipments will be created automatically from its stops and units
+    // and then released.
+    CREATE_AND_RELEASE_SHIPMENTS = 2;
   }
 
   // A stop is an address where an event is going to happen. The event could be
