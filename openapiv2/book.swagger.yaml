@@ -306,6 +306,29 @@ paths:
       tags:
         - ShipmentService
 definitions:
+  BookingAutomationRule:
+    type: string
+    enum:
+      - CREATE_SHIPMENTS
+      - CREATE_AND_RELEASE_SHIPMENTS
+    description: |-
+      The rule that is applied when a confirmed booking is accepted.
+
+       - AUTOMATION_RULE_UNSPECIFIED: Unspecified auto rule.
+       - CREATE_SHIPMENTS: When the confirmed booking is accepted, shipments will be created automatically from its stops and units.
+       - CREATE_AND_RELEASE_SHIPMENTS: When the confirmed booking is accepted, shipments will be created automatically from its stops and units
+      and then released.
+  BookingBookingType:
+    type: string
+    enum:
+      - PROVISIONAL
+      - CONFIRMED
+    description: |-
+      The booking type.
+
+       - BOOKING_TYPE_UNSPECIFIED: Unspecified booking type
+       - PROVISIONAL: The booking is provisional and can be updated.
+       - CONFIRMED: The booking is confirmed and can not be updated.
   BookingServiceType:
     type: string
     enum:
@@ -577,12 +600,8 @@ definitions:
   v1beta1Booking:
     type: object
     properties:
-      autoCreateShipments:
-        type: boolean
-        description: Flag indicating if a shipment should be created automatically for this booking based on its stops. Default false.
-      autoReleaseShipments:
-        type: boolean
-        description: Flag indicating if a shipment should be released automatically for this booking. Default false.
+      automationRule:
+        $ref: '#/definitions/BookingAutomationRule'
       createTime:
         type: string
         format: date-time
@@ -622,6 +641,8 @@ definitions:
         type: string
         description: Tracking ID for the booking.
         readOnly: true
+      type:
+        $ref: '#/definitions/BookingBookingType'
       units:
         type: array
         items:
