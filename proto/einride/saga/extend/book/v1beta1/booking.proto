@@ -44,8 +44,8 @@ message Booking {
   BookingType type = 7;
   // The type of service to create a booking for.
   ServiceType service_type = 8 [(google.api.field_behavior) = REQUIRED];
-  // A sequenced booking must be transported in the provided stop order (pre planned). Default false.
-  bool sequenced = 9;
+  // Specifies if the sequence of the stops is significant. Default UNSEQUENCED.
+  StopSequence stop_sequence = 9;
   // External reference ID is a unique identifier that can be set by the client.
   string external_reference_id = 10;
   // The rule that is applied when a confirmed booking is accepted. Defaults to no auto rule.
@@ -96,6 +96,16 @@ message Booking {
     SHUTTLE = 3;
     // Service type milk run.
     MILK_RUN = 4;
+  }
+
+  // The stop sequence.
+  enum StopSequence {
+    // Unspecified stop sequence.
+    STOP_SEQUENCE_UNSPECIFIED = 0;
+    // The booking must be transported in the provided stop order (pre planned).
+    SEQUENCED = 1;
+    // The booking can be transported in any stop order.
+    UNSEQUENCED = 2;
   }
 
   // The rule that is applied when a confirmed booking is accepted.
