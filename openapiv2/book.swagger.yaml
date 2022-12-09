@@ -374,6 +374,17 @@ definitions:
       - address
       - stopType
       - unitExternalReferenceIds
+  BookingStopSequence:
+    type: string
+    enum:
+      - SEQUENCED
+      - UNSEQUENCED
+    description: |-
+      The stop sequence.
+
+       - STOP_SEQUENCE_UNSPECIFIED: Unspecified stop sequence.
+       - SEQUENCED: The booking must be transported in the provided stop order (pre planned).
+       - UNSEQUENCED: The booking can be transported in any stop order.
   BookingStopType:
     type: string
     enum:
@@ -621,9 +632,6 @@ definitions:
       sender:
         type: string
         description: Resource name of the sender of the booking.
-      sequenced:
-        type: boolean
-        description: A sequenced booking must be transported in the provided stop order (pre planned). Default false.
       serviceType:
         $ref: '#/definitions/BookingServiceType'
       space:
@@ -632,6 +640,8 @@ definitions:
         readOnly: true
       state:
         $ref: '#/definitions/v1beta1BookingState'
+      stopSequence:
+        $ref: '#/definitions/BookingStopSequence'
       stops:
         type: array
         items:
