@@ -80,4 +80,6 @@ message Vehicle {
   string vehicle_reference_id = 1 [(google.api.field_behavior) = REQUIRED];
   // Driver reference id
   string driver_reference_id = 2;
+  // Carrier reference id
+  string carrier_reference_id = 3;
 }

@@ -46,6 +46,7 @@ func NewShipmentTrackingEventServiceCommand(config aipcli.Config) *cobra.Command
 				"einride.saga.extend.book.v1beta1.ShipmentTrackingEvent.update_time":                          " The last update timestamp of the ShipmentTrackingEvent.\n Updated when create/update/delete operation is performed.\n",
 				"einride.saga.extend.book.v1beta1.ShipmentTrackingEvent.vehicle":                              " On what vehicle did this event occur\n",
 				"einride.saga.extend.book.v1beta1.ShipmentTrackingEventService.CreateShipmentTrackingEvent":   " Create a tracking event for a shipment\n\n This is an AIP standard [Create](https://google.aip.dev/133) method.\n",
+				"einride.saga.extend.book.v1beta1.Vehicle.carrier_reference_id":                               " Carrier reference id\n",
 				"einride.saga.extend.book.v1beta1.Vehicle.driver_reference_id":                                " Driver reference id\n",
 				"einride.saga.extend.book.v1beta1.Vehicle.vehicle_reference_id":                               " Vehicle reference id\n",
 				"google.protobuf.Timestamp.nanos":                                                             " Non-negative fractions of a second at nanosecond resolution. Negative\n second values with fractions must still have non-negative nanos values\n that count forward in time. Must be from 0 to 999,999,999\n inclusive.\n",

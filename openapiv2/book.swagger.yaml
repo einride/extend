@@ -839,6 +839,9 @@ definitions:
   v1beta1Vehicle:
     type: object
     properties:
+      carrierReferenceId:
+        type: string
+        title: Carrier reference id
       driverReferenceId:
         type: string
         title: Driver reference id
