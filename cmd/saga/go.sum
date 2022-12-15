@@ -50,8 +50,8 @@ github.com/stretchr/testify v1.8.1/go.mod h1:w2LPCIKwWwSfY2zedu0+kehJoqGctiVI29o
 github.com/yuin/goldmark v1.2.1/go.mod h1:3hX8gzYuyVAZsxl0MRgGTJEmQBFcNTphYh9decYSb74=
 go.einride.tech/aip v0.59.1 h1:dxmXyjwB/CDgzBA/qaes698HW7m0Z8ojbzjkvGpW6i8=
 go.einride.tech/aip v0.59.1/go.mod h1:SdLbSbgSU60Xkb4TMkmsZEQPHeEWx0ikBoq5QnqZvdg=
-go.einride.tech/aip-cli v0.18.2 h1:bRGbK4W/dB17YKmU1IewLzcZCEt4dWMV9WurtWbxphY=
-go.einride.tech/aip-cli v0.18.2/go.mod h1:SpVJMgqDcuN8zo6LWA+X8PWhXTwVmC2I/rthchssbyU=
+go.einride.tech/aip-cli v0.19.0 h1:QkJLTiJLeA3t3R75YPlJiK9F82R5FHlC4Ej/JjzEkpk=
+go.einride.tech/aip-cli v0.19.0/go.mod h1:SpVJMgqDcuN8zo6LWA+X8PWhXTwVmC2I/rthchssbyU=
 go.einride.tech/grpc-service-config v0.8.0 h1:WlUV7ASkBlTJ5AKUSXEMCOhKjtzibHVora3Xjz8DvXs=
 go.einride.tech/grpc-service-config v0.8.0/go.mod h1:bonKFXg4nkRbIOAhM1+01Xry+v8o9OkxGWXf6x1SEa8=
 go.einride.tech/iam v0.46.0 h1:izbIDH0Ij7f91Z90s8kxyivapnJBBjZlqZuyoDQDFAU=
