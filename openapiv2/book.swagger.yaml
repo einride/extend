@@ -188,6 +188,8 @@ paths:
           required: true
           schema:
             $ref: '#/definitions/v1beta1ShipmentTrackingEvent'
+            required:
+              - shipmentTrackingEvent
       tags:
         - ShipmentTrackingEventService
   /v1beta1/{shipment}:release:
@@ -274,6 +276,8 @@ paths:
           required: true
           schema:
             $ref: '#/definitions/v1beta1Booking'
+            required:
+              - booking
       tags:
         - BookingService
   /v1beta1/{space}/shipments:
@@ -303,6 +307,8 @@ paths:
           required: true
           schema:
             $ref: '#/definitions/v1beta1Shipment'
+            required:
+              - shipment
       tags:
         - ShipmentService
 definitions:
@@ -349,6 +355,7 @@ definitions:
     properties:
       address:
         $ref: '#/definitions/v1beta1Address'
+        description: The address of this stop.
       instructions:
         type: string
         description: Instructions for this stop.
@@ -362,6 +369,7 @@ definitions:
         description: The earliest time to arrive this stop.
       stopType:
         $ref: '#/definitions/BookingStopType'
+        description: The type of stop.
       unitExternalReferenceIds:
         type: array
         items:
@@ -374,17 +382,6 @@ definitions:
       - address
       - stopType
       - unitExternalReferenceIds
-  BookingStopSequence:
-    type: string
-    enum:
-      - SEQUENCED
-      - UNSEQUENCED
-    description: |-
-      The stop sequence.
-
-       - STOP_SEQUENCE_UNSPECIFIED: Unspecified stop sequence.
-       - SEQUENCED: The booking must be transported in the provided stop order (pre planned).
-       - UNSEQUENCED: The booking can be transported in any stop order.
   BookingStopType:
     type: string
     enum:
@@ -435,6 +432,7 @@ definitions:
     properties:
       unit:
         $ref: '#/definitions/UnitLengthUnit'
+        title: Length unit
       value:
         type: number
         format: double
@@ -458,6 +456,7 @@ definitions:
     properties:
       unit:
         $ref: '#/definitions/UnitVolumeUnit'
+        title: Volume unit
       value:
         type: number
         format: double
@@ -481,6 +480,7 @@ definitions:
     properties:
       unit:
         $ref: '#/definitions/UnitWeightUnit'
+        title: Weight unit
       value:
         type: number
         format: double
@@ -510,8 +510,10 @@ definitions:
         title: External reference ID of the unit
       height:
         $ref: '#/definitions/UnitLength'
+        title: Unit height
       length:
         $ref: '#/definitions/UnitLength'
+        title: Unit length
       trackingId:
         type: string
         title: Unique unit tracking ID
@@ -521,10 +523,13 @@ definitions:
         title: Type of unit
       volume:
         $ref: '#/definitions/UnitVolume'
+        title: Unit volume
       weight:
         $ref: '#/definitions/UnitWeight'
+        title: Unit weight
       width:
         $ref: '#/definitions/UnitLength'
+        title: Unit width
     description: A unit is a holder of goods such as a EUR-pallet.
     required:
       - type
@@ -581,6 +586,7 @@ definitions:
         title: The displayed name of the address
       latLng:
         $ref: '#/definitions/typeLatLng'
+        title: The geographic location of the address
       line1:
         type: string
         title: Address line 1
@@ -613,6 +619,7 @@ definitions:
     properties:
       automationRule:
         $ref: '#/definitions/BookingAutomationRule'
+        description: The rule that is applied when a confirmed booking is accepted. Defaults to no auto rule.
       createTime:
         type: string
         format: date-time
@@ -634,14 +641,17 @@ definitions:
         description: Resource name of the sender of the booking.
       serviceType:
         $ref: '#/definitions/BookingServiceType'
+        description: The type of service to create a booking for.
       space:
         type: string
         description: Resource name of the space that owns the booking.
         readOnly: true
       state:
         $ref: '#/definitions/v1beta1BookingState'
-      stopSequence:
-        $ref: '#/definitions/BookingStopSequence'
+        description: |-
+          The state of the booking. Set to PENDING upon creation.
+          A booking is then either accepted or rejected.
+        readOnly: true
       stops:
         type: array
         items:
@@ -653,6 +663,7 @@ definitions:
         readOnly: true
       type:
         $ref: '#/definitions/BookingBookingType'
+        description: Booking type. Defaults to PROVISIONAL.
       units:
         type: array
         items:
@@ -718,11 +729,14 @@ definitions:
         readOnly: true
       deliveryAddress:
         $ref: '#/definitions/v1beta1Address'
+        description: The address where the shipment is delivered to.
       deliveryInstructions:
         type: string
         description: Instructions for the delivery.
       deliveryState:
         $ref: '#/definitions/ShipmentDeliveryState'
+        title: Shipment delivery state
+        readOnly: true
       externalReferenceId:
         type: string
         description: An external reference for this shipment.
@@ -732,6 +746,9 @@ definitions:
         readOnly: true
       pickupAddress:
         $ref: '#/definitions/v1beta1Address'
+        description: |-
+          The address where the shipment is picked up.
+          Supply when creating shipment if different from the sender default pickup address.
       pickupInstructions:
         type: string
         description: Instructions for the pickup.
@@ -760,6 +777,9 @@ definitions:
         readOnly: true
       state:
         $ref: '#/definitions/v1beta1ShipmentState'
+        description: |-
+          Shipment state
+          Can be set to ACTIVE (default) or RELEASED when creating a shipment.
       trackingId:
         type: string
         description: A generated tracking ID for this shipment.
@@ -796,8 +816,10 @@ definitions:
     properties:
       address:
         $ref: '#/definitions/v1beta1Address'
+        description: The address where the event happened.
       code:
         $ref: '#/definitions/ShipmentTrackingEventEventCode'
+        title: The kind of tracking event that happened
       createTime:
         type: string
         format: date-time
@@ -832,6 +854,7 @@ definitions:
         readOnly: true
       vehicle:
         $ref: '#/definitions/v1beta1Vehicle'
+        title: On what vehicle did this event occur
     description: A shipment tracking event represents an event on a shipment.
     required:
       - code
