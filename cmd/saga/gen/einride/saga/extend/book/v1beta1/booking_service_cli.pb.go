@@ -48,7 +48,6 @@ func NewBookingServiceCommand(config aipcli.Config) *cobra.Command {
 				"einride.saga.extend.book.v1beta1.Booking.service_type":                     " The type of service to create a booking for.\n",
 				"einride.saga.extend.book.v1beta1.Booking.space":                            " Resource name of the space that owns the booking.\n",
 				"einride.saga.extend.book.v1beta1.Booking.state":                            " The state of the booking. Set to PENDING upon creation.\n A booking is then either accepted or rejected.\n",
-				"einride.saga.extend.book.v1beta1.Booking.stop_sequence":                    " Specifies if the sequence of the stops is significant. Default UNSEQUENCED.\n",
 				"einride.saga.extend.book.v1beta1.Booking.stops":                            " The stops included in this booking.\n",
 				"einride.saga.extend.book.v1beta1.Booking.tracking_id":                      " Tracking ID for the booking.\n",
 				"einride.saga.extend.book.v1beta1.Booking.type":                             " Booking type. Defaults to PROVISIONAL.\n",
