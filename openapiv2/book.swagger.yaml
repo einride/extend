@@ -311,6 +311,38 @@ paths:
               - shipment
       tags:
         - ShipmentService
+  /v1beta1/bookings:
+    post:
+      summary: |-
+        Create a booking for a sender without specifying space in the URL.
+        Booking parent space is deduced from the sender field in the booking.
+      description: |-
+        This is an AIP standard [Create](https://google.aip.dev/133) method.
+        (-- api-linter: core::0133::http-uri-parent=disabled
+        (-- api-linter: core::0133::method-signature=disabled
+        (-- api-linter: client-libraries::4232::required-fields=disabled
+            aip.dev/not-precedent: We need to do this in order to have a static URL without specifying space. --)
+      operationId: BookingService_CreateBookingSpaceless
+      responses:
+        "200":
+          description: A successful response.
+          schema:
+            $ref: '#/definitions/v1beta1Booking'
+        default:
+          description: An unexpected error response.
+          schema:
+            $ref: '#/definitions/rpcStatus'
+      parameters:
+        - name: booking
+          description: The booking to create.
+          in: body
+          required: true
+          schema:
+            $ref: '#/definitions/v1beta1Booking'
+            required:
+              - booking
+      tags:
+        - BookingService
 definitions:
   BookingAutomationRule:
     type: string

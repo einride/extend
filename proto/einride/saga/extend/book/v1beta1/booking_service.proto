@@ -32,6 +32,29 @@ service BookingService {
     };
   }
 
+  // Create a booking for a sender without specifying space in the URL.
+  // Booking parent space is deduced from the sender field in the booking.
+  //
+  // This is an AIP standard [Create](https://google.aip.dev/133) method.
+  // (-- api-linter: core::0133::http-uri-parent=disabled
+  // (-- api-linter: core::0133::method-signature=disabled
+  // (-- api-linter: client-libraries::4232::required-fields=disabled
+  //     aip.dev/not-precedent: We need to do this in order to have a static URL without specifying space. --)
+  rpc CreateBookingSpaceless(CreateBookingSpacelessRequest) returns (Booking) {
+    option (google.api.http) = {
+      post: "/v1beta1/bookings"
+      body: "booking"
+    };
+    option (google.api.method_signature) = "booking";
+    option (einride.iam.v1.method_authorization) = {
+      permission: "book.bookings.create"
+      before: {
+        expression: "test(caller, request.booking.sender)"
+        description: "The caller must have permission to create a booking for the sender."
+      }
+    };
+  }
+
   // Get a booking.
   //
   // This is an AIP standard [Get](https://google.aip.dev/131) method.
@@ -67,6 +90,16 @@ message CreateBookingRequest {
 
   // The booking to create.
   Booking booking = 2 [(google.api.field_behavior) = REQUIRED];
+}
+
+// The request message to create a booking without specifying space.
+// Booking parent space is deduced from the sender field in the booking.
+//
+// (-- api-linter: core::0133::request-parent-required=disabled
+//     aip.dev/not-precedent: We need to do this in order skip specifying space in the request. --)
+message CreateBookingSpacelessRequest {
+  // The booking to create.
+  Booking booking = 1 [(google.api.field_behavior) = REQUIRED];
 }
 
 // The request message to get a booking.

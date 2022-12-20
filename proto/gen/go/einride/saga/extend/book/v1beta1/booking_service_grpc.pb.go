@@ -26,6 +26,15 @@ type BookingServiceClient interface {
 	//
 	// This is an AIP standard [Create](https://google.aip.dev/133) method.
 	CreateBooking(ctx context.Context, in *CreateBookingRequest, opts ...grpc.CallOption) (*Booking, error)
+	// Create a booking for a sender without specifying space in the URL.
+	// Booking parent space is deduced from the sender field in the booking.
+	//
+	// This is an AIP standard [Create](https://google.aip.dev/133) method.
+	// (-- api-linter: core::0133::http-uri-parent=disabled
+	// (-- api-linter: core::0133::method-signature=disabled
+	// (-- api-linter: client-libraries::4232::required-fields=disabled
+	//     aip.dev/not-precedent: We need to do this in order to have a static URL without specifying space. --)
+	CreateBookingSpaceless(ctx context.Context, in *CreateBookingSpacelessRequest, opts ...grpc.CallOption) (*Booking, error)
 	// Get a booking.
 	//
 	// This is an AIP standard [Get](https://google.aip.dev/131) method.
@@ -49,6 +58,15 @@ func (c *bookingServiceClient) CreateBooking(ctx context.Context, in *CreateBook
 	return out, nil
 }
 
+func (c *bookingServiceClient) CreateBookingSpaceless(ctx context.Context, in *CreateBookingSpacelessRequest, opts ...grpc.CallOption) (*Booking, error) {
+	out := new(Booking)
+	err := c.cc.Invoke(ctx, "/einride.saga.extend.book.v1beta1.BookingService/CreateBookingSpaceless", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 func (c *bookingServiceClient) GetBooking(ctx context.Context, in *GetBookingRequest, opts ...grpc.CallOption) (*Booking, error) {
 	out := new(Booking)
 	err := c.cc.Invoke(ctx, "/einride.saga.extend.book.v1beta1.BookingService/GetBooking", in, out, opts...)
@@ -66,6 +84,15 @@ type BookingServiceServer interface {
 	//
 	// This is an AIP standard [Create](https://google.aip.dev/133) method.
 	CreateBooking(context.Context, *CreateBookingRequest) (*Booking, error)
+	// Create a booking for a sender without specifying space in the URL.
+	// Booking parent space is deduced from the sender field in the booking.
+	//
+	// This is an AIP standard [Create](https://google.aip.dev/133) method.
+	// (-- api-linter: core::0133::http-uri-parent=disabled
+	// (-- api-linter: core::0133::method-signature=disabled
+	// (-- api-linter: client-libraries::4232::required-fields=disabled
+	//     aip.dev/not-precedent: We need to do this in order to have a static URL without specifying space. --)
+	CreateBookingSpaceless(context.Context, *CreateBookingSpacelessRequest) (*Booking, error)
 	// Get a booking.
 	//
 	// This is an AIP standard [Get](https://google.aip.dev/131) method.
@@ -78,6 +105,9 @@ type UnimplementedBookingServiceServer struct {
 
 func (UnimplementedBookingServiceServer) CreateBooking(context.Context, *CreateBookingRequest) (*Booking, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method CreateBooking not implemented")
+}
+func (UnimplementedBookingServiceServer) CreateBookingSpaceless(context.Context, *CreateBookingSpacelessRequest) (*Booking, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method CreateBookingSpaceless not implemented")
 }
 func (UnimplementedBookingServiceServer) GetBooking(context.Context, *GetBookingRequest) (*Booking, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method GetBooking not implemented")
@@ -112,6 +142,24 @@ func _BookingService_CreateBooking_Handler(srv interface{}, ctx context.Context,
 	return interceptor(ctx, in, info, handler)
 }
 
+func _BookingService_CreateBookingSpaceless_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(CreateBookingSpacelessRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(BookingServiceServer).CreateBookingSpaceless(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/einride.saga.extend.book.v1beta1.BookingService/CreateBookingSpaceless",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(BookingServiceServer).CreateBookingSpaceless(ctx, req.(*CreateBookingSpacelessRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
 func _BookingService_GetBooking_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
 	in := new(GetBookingRequest)
 	if err := dec(in); err != nil {
@@ -140,6 +188,10 @@ var BookingService_ServiceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "CreateBooking",
 			Handler:    _BookingService_CreateBooking_Handler,
+		},
+		{
+			MethodName: "CreateBookingSpaceless",
+			Handler:    _BookingService_CreateBookingSpaceless_Handler,
 		},
 		{
 			MethodName: "GetBooking",
