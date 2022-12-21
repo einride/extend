@@ -315,12 +315,14 @@ definitions:
   BookingAutomationRule:
     type: string
     enum:
+      - NONE
       - CREATE_SHIPMENTS
       - CREATE_AND_RELEASE_SHIPMENTS
     description: |-
       The rule that is applied when a confirmed booking is accepted.
 
        - AUTOMATION_RULE_UNSPECIFIED: Unspecified auto rule.
+       - NONE: No automation rule
        - CREATE_SHIPMENTS: When the confirmed booking is accepted, shipments will be created automatically from its stops and units.
        - CREATE_AND_RELEASE_SHIPMENTS: When the confirmed booking is accepted, shipments will be created automatically from its stops and units
       and then released.
@@ -619,7 +621,7 @@ definitions:
     properties:
       automationRule:
         $ref: '#/definitions/BookingAutomationRule'
-        description: The rule that is applied when a confirmed booking is accepted. Defaults to no auto rule.
+        description: The rule that is applied when a confirmed booking is accepted. Defaults to NONE.
       createTime:
         type: string
         format: date-time

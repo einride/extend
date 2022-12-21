@@ -46,7 +46,7 @@ message Booking {
   ServiceType service_type = 8 [(google.api.field_behavior) = REQUIRED];
   // External reference ID is a unique identifier that can be set by the client.
   string external_reference_id = 9;
-  // The rule that is applied when a confirmed booking is accepted. Defaults to no auto rule.
+  // The rule that is applied when a confirmed booking is accepted. Defaults to NONE.
   AutomationRule automation_rule = 10;
 
   // The units included in this booking.
@@ -100,11 +100,13 @@ message Booking {
   enum AutomationRule {
     // Unspecified auto rule.
     AUTOMATION_RULE_UNSPECIFIED = 0;
+    // No automation rule
+    NONE = 1;
     // When the confirmed booking is accepted, shipments will be created automatically from its stops and units.
-    CREATE_SHIPMENTS = 1;
+    CREATE_SHIPMENTS = 2;
     // When the confirmed booking is accepted, shipments will be created automatically from its stops and units
     // and then released.
-    CREATE_AND_RELEASE_SHIPMENTS = 2;
+    CREATE_AND_RELEASE_SHIPMENTS = 3;
   }
 
   // A stop is an address where an event is going to happen. The event could be

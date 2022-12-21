@@ -39,7 +39,7 @@ func NewBookingServiceCommand(config aipcli.Config) *cobra.Command {
 				"einride.saga.extend.book.v1beta1.Booking.Stop.requested_start_time":        " The earliest time to arrive this stop.\n",
 				"einride.saga.extend.book.v1beta1.Booking.Stop.stop_type":                   " The type of stop.\n",
 				"einride.saga.extend.book.v1beta1.Booking.Stop.unit_external_reference_ids": " The unit external reference id associated with this stop. E.g. for a pickup stop this will hold the units to pickup.\n",
-				"einride.saga.extend.book.v1beta1.Booking.automation_rule":                  " The rule that is applied when a confirmed booking is accepted. Defaults to no auto rule.\n",
+				"einride.saga.extend.book.v1beta1.Booking.automation_rule":                  " The rule that is applied when a confirmed booking is accepted. Defaults to NONE.\n",
 				"einride.saga.extend.book.v1beta1.Booking.create_time":                      " The creation timestamp of the booking.\n",
 				"einride.saga.extend.book.v1beta1.Booking.delete_time":                      " The deletion timestamp of the booking. Set if the booking is deleted.\n",
 				"einride.saga.extend.book.v1beta1.Booking.external_reference_id":            " External reference ID is a unique identifier that can be set by the client.\n",
