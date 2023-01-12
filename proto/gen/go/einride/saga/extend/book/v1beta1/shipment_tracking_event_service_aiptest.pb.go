@@ -220,7 +220,7 @@ func (fx *ShipmentTrackingEventTestSuiteConfig) testCreate(t *testing.T) {
 			})
 			assert.Equal(t, codes.InvalidArgument, status.Code(err), err)
 		})
-		t.Run(".vehicle.vehicle_reference_id", func(t *testing.T) {
+		t.Run(".vehicle.reference_id", func(t *testing.T) {
 			fx.maybeSkip(t)
 			parent := fx.nextParent(t, false)
 			msg := fx.Create(parent)
@@ -228,7 +228,7 @@ func (fx *ShipmentTrackingEventTestSuiteConfig) testCreate(t *testing.T) {
 			if container == nil {
 				t.Skip("not reachable")
 			}
-			fd := container.ProtoReflect().Descriptor().Fields().ByName("vehicle_reference_id")
+			fd := container.ProtoReflect().Descriptor().Fields().ByName("reference_id")
 			container.ProtoReflect().Clear(fd)
 			_, err := fx.service.CreateShipmentTrackingEvent(fx.ctx, &CreateShipmentTrackingEventRequest{
 				Parent:                parent,

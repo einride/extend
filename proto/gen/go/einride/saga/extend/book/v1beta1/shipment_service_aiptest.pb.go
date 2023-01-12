@@ -234,6 +234,22 @@ func (fx *ShipmentTestSuiteConfig) testCreate(t *testing.T) {
 			})
 			assert.Equal(t, codes.InvalidArgument, status.Code(err), err)
 		})
+		t.Run(".vehicle.reference_id", func(t *testing.T) {
+			fx.maybeSkip(t)
+			parent := fx.nextParent(t, false)
+			msg := fx.Create(parent)
+			container := msg.GetVehicle()
+			if container == nil {
+				t.Skip("not reachable")
+			}
+			fd := container.ProtoReflect().Descriptor().Fields().ByName("reference_id")
+			container.ProtoReflect().Clear(fd)
+			_, err := fx.service.CreateShipment(fx.ctx, &CreateShipmentRequest{
+				Parent:   parent,
+				Shipment: msg,
+			})
+			assert.Equal(t, codes.InvalidArgument, status.Code(err), err)
+		})
 	})
 
 	// The method should fail with InvalidArgument if the resource has any

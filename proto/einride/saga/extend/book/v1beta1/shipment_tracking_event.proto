@@ -3,6 +3,7 @@ syntax = "proto3";
 package einride.saga.extend.book.v1beta1;
 
 import "einride/saga/extend/book/v1beta1/address.proto";
+import "einride/saga/extend/book/v1beta1/vehicle.proto";
 import "google/api/field_behavior.proto";
 import "google/api/resource.proto";
 import "google/protobuf/timestamp.proto";
@@ -73,13 +74,4 @@ message ShipmentTrackingEvent {
 
   // On what vehicle did this event occur
   Vehicle vehicle = 10;
-}
-// Holds vehicle information if needed by the shipment tracking event
-message Vehicle {
-  // Vehicle reference id
-  string vehicle_reference_id = 1 [(google.api.field_behavior) = REQUIRED];
-  // Driver reference id
-  string driver_reference_id = 2;
-  // Carrier reference id
-  string carrier_reference_id = 3;
 }
