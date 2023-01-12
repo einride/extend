@@ -1,0 +1,15 @@
+syntax = "proto3";
+
+package einride.saga.extend.book.v1beta1;
+
+import "google/api/field_behavior.proto";
+
+// Holds vehicle information
+message Vehicle {
+  // Reference id
+  string reference_id = 1 [(google.api.field_behavior) = REQUIRED];
+  // Driver reference id
+  string driver_reference_id = 2;
+  // Carrier reference id
+  string carrier_reference_id = 3;
+}

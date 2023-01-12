@@ -798,6 +798,9 @@ definitions:
           The last update timestamp of the shipment.
           Updated when create/update/delete operation is performed.
         readOnly: true
+      vehicle:
+        $ref: '#/definitions/v1beta1Vehicle'
+        title: Vehicle information for the shipment
     description: A shipment represents a demand to deliver goods from an origin to a destination.
     required:
       - sender
@@ -870,12 +873,12 @@ definitions:
       driverReferenceId:
         type: string
         title: Driver reference id
-      vehicleReferenceId:
+      referenceId:
         type: string
-        title: Vehicle reference id
-    title: Holds vehicle information if needed by the shipment tracking event
+        title: Reference id
+    title: Holds vehicle information
     required:
-      - vehicleReferenceId
+      - referenceId
 securityDefinitions:
   Authorization:
     type: apiKey

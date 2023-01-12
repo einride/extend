@@ -48,7 +48,7 @@ func NewShipmentTrackingEventServiceCommand(config aipcli.Config) *cobra.Command
 				"einride.saga.extend.book.v1beta1.ShipmentTrackingEventService.CreateShipmentTrackingEvent":   " Create a tracking event for a shipment\n\n This is an AIP standard [Create](https://google.aip.dev/133) method.\n",
 				"einride.saga.extend.book.v1beta1.Vehicle.carrier_reference_id":                               " Carrier reference id\n",
 				"einride.saga.extend.book.v1beta1.Vehicle.driver_reference_id":                                " Driver reference id\n",
-				"einride.saga.extend.book.v1beta1.Vehicle.vehicle_reference_id":                               " Vehicle reference id\n",
+				"einride.saga.extend.book.v1beta1.Vehicle.reference_id":                                       " Reference id\n",
 				"google.protobuf.Timestamp.nanos":                                                             " Non-negative fractions of a second at nanosecond resolution. Negative\n second values with fractions must still have non-negative nanos values\n that count forward in time. Must be from 0 to 999,999,999\n inclusive.\n",
 				"google.protobuf.Timestamp.seconds":                                                           " Represents seconds of UTC time since Unix epoch\n 1970-01-01T00:00:00Z. Must be from 0001-01-01T00:00:00Z to\n 9999-12-31T23:59:59Z inclusive.\n",
 				"google.type.LatLng.latitude":                                                                 " The latitude in degrees. It must be in the range [-90.0, +90.0].\n",

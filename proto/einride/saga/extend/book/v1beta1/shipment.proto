@@ -4,6 +4,7 @@ package einride.saga.extend.book.v1beta1;
 
 import "einride/saga/extend/book/v1beta1/address.proto";
 import "einride/saga/extend/book/v1beta1/unit.proto";
+import "einride/saga/extend/book/v1beta1/vehicle.proto";
 import "google/api/field_behavior.proto";
 import "google/api/resource.proto";
 import "google/protobuf/timestamp.proto";
@@ -107,4 +108,7 @@ message Shipment {
     // Shipment is delivered
     DELIVERED = 3;
   }
+
+  // Vehicle information for the shipment
+  Vehicle vehicle = 21;
 }
