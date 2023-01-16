@@ -8,10 +8,10 @@ require (
 	github.com/spf13/cobra v1.6.1
 	go.einride.tech/aip-cli v0.18.2
 	go.einride.tech/grpc-service-config v0.8.0
-	go.einride.tech/iam v0.46.0
+	go.einride.tech/iam v0.48.0
 	go.einride.tech/protobuf-sensitive v0.3.0
 	google.golang.org/genproto v0.0.0-20221114212237-e4508ebdbee1
-	google.golang.org/grpc v1.50.1
+	google.golang.org/grpc v1.51.0
 	google.golang.org/protobuf v1.28.1
 	gotest.tools/v3 v3.4.0
 )
@@ -29,7 +29,7 @@ require (
 	github.com/spf13/pflag v1.0.5 // indirect
 	github.com/stoewer/go-strcase v1.2.0 // indirect
 	github.com/stretchr/testify v1.8.1 // indirect
-	go.einride.tech/aip v0.59.1 // indirect
+	go.einride.tech/aip v0.60.0 // indirect
 	golang.org/x/net v0.2.0 // indirect
 	golang.org/x/oauth2 v0.2.0 // indirect
 	golang.org/x/sys v0.2.0 // indirect
