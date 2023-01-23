@@ -111,4 +111,7 @@ message Shipment {
 
   // Vehicle information for the shipment
   Vehicle vehicle = 21;
+
+  // Annotations for the shipment
+  map<string, string> annotations = 22;
 }
