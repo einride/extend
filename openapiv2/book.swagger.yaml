@@ -716,6 +716,11 @@ definitions:
   v1beta1Shipment:
     type: object
     properties:
+      annotations:
+        type: object
+        additionalProperties:
+          type: string
+        title: Annotations for the shipment
       booking:
         type: string
         description: Resource name of the booking this shipment relates to.
