@@ -407,6 +407,18 @@ definitions:
        - IN_TRANSIT: Shipment is in transit
        - DELIVERED: Shipment is delivered
     title: Shipment delivery state
+  ShipmentService:
+    type: string
+    enum:
+      - PALLET
+      - FTL
+      - DRAYAGE
+    description: |-
+      - SERVICE_UNSPECIFIED: Unspecified shipment service
+       - PALLET: Pallet
+       - FTL: Full truck load
+       - DRAYAGE: Drayage is the transport of goods over a short distance also known as the "The first mile."
+    title: Shipment service type
   ShipmentTrackingEventEventCode:
     type: string
     enum:
@@ -778,6 +790,9 @@ definitions:
       sender:
         type: string
         description: Resource name of the sender of the shipment.
+      service:
+        $ref: '#/definitions/ShipmentService'
+        title: Shipment service
       space:
         type: string
         description: Resource name of the space that owns the shipment.

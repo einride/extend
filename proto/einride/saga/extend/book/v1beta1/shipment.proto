@@ -114,4 +114,19 @@ message Shipment {
 
   // Annotations for the shipment
   map<string, string> annotations = 22;
+
+  // Shipment service
+  Service service = 23;
+
+  // Shipment service type
+  enum Service {
+    // Unspecified shipment service
+    SERVICE_UNSPECIFIED = 0;
+    // Pallet
+    PALLET = 1;
+    // Full truck load
+    FTL = 2;
+    // Drayage is the transport of goods over a short distance also known as the "The first mile."
+    DRAYAGE = 3;
+  }
 }
