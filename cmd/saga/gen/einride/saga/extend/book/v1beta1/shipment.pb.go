@@ -242,7 +242,7 @@ type Shipment struct {
 	Vehicle *Vehicle `protobuf:"bytes,21,opt,name=vehicle,proto3" json:"vehicle,omitempty"`
 	// Annotations for the shipment
 	Annotations map[string]string `protobuf:"bytes,22,rep,name=annotations,proto3" json:"annotations,omitempty" protobuf_key:"bytes,1,opt,name=key,proto3" protobuf_val:"bytes,2,opt,name=value,proto3"`
-	// Shipment service
+	// Shipment service, defaults to PALLET
 	Service Shipment_Service `protobuf:"varint,23,opt,name=service,proto3,enum=einride.saga.extend.book.v1beta1.Shipment_Service" json:"service,omitempty"`
 }
 

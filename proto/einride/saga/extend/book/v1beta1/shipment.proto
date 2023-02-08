@@ -115,7 +115,7 @@ message Shipment {
   // Annotations for the shipment
   map<string, string> annotations = 22;
 
-  // Shipment service
+  // Shipment service, defaults to PALLET
   Service service = 23;
 
   // Shipment service type

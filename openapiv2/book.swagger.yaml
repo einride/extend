@@ -788,7 +788,7 @@ definitions:
         description: Resource name of the sender of the shipment.
       service:
         $ref: '#/definitions/ShipmentService'
-        title: Shipment service
+        title: Shipment service, defaults to PALLET
       space:
         type: string
         description: Resource name of the space that owns the shipment.
