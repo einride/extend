@@ -53,7 +53,7 @@ func NewShipmentServiceCommand(config aipcli.Config) *cobra.Command {
 				"einride.saga.extend.book.v1beta1.Shipment.requested_pickup_end_time":     " The shipment should be picked up before this time\n",
 				"einride.saga.extend.book.v1beta1.Shipment.requested_pickup_start_time":   " The shipment should be picked up after this time\n",
 				"einride.saga.extend.book.v1beta1.Shipment.sender":                        " Resource name of the sender of the shipment.\n",
-				"einride.saga.extend.book.v1beta1.Shipment.service":                       " Shipment service\n",
+				"einride.saga.extend.book.v1beta1.Shipment.service":                       " Shipment service, defaults to PALLET\n",
 				"einride.saga.extend.book.v1beta1.Shipment.space":                         " Resource name of the space that owns the shipment.\n",
 				"einride.saga.extend.book.v1beta1.Shipment.state":                         " Shipment state\n Can be set to ACTIVE (default) or RELEASED when creating a shipment.\n",
 				"einride.saga.extend.book.v1beta1.Shipment.tracking_id":                   " A generated tracking ID for this shipment.\n",
