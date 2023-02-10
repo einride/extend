@@ -671,10 +671,6 @@ definitions:
         items:
           $ref: '#/definitions/BookingStop'
         description: The stops included in this booking.
-      trackingId:
-        type: string
-        description: Tracking ID for the booking.
-        readOnly: true
       type:
         $ref: '#/definitions/BookingBookingType'
         description: Booking type. Defaults to PROVISIONAL.
