@@ -54,8 +54,6 @@ message Booking {
   // The stops included in this booking.
   repeated Stop stops = 12 [(google.api.field_behavior) = REQUIRED];
 
-  // Tracking ID for the booking.
-  string tracking_id = 13 [(google.api.field_behavior) = OUTPUT_ONLY];
   // The state of the booking. Set to PENDING upon creation.
   // A booking is then either accepted or rejected.
   State state = 14 [(google.api.field_behavior) = OUTPUT_ONLY];
