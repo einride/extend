@@ -22,7 +22,7 @@ const _ = grpc.SupportPackageIsVersion7
 //
 // For semantics around ctx use and closing/ending streaming RPCs, please refer to https://pkg.go.dev/google.golang.org/grpc/?tab=doc#ClientConn.NewStream.
 type ShipmentTrackingEventServiceClient interface {
-	// Create a tracking event for a shipment
+	// Create a tracking event.
 	//
 	// This is an AIP standard [Create](https://google.aip.dev/133) method.
 	CreateShipmentTrackingEvent(ctx context.Context, in *CreateShipmentTrackingEventRequest, opts ...grpc.CallOption) (*ShipmentTrackingEvent, error)
@@ -30,8 +30,7 @@ type ShipmentTrackingEventServiceClient interface {
 	//
 	// This is an AIP standard [Get](https://google.aip.dev/131) method.
 	GetShipmentTrackingEvent(ctx context.Context, in *GetShipmentTrackingEventRequest, opts ...grpc.CallOption) (*ShipmentTrackingEvent, error)
-	// List shipment tracking events for a shipment.
-	// The events are ordered by ascending occurred_time.
+	// List shipment tracking events.
 	//
 	// See: https://google.aip.dev/132 (Standard methods: List).
 	ListShipmentTrackingEvents(ctx context.Context, in *ListShipmentTrackingEventsRequest, opts ...grpc.CallOption) (*ListShipmentTrackingEventsResponse, error)
@@ -76,7 +75,7 @@ func (c *shipmentTrackingEventServiceClient) ListShipmentTrackingEvents(ctx cont
 // All implementations should embed UnimplementedShipmentTrackingEventServiceServer
 // for forward compatibility
 type ShipmentTrackingEventServiceServer interface {
-	// Create a tracking event for a shipment
+	// Create a tracking event.
 	//
 	// This is an AIP standard [Create](https://google.aip.dev/133) method.
 	CreateShipmentTrackingEvent(context.Context, *CreateShipmentTrackingEventRequest) (*ShipmentTrackingEvent, error)
@@ -84,8 +83,7 @@ type ShipmentTrackingEventServiceServer interface {
 	//
 	// This is an AIP standard [Get](https://google.aip.dev/131) method.
 	GetShipmentTrackingEvent(context.Context, *GetShipmentTrackingEventRequest) (*ShipmentTrackingEvent, error)
-	// List shipment tracking events for a shipment.
-	// The events are ordered by ascending occurred_time.
+	// List shipment tracking events.
 	//
 	// See: https://google.aip.dev/132 (Standard methods: List).
 	ListShipmentTrackingEvents(context.Context, *ListShipmentTrackingEventsRequest) (*ListShipmentTrackingEventsResponse, error)
