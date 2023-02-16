@@ -96,9 +96,7 @@ paths:
         - BookingService
   /v1beta1/{parent}/trackingEvents:
     get:
-      summary: |-
-        List shipment tracking events for a shipment.
-        The events are ordered by ascending occurred_time.
+      summary: List shipment tracking events.
       description: 'See: https://google.aip.dev/132 (Standard methods: List).'
       operationId: ShipmentTrackingEventService_ListShipmentTrackingEvents
       responses:
@@ -163,7 +161,7 @@ paths:
         - ShipmentService
   /v1beta1/{shipment}/trackingEvents:
     post:
-      summary: Create a tracking event for a shipment
+      summary: Create a tracking event.
       description: This is an AIP standard [Create](https://google.aip.dev/133) method.
       operationId: ShipmentTrackingEventService_CreateShipmentTrackingEvent
       responses:

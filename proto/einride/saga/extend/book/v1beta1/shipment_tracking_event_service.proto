@@ -98,7 +98,7 @@ option (grpc.gateway.protoc_gen_openapiv2.options.openapiv2_swagger) = {
 service ShipmentTrackingEventService {
   option (google.api.default_host) = "api.saga.einride.tech";
 
-  // Create a tracking event for a shipment
+  // Create a tracking event.
   //
   // This is an AIP standard [Create](https://google.aip.dev/133) method.
   rpc CreateShipmentTrackingEvent(CreateShipmentTrackingEventRequest) returns (ShipmentTrackingEvent) {
@@ -133,8 +133,7 @@ service ShipmentTrackingEventService {
     };
   }
 
-  // List shipment tracking events for a shipment.
-  // The events are ordered by ascending occurred_time.
+  // List shipment tracking events.
   //
   // See: https://google.aip.dev/132 (Standard methods: List).
   rpc ListShipmentTrackingEvents(ListShipmentTrackingEventsRequest) returns (ListShipmentTrackingEventsResponse) {

@@ -45,7 +45,7 @@ func NewShipmentTrackingEventServiceCommand(config aipcli.Config) *cobra.Command
 				"einride.saga.extend.book.v1beta1.ShipmentTrackingEvent.shipment":                             " Resource name of the shipment that owns the ShipmentTrackingEvent.\n",
 				"einride.saga.extend.book.v1beta1.ShipmentTrackingEvent.update_time":                          " The last update timestamp of the ShipmentTrackingEvent.\n Updated when create/update/delete operation is performed.\n",
 				"einride.saga.extend.book.v1beta1.ShipmentTrackingEvent.vehicle":                              " On what vehicle did this event occur\n",
-				"einride.saga.extend.book.v1beta1.ShipmentTrackingEventService.CreateShipmentTrackingEvent":   " Create a tracking event for a shipment\n\n This is an AIP standard [Create](https://google.aip.dev/133) method.\n",
+				"einride.saga.extend.book.v1beta1.ShipmentTrackingEventService.CreateShipmentTrackingEvent":   " Create a tracking event.\n\n This is an AIP standard [Create](https://google.aip.dev/133) method.\n",
 				"einride.saga.extend.book.v1beta1.Vehicle.carrier_reference_id":                               " Carrier reference id\n",
 				"einride.saga.extend.book.v1beta1.Vehicle.driver_reference_id":                                " Driver reference id\n",
 				"einride.saga.extend.book.v1beta1.Vehicle.reference_id":                                       " Reference id\n",
@@ -76,7 +76,7 @@ func NewShipmentTrackingEventServiceCommand(config aipcli.Config) *cobra.Command
 				"einride.saga.extend.book.v1beta1.ListShipmentTrackingEventsRequest.page_size":             " Requested page size. Server may return fewer shipment tracking events than requested.\n If unspecified, server will pick an appropriate default.\n",
 				"einride.saga.extend.book.v1beta1.ListShipmentTrackingEventsRequest.page_token":            " A token identifying a page of results the server should return.\n Typically, this is the value of\n [ListShipmentTrackingEventsResponse.page_token][einride.saga.extend.book.v1beta1.ListShipmentTrackingEventsResponse.page_token]\n returned from the previous call to `ListShipmentTrackingEvents` method.\n",
 				"einride.saga.extend.book.v1beta1.ListShipmentTrackingEventsRequest.parent":                " The resource name of the parent, which owns this collection of shipment tracking events.\n Format: spaces/{space}/shipments/{shipment}/trackingEvents\n",
-				"einride.saga.extend.book.v1beta1.ShipmentTrackingEventService.ListShipmentTrackingEvents": " List shipment tracking events for a shipment.\n The events are ordered by ascending occurred_time.\n\n See: https://google.aip.dev/132 (Standard methods: List).\n",
+				"einride.saga.extend.book.v1beta1.ShipmentTrackingEventService.ListShipmentTrackingEvents": " List shipment tracking events.\n\n See: https://google.aip.dev/132 (Standard methods: List).\n",
 			},
 		),
 	)
