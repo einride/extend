@@ -342,6 +342,7 @@ definitions:
       - DISTRIBUTION
       - SHUTTLE
       - MILK_RUN
+      - DRAYAGE
     description: |-
       The service type of the booking.
 
@@ -350,6 +351,7 @@ definitions:
        - DISTRIBUTION: Service type distribution.
        - SHUTTLE: Service type shuttle.
        - MILK_RUN: Service type milk run.
+       - DRAYAGE: Service type drayage.
   BookingStop:
     type: object
     properties:

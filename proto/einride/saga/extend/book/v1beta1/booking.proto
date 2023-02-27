@@ -92,6 +92,8 @@ message Booking {
     SHUTTLE = 3;
     // Service type milk run.
     MILK_RUN = 4;
+    // Service type drayage.
+    DRAYAGE = 5;
   }
 
   // The rule that is applied when a confirmed booking is accepted.
