@@ -1,0 +1,180 @@
+{
+    "$schema": "http://json-schema.org/draft-04/schema#",
+    "$ref": "#/definitions/ListShipmentTrackingEventsResponse",
+    "definitions": {
+        "ListShipmentTrackingEventsResponse": {
+            "properties": {
+                "shipment_tracking_events": {
+                    "items": {
+                        "$ref": "#/definitions/einride.saga.extend.book.v1beta1.ShipmentTrackingEvent"
+                    },
+                    "type": "array",
+                    "description": "The list of shipment tracking events."
+                },
+                "next_page_token": {
+                    "type": "string",
+                    "description": "A token to retrieve next page of results.  Pass this value in the [ListShipmentTrackingEventsRequest.page_token][einride.saga.extend.book.v1beta1.ListShipmentTrackingEventsRequest.page_token] field in the subsequent call to `ListShipmentTrackingEvents` method to retrieve the next page of results."
+                }
+            },
+            "additionalProperties": true,
+            "type": "object",
+            "title": "List Shipment Tracking Events Response",
+            "description": "Response message for ShipmentTrackingEventService.ListShipmentTrackingEvents."
+        },
+        "einride.saga.extend.book.v1beta1.Address": {
+            "properties": {
+                "recipient": {
+                    "type": "string",
+                    "description": "Recipient"
+                },
+                "co": {
+                    "type": "string",
+                    "description": "Care of (C/O)"
+                },
+                "line1": {
+                    "type": "string",
+                    "description": "Address line 1"
+                },
+                "line2": {
+                    "type": "string",
+                    "description": "Address line 2"
+                },
+                "postal_code": {
+                    "type": "string",
+                    "description": "Postal code"
+                },
+                "city": {
+                    "type": "string",
+                    "description": "City"
+                },
+                "region_code": {
+                    "type": "string",
+                    "description": "Region code (Unicode CLDR region code) https://cldr.unicode.org/"
+                },
+                "state_code": {
+                    "type": "string",
+                    "description": "State code"
+                },
+                "display_name": {
+                    "type": "string",
+                    "description": "The displayed name of the address"
+                },
+                "contact_info": {
+                    "type": "string",
+                    "description": "Contact information"
+                },
+                "lat_lng": {
+                    "$ref": "#/definitions/google.type.LatLng",
+                    "additionalProperties": true,
+                    "description": "The geographic location of the address"
+                }
+            },
+            "additionalProperties": true,
+            "type": "object",
+            "title": "Address",
+            "description": "An Address is where goods are picked up or delivered."
+        },
+        "einride.saga.extend.book.v1beta1.ShipmentTrackingEvent": {
+            "properties": {
+                "name": {
+                    "type": "string",
+                    "description": "The resource name of the ShipmentTrackingEvent."
+                },
+                "shipment": {
+                    "type": "string",
+                    "description": "Resource name of the shipment that owns the ShipmentTrackingEvent."
+                },
+                "create_time": {
+                    "type": "string",
+                    "description": "The creation timestamp of the ShipmentTrackingEvent. When this event was received by Einride.",
+                    "format": "date-time"
+                },
+                "update_time": {
+                    "type": "string",
+                    "description": "The last update timestamp of the ShipmentTrackingEvent. Updated when create/update/delete operation is performed.",
+                    "format": "date-time"
+                },
+                "delete_time": {
+                    "type": "string",
+                    "description": "The deletion timestamp of the ShipmentTrackingEvent. Set if the event is deleted.",
+                    "format": "date-time"
+                },
+                "code": {
+                    "enum": [
+                        "EVENT_CODE_UNSPECIFIED",
+                        "ARRIVED_AT_PICKUP",
+                        "DEPARTED_PICKUP",
+                        "ARRIVED_AT_DELIVERY",
+                        "DEPARTED_DELIVERY",
+                        "STARTED_AT_PICKUP",
+                        "COMPLETED_PICKUP",
+                        "STARTED_AT_DELIVERY",
+                        "COMPLETED_DELIVERY"
+                    ],
+                    "type": "string",
+                    "title": "Event Code",
+                    "description": "Event code"
+                },
+                "occurred_time": {
+                    "type": "string",
+                    "description": "When the event occurred.",
+                    "format": "date-time"
+                },
+                "address": {
+                    "$ref": "#/definitions/einride.saga.extend.book.v1beta1.Address",
+                    "additionalProperties": true,
+                    "description": "The address where the event happened."
+                },
+                "description": {
+                    "type": "string",
+                    "description": "Description for the ShipmentTrackingEvent."
+                },
+                "vehicle": {
+                    "$ref": "#/definitions/einride.saga.extend.book.v1beta1.Vehicle",
+                    "additionalProperties": true,
+                    "description": "On what vehicle did this event occur"
+                }
+            },
+            "additionalProperties": true,
+            "type": "object",
+            "title": "Shipment Tracking Event",
+            "description": "A shipment tracking event represents an event on a shipment."
+        },
+        "einride.saga.extend.book.v1beta1.Vehicle": {
+            "properties": {
+                "reference_id": {
+                    "type": "string",
+                    "description": "Reference id"
+                },
+                "driver_reference_id": {
+                    "type": "string",
+                    "description": "Driver reference id"
+                },
+                "carrier_reference_id": {
+                    "type": "string",
+                    "description": "Carrier reference id"
+                }
+            },
+            "additionalProperties": true,
+            "type": "object",
+            "title": "Vehicle",
+            "description": "Holds vehicle information"
+        },
+        "google.type.LatLng": {
+            "properties": {
+                "latitude": {
+                    "type": "number",
+                    "description": "The latitude in degrees. It must be in the range [-90.0, +90.0]."
+                },
+                "longitude": {
+                    "type": "number",
+                    "description": "The longitude in degrees. It must be in the range [-180.0, +180.0]."
+                }
+            },
+            "additionalProperties": true,
+            "type": "object",
+            "title": "Lat Lng",
+            "description": "An object that represents a latitude/longitude pair. This is expressed as a pair of doubles to represent degrees latitude and degrees longitude. Unless specified otherwise, this must conform to the \u003ca href=\"http://www.unoosa.org/pdf/icg/2012/template/WGS_84.pdf\"\u003eWGS84 standard\u003c/a\u003e. Values must be within normalized ranges."
+        }
+    }
+}

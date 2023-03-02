@@ -1,0 +1,75 @@
+{
+    "$schema": "http://json-schema.org/draft-04/schema#",
+    "$ref": "#/definitions/Address",
+    "definitions": {
+        "Address": {
+            "properties": {
+                "recipient": {
+                    "type": "string",
+                    "description": "Recipient"
+                },
+                "co": {
+                    "type": "string",
+                    "description": "Care of (C/O)"
+                },
+                "line1": {
+                    "type": "string",
+                    "description": "Address line 1"
+                },
+                "line2": {
+                    "type": "string",
+                    "description": "Address line 2"
+                },
+                "postal_code": {
+                    "type": "string",
+                    "description": "Postal code"
+                },
+                "city": {
+                    "type": "string",
+                    "description": "City"
+                },
+                "region_code": {
+                    "type": "string",
+                    "description": "Region code (Unicode CLDR region code) https://cldr.unicode.org/"
+                },
+                "state_code": {
+                    "type": "string",
+                    "description": "State code"
+                },
+                "display_name": {
+                    "type": "string",
+                    "description": "The displayed name of the address"
+                },
+                "contact_info": {
+                    "type": "string",
+                    "description": "Contact information"
+                },
+                "lat_lng": {
+                    "$ref": "#/definitions/google.type.LatLng",
+                    "additionalProperties": true,
+                    "description": "The geographic location of the address"
+                }
+            },
+            "additionalProperties": true,
+            "type": "object",
+            "title": "Address",
+            "description": "An Address is where goods are picked up or delivered."
+        },
+        "google.type.LatLng": {
+            "properties": {
+                "latitude": {
+                    "type": "number",
+                    "description": "The latitude in degrees. It must be in the range [-90.0, +90.0]."
+                },
+                "longitude": {
+                    "type": "number",
+                    "description": "The longitude in degrees. It must be in the range [-180.0, +180.0]."
+                }
+            },
+            "additionalProperties": true,
+            "type": "object",
+            "title": "Lat Lng",
+            "description": "An object that represents a latitude/longitude pair. This is expressed as a pair of doubles to represent degrees latitude and degrees longitude. Unless specified otherwise, this must conform to the \u003ca href=\"http://www.unoosa.org/pdf/icg/2012/template/WGS_84.pdf\"\u003eWGS84 standard\u003c/a\u003e. Values must be within normalized ranges."
+        }
+    }
+}

@@ -1,0 +1,18 @@
+{
+    "$schema": "http://json-schema.org/draft-04/schema#",
+    "$ref": "#/definitions/GetBookingRequest",
+    "definitions": {
+        "GetBookingRequest": {
+            "properties": {
+                "name": {
+                    "type": "string",
+                    "description": "The resource name of the booking to retrieve."
+                }
+            },
+            "additionalProperties": true,
+            "type": "object",
+            "title": "Get Booking Request",
+            "description": "The request message to get a booking."
+        }
+    }
+}

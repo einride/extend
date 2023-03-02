@@ -1,0 +1,26 @@
+{
+    "$schema": "http://json-schema.org/draft-04/schema#",
+    "$ref": "#/definitions/ListShipmentTrackingEventsRequest",
+    "definitions": {
+        "ListShipmentTrackingEventsRequest": {
+            "properties": {
+                "parent": {
+                    "type": "string",
+                    "description": "The resource name of the parent, which owns this collection of shipment tracking events. Format: spaces/{space}/shipments/{shipment}/trackingEvents"
+                },
+                "page_size": {
+                    "type": "integer",
+                    "description": "Requested page size. Server may return fewer shipment tracking events than requested. If unspecified, server will pick an appropriate default."
+                },
+                "page_token": {
+                    "type": "string",
+                    "description": "A token identifying a page of results the server should return. Typically, this is the value of [ListShipmentTrackingEventsResponse.page_token][einride.saga.extend.book.v1beta1.ListShipmentTrackingEventsResponse.page_token] returned from the previous call to `ListShipmentTrackingEvents` method."
+                }
+            },
+            "additionalProperties": true,
+            "type": "object",
+            "title": "List Shipment Tracking Events Request",
+            "description": "Request message for ShipmentTrackingEventService.ListShipmentTrackingEvents."
+        }
+    }
+}

@@ -1,0 +1,18 @@
+{
+    "$schema": "http://json-schema.org/draft-04/schema#",
+    "$ref": "#/definitions/GetShipmentTrackingEventRequest",
+    "definitions": {
+        "GetShipmentTrackingEventRequest": {
+            "properties": {
+                "name": {
+                    "type": "string",
+                    "description": "The resource name of the shipment tracking event to retrieve. Format: spaces/{space}/shipments/{shipment}/trackingEvents/{shipmentTrackingEvent}"
+                }
+            },
+            "additionalProperties": true,
+            "type": "object",
+            "title": "Get Shipment Tracking Event Request",
+            "description": "Request message for ShipmentTrackingEventService.GetShipmentTrackingEvent."
+        }
+    }
+}

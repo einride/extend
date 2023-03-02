@@ -19,3 +19,8 @@ plugins:
       - allow_merge=true
       - merge_file_name=book
       - omit_enum_default_value=true
+  - name: jsonschema
+    out: jsonschema
+    strategy: all
+    opt:
+      - enums_as_strings_only

@@ -4,6 +4,7 @@ import (
 	"context"
 	"os"
 
+	"github.com/einride/extend/sage/sgprotocgenjsonschema"
 	"go.einride.tech/sage/sg"
 	"go.einride.tech/sage/sgtool"
 	"go.einride.tech/sage/tools/sgapilinter"
@@ -112,6 +113,26 @@ func (Proto) ProtocGenGoIam(ctx context.Context) error {
 	return err
 }
 
+// func (Proto) ProtocGenJsonSchema(ctx context.Context) error {
+// 	sg.Deps(
+// 		ctx,
+// 		sgprotocgenjsonschema.PrepareCommand,
+// 	)
+// 	sg.Logger(ctx).Println("generating protobuf json schemas...")
+// 	if err := os.RemoveAll(sg.FromGitRoot("jsonschemas")); err != nil {
+// 		return err
+// 	}
+// 	cmd := sgprotocgenjsonschema.Command(
+// 		ctx,
+// 		"--include_imports",
+// 		"--jsonschema_out="+sg.FromGitRoot("jsonschemas"),
+// 		"--proto_path="+sg.FromGitRoot("proto", "einride", "saga", "extend", "book", "v1beta1"),
+// 		sg.FromGitRoot("proto", "einride", "saga", "extend", "book", "v1beta1", "address.proto"),
+// 	)
+// 	cmd.Dir = sg.FromGitRoot("proto")
+// 	return cmd.Run()
+// }
+
 func (Proto) CleanGenerated(ctx context.Context) error {
 	sg.Logger(ctx).Println("cleaning generated files...")
 	if err := os.RemoveAll(sg.FromGitRoot("proto", "gen")); err != nil {
@@ -156,7 +177,7 @@ func (Proto) BufGenerateAuth(ctx context.Context) error {
 }
 
 func (Proto) BufGenerateBook(ctx context.Context) error {
-	sg.Deps(ctx, Proto.ProtocGenOpenApiV2)
+	sg.Deps(ctx, Proto.ProtocGenOpenApiV2, sgprotocgenjsonschema.PrepareCommand)
 	sg.Logger(ctx).Println("generating proto stubs...")
 	cmd := sgbuf.Command(
 		ctx,

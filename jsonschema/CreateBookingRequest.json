@@ -1,0 +1,349 @@
+{
+    "$schema": "http://json-schema.org/draft-04/schema#",
+    "$ref": "#/definitions/CreateBookingRequest",
+    "definitions": {
+        "CreateBookingRequest": {
+            "properties": {
+                "parent": {
+                    "type": "string",
+                    "description": "The parent space in which to create the booking."
+                },
+                "booking": {
+                    "$ref": "#/definitions/einride.saga.extend.book.v1beta1.Booking",
+                    "additionalProperties": true,
+                    "description": "The booking to create."
+                }
+            },
+            "additionalProperties": true,
+            "type": "object",
+            "title": "Create Booking Request",
+            "description": "The request message to create a booking."
+        },
+        "einride.saga.extend.book.v1beta1.Address": {
+            "properties": {
+                "recipient": {
+                    "type": "string",
+                    "description": "Recipient"
+                },
+                "co": {
+                    "type": "string",
+                    "description": "Care of (C/O)"
+                },
+                "line1": {
+                    "type": "string",
+                    "description": "Address line 1"
+                },
+                "line2": {
+                    "type": "string",
+                    "description": "Address line 2"
+                },
+                "postal_code": {
+                    "type": "string",
+                    "description": "Postal code"
+                },
+                "city": {
+                    "type": "string",
+                    "description": "City"
+                },
+                "region_code": {
+                    "type": "string",
+                    "description": "Region code (Unicode CLDR region code) https://cldr.unicode.org/"
+                },
+                "state_code": {
+                    "type": "string",
+                    "description": "State code"
+                },
+                "display_name": {
+                    "type": "string",
+                    "description": "The displayed name of the address"
+                },
+                "contact_info": {
+                    "type": "string",
+                    "description": "Contact information"
+                },
+                "lat_lng": {
+                    "$ref": "#/definitions/google.type.LatLng",
+                    "additionalProperties": true,
+                    "description": "The geographic location of the address"
+                }
+            },
+            "additionalProperties": true,
+            "type": "object",
+            "title": "Address",
+            "description": "An Address is where goods are picked up or delivered."
+        },
+        "einride.saga.extend.book.v1beta1.Booking": {
+            "properties": {
+                "name": {
+                    "type": "string",
+                    "description": "The resource name of the booking."
+                },
+                "space": {
+                    "type": "string",
+                    "description": "Resource name of the space that owns the booking."
+                },
+                "sender": {
+                    "type": "string",
+                    "description": "Resource name of the sender of the booking."
+                },
+                "create_time": {
+                    "type": "string",
+                    "description": "The creation timestamp of the booking.",
+                    "format": "date-time"
+                },
+                "update_time": {
+                    "type": "string",
+                    "description": "The last update timestamp of the booking. Updated when create/update/delete operation is performed.",
+                    "format": "date-time"
+                },
+                "delete_time": {
+                    "type": "string",
+                    "description": "The deletion timestamp of the booking. Set if the booking is deleted.",
+                    "format": "date-time"
+                },
+                "type": {
+                    "enum": [
+                        "BOOKING_TYPE_UNSPECIFIED",
+                        "PROVISIONAL",
+                        "CONFIRMED"
+                    ],
+                    "type": "string",
+                    "title": "Booking Type",
+                    "description": "The booking type."
+                },
+                "service_type": {
+                    "enum": [
+                        "SERVICE_TYPE_UNSPECIFIED",
+                        "FULL_TRUCK_LOAD",
+                        "DISTRIBUTION",
+                        "SHUTTLE",
+                        "MILK_RUN",
+                        "DRAYAGE"
+                    ],
+                    "type": "string",
+                    "title": "Service Type",
+                    "description": "The service type of the booking."
+                },
+                "external_reference_id": {
+                    "type": "string",
+                    "description": "External reference ID is a unique identifier that can be set by the client."
+                },
+                "automation_rule": {
+                    "enum": [
+                        "AUTOMATION_RULE_UNSPECIFIED",
+                        "NONE",
+                        "CREATE_SHIPMENTS",
+                        "CREATE_AND_RELEASE_SHIPMENTS"
+                    ],
+                    "type": "string",
+                    "title": "Automation Rule",
+                    "description": "The rule that is applied when a confirmed booking is accepted."
+                },
+                "units": {
+                    "items": {
+                        "$ref": "#/definitions/einride.saga.extend.book.v1beta1.Unit"
+                    },
+                    "type": "array",
+                    "description": "The units included in this booking."
+                },
+                "stops": {
+                    "items": {
+                        "$ref": "#/definitions/einride.saga.extend.book.v1beta1.Booking.Stop"
+                    },
+                    "type": "array",
+                    "description": "The stops included in this booking."
+                },
+                "state": {
+                    "enum": [
+                        "STATE_UNSPECIFIED",
+                        "PENDING",
+                        "ACCEPTED",
+                        "REJECTED"
+                    ],
+                    "type": "string",
+                    "title": "State",
+                    "description": "The state of the booking."
+                }
+            },
+            "additionalProperties": true,
+            "type": "object",
+            "title": "Booking",
+            "description": "A booking represents an estimated demand to deliver goods."
+        },
+        "einride.saga.extend.book.v1beta1.Booking.Stop": {
+            "properties": {
+                "address": {
+                    "$ref": "#/definitions/einride.saga.extend.book.v1beta1.Address",
+                    "additionalProperties": true,
+                    "description": "The address of this stop."
+                },
+                "stop_type": {
+                    "enum": [
+                        "TYPE_UNSPECIFIED",
+                        "PICKUP",
+                        "DELIVER"
+                    ],
+                    "type": "string",
+                    "title": "Type",
+                    "description": "Type describes the reason for the stop. E.g. a stop to deliver or pickup."
+                },
+                "instructions": {
+                    "type": "string",
+                    "description": "Instructions for this stop."
+                },
+                "requested_start_time": {
+                    "type": "string",
+                    "description": "The earliest time to arrive this stop.",
+                    "format": "date-time"
+                },
+                "requested_end_time": {
+                    "type": "string",
+                    "description": "The latest time to depart this stop.",
+                    "format": "date-time"
+                },
+                "unit_external_reference_ids": {
+                    "items": {
+                        "type": "string"
+                    },
+                    "type": "array",
+                    "description": "The unit external reference id associated with this stop. E.g. for a pickup stop this will hold the units to pickup."
+                }
+            },
+            "additionalProperties": true,
+            "type": "object",
+            "title": "Stop",
+            "description": "A stop is an address where an event is going to happen. The event could be to deliver goods, charge the vehicle etc."
+        },
+        "einride.saga.extend.book.v1beta1.Unit": {
+            "properties": {
+                "type": {
+                    "type": "string",
+                    "description": "Type of unit"
+                },
+                "external_reference_id": {
+                    "type": "string",
+                    "description": "External reference ID of the unit"
+                },
+                "description": {
+                    "type": "string",
+                    "description": "Description of the unit"
+                },
+                "tracking_id": {
+                    "type": "string",
+                    "description": "Unique unit tracking ID"
+                },
+                "weight": {
+                    "$ref": "#/definitions/einride.saga.extend.book.v1beta1.Unit.Weight",
+                    "additionalProperties": true,
+                    "description": "Unit weight"
+                },
+                "length": {
+                    "$ref": "#/definitions/einride.saga.extend.book.v1beta1.Unit.Length",
+                    "additionalProperties": true,
+                    "description": "Unit length"
+                },
+                "height": {
+                    "$ref": "#/definitions/einride.saga.extend.book.v1beta1.Unit.Length",
+                    "additionalProperties": true,
+                    "description": "Unit height"
+                },
+                "width": {
+                    "$ref": "#/definitions/einride.saga.extend.book.v1beta1.Unit.Length",
+                    "additionalProperties": true,
+                    "description": "Unit width"
+                },
+                "volume": {
+                    "$ref": "#/definitions/einride.saga.extend.book.v1beta1.Unit.Volume",
+                    "additionalProperties": true,
+                    "description": "Unit volume"
+                }
+            },
+            "additionalProperties": true,
+            "type": "object",
+            "title": "Unit",
+            "description": "A unit is a holder of goods such as a EUR-pallet."
+        },
+        "einride.saga.extend.book.v1beta1.Unit.Length": {
+            "properties": {
+                "value": {
+                    "type": "number",
+                    "description": "Length value"
+                },
+                "unit": {
+                    "enum": [
+                        "UNIT_UNSPECIFIED",
+                        "CM",
+                        "IN"
+                    ],
+                    "type": "string",
+                    "title": "Unit",
+                    "description": "Length units"
+                }
+            },
+            "additionalProperties": true,
+            "type": "object",
+            "title": "Length",
+            "description": "Length specified in different units"
+        },
+        "einride.saga.extend.book.v1beta1.Unit.Volume": {
+            "properties": {
+                "value": {
+                    "type": "number",
+                    "description": "Volume value"
+                },
+                "unit": {
+                    "enum": [
+                        "UNIT_UNSPECIFIED",
+                        "CBM",
+                        "CBFT"
+                    ],
+                    "type": "string",
+                    "title": "Unit",
+                    "description": "Volume units"
+                }
+            },
+            "additionalProperties": true,
+            "type": "object",
+            "title": "Volume",
+            "description": "Volume specified in different units"
+        },
+        "einride.saga.extend.book.v1beta1.Unit.Weight": {
+            "properties": {
+                "value": {
+                    "type": "number",
+                    "description": "Weight value"
+                },
+                "unit": {
+                    "enum": [
+                        "UNIT_UNSPECIFIED",
+                        "KG",
+                        "LBS"
+                    ],
+                    "type": "string",
+                    "title": "Unit",
+                    "description": "Weight units"
+                }
+            },
+            "additionalProperties": true,
+            "type": "object",
+            "title": "Weight",
+            "description": "Weight specified in different units"
+        },
+        "google.type.LatLng": {
+            "properties": {
+                "latitude": {
+                    "type": "number",
+                    "description": "The latitude in degrees. It must be in the range [-90.0, +90.0]."
+                },
+                "longitude": {
+                    "type": "number",
+                    "description": "The longitude in degrees. It must be in the range [-180.0, +180.0]."
+                }
+            },
+            "additionalProperties": true,
+            "type": "object",
+            "title": "Lat Lng",
+            "description": "An object that represents a latitude/longitude pair. This is expressed as a pair of doubles to represent degrees latitude and degrees longitude. Unless specified otherwise, this must conform to the \u003ca href=\"http://www.unoosa.org/pdf/icg/2012/template/WGS_84.pdf\"\u003eWGS84 standard\u003c/a\u003e. Values must be within normalized ranges."
+        }
+    }
+}

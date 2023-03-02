@@ -1,0 +1,18 @@
+{
+    "$schema": "http://json-schema.org/draft-04/schema#",
+    "$ref": "#/definitions/ReleaseShipmentRequest",
+    "definitions": {
+        "ReleaseShipmentRequest": {
+            "properties": {
+                "name": {
+                    "type": "string",
+                    "description": "The resource name of the shipment to release."
+                }
+            },
+            "additionalProperties": true,
+            "type": "object",
+            "title": "Release Shipment Request",
+            "description": "Request message for BookService.ReleaseShipment."
+        }
+    }
+}

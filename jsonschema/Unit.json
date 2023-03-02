@@ -1,0 +1,121 @@
+{
+    "$schema": "http://json-schema.org/draft-04/schema#",
+    "$ref": "#/definitions/Unit",
+    "definitions": {
+        "Unit": {
+            "properties": {
+                "type": {
+                    "type": "string",
+                    "description": "Type of unit"
+                },
+                "external_reference_id": {
+                    "type": "string",
+                    "description": "External reference ID of the unit"
+                },
+                "description": {
+                    "type": "string",
+                    "description": "Description of the unit"
+                },
+                "tracking_id": {
+                    "type": "string",
+                    "description": "Unique unit tracking ID"
+                },
+                "weight": {
+                    "$ref": "#/definitions/einride.saga.extend.book.v1beta1.Unit.Weight",
+                    "additionalProperties": true,
+                    "description": "Unit weight"
+                },
+                "length": {
+                    "$ref": "#/definitions/einride.saga.extend.book.v1beta1.Unit.Length",
+                    "additionalProperties": true,
+                    "description": "Unit length"
+                },
+                "height": {
+                    "$ref": "#/definitions/einride.saga.extend.book.v1beta1.Unit.Length",
+                    "additionalProperties": true,
+                    "description": "Unit height"
+                },
+                "width": {
+                    "$ref": "#/definitions/einride.saga.extend.book.v1beta1.Unit.Length",
+                    "additionalProperties": true,
+                    "description": "Unit width"
+                },
+                "volume": {
+                    "$ref": "#/definitions/einride.saga.extend.book.v1beta1.Unit.Volume",
+                    "additionalProperties": true,
+                    "description": "Unit volume"
+                }
+            },
+            "additionalProperties": true,
+            "type": "object",
+            "title": "Unit",
+            "description": "A unit is a holder of goods such as a EUR-pallet."
+        },
+        "einride.saga.extend.book.v1beta1.Unit.Length": {
+            "properties": {
+                "value": {
+                    "type": "number",
+                    "description": "Length value"
+                },
+                "unit": {
+                    "enum": [
+                        "UNIT_UNSPECIFIED",
+                        "CM",
+                        "IN"
+                    ],
+                    "type": "string",
+                    "title": "Unit",
+                    "description": "Length units"
+                }
+            },
+            "additionalProperties": true,
+            "type": "object",
+            "title": "Length",
+            "description": "Length specified in different units"
+        },
+        "einride.saga.extend.book.v1beta1.Unit.Volume": {
+            "properties": {
+                "value": {
+                    "type": "number",
+                    "description": "Volume value"
+                },
+                "unit": {
+                    "enum": [
+                        "UNIT_UNSPECIFIED",
+                        "CBM",
+                        "CBFT"
+                    ],
+                    "type": "string",
+                    "title": "Unit",
+                    "description": "Volume units"
+                }
+            },
+            "additionalProperties": true,
+            "type": "object",
+            "title": "Volume",
+            "description": "Volume specified in different units"
+        },
+        "einride.saga.extend.book.v1beta1.Unit.Weight": {
+            "properties": {
+                "value": {
+                    "type": "number",
+                    "description": "Weight value"
+                },
+                "unit": {
+                    "enum": [
+                        "UNIT_UNSPECIFIED",
+                        "KG",
+                        "LBS"
+                    ],
+                    "type": "string",
+                    "title": "Unit",
+                    "description": "Weight units"
+                }
+            },
+            "additionalProperties": true,
+            "type": "object",
+            "title": "Weight",
+            "description": "Weight specified in different units"
+        }
+    }
+}

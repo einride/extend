@@ -1,0 +1,26 @@
+{
+    "$schema": "http://json-schema.org/draft-04/schema#",
+    "$ref": "#/definitions/Vehicle",
+    "definitions": {
+        "Vehicle": {
+            "properties": {
+                "reference_id": {
+                    "type": "string",
+                    "description": "Reference id"
+                },
+                "driver_reference_id": {
+                    "type": "string",
+                    "description": "Driver reference id"
+                },
+                "carrier_reference_id": {
+                    "type": "string",
+                    "description": "Carrier reference id"
+                }
+            },
+            "additionalProperties": true,
+            "type": "object",
+            "title": "Vehicle",
+            "description": "Holds vehicle information"
+        }
+    }
+}

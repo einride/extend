@@ -1,0 +1,18 @@
+{
+    "$schema": "http://json-schema.org/draft-04/schema#",
+    "$ref": "#/definitions/GetShipmentRequest",
+    "definitions": {
+        "GetShipmentRequest": {
+            "properties": {
+                "name": {
+                    "type": "string",
+                    "description": "The resource name of the shipment to retrieve."
+                }
+            },
+            "additionalProperties": true,
+            "type": "object",
+            "title": "Get Shipment Request",
+            "description": "Request message for BookService.GetShipment."
+        }
+    }
+}

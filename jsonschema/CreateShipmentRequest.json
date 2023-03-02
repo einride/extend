@@ -1,0 +1,363 @@
+{
+    "$schema": "http://json-schema.org/draft-04/schema#",
+    "$ref": "#/definitions/CreateShipmentRequest",
+    "definitions": {
+        "CreateShipmentRequest": {
+            "properties": {
+                "parent": {
+                    "type": "string",
+                    "description": "The parent space in which to create the shipment."
+                },
+                "shipment": {
+                    "$ref": "#/definitions/einride.saga.extend.book.v1beta1.Shipment",
+                    "additionalProperties": true,
+                    "description": "The shipment to create."
+                }
+            },
+            "additionalProperties": true,
+            "type": "object",
+            "title": "Create Shipment Request",
+            "description": "Request message for BookService.CreateShipment."
+        },
+        "einride.saga.extend.book.v1beta1.Address": {
+            "properties": {
+                "recipient": {
+                    "type": "string",
+                    "description": "Recipient"
+                },
+                "co": {
+                    "type": "string",
+                    "description": "Care of (C/O)"
+                },
+                "line1": {
+                    "type": "string",
+                    "description": "Address line 1"
+                },
+                "line2": {
+                    "type": "string",
+                    "description": "Address line 2"
+                },
+                "postal_code": {
+                    "type": "string",
+                    "description": "Postal code"
+                },
+                "city": {
+                    "type": "string",
+                    "description": "City"
+                },
+                "region_code": {
+                    "type": "string",
+                    "description": "Region code (Unicode CLDR region code) https://cldr.unicode.org/"
+                },
+                "state_code": {
+                    "type": "string",
+                    "description": "State code"
+                },
+                "display_name": {
+                    "type": "string",
+                    "description": "The displayed name of the address"
+                },
+                "contact_info": {
+                    "type": "string",
+                    "description": "Contact information"
+                },
+                "lat_lng": {
+                    "$ref": "#/definitions/google.type.LatLng",
+                    "additionalProperties": true,
+                    "description": "The geographic location of the address"
+                }
+            },
+            "additionalProperties": true,
+            "type": "object",
+            "title": "Address",
+            "description": "An Address is where goods are picked up or delivered."
+        },
+        "einride.saga.extend.book.v1beta1.Shipment": {
+            "properties": {
+                "name": {
+                    "type": "string",
+                    "description": "The resource name of the shipment."
+                },
+                "space": {
+                    "type": "string",
+                    "description": "Resource name of the space that owns the shipment."
+                },
+                "sender": {
+                    "type": "string",
+                    "description": "Resource name of the sender of the shipment."
+                },
+                "create_time": {
+                    "type": "string",
+                    "description": "The creation timestamp of the shipment.",
+                    "format": "date-time"
+                },
+                "update_time": {
+                    "type": "string",
+                    "description": "The last update timestamp of the shipment. Updated when create/update/delete operation is performed.",
+                    "format": "date-time"
+                },
+                "delete_time": {
+                    "type": "string",
+                    "description": "The deletion timestamp of the shipment. Set if the shipment is deleted.",
+                    "format": "date-time"
+                },
+                "tracking_id": {
+                    "type": "string",
+                    "description": "A generated tracking ID for this shipment."
+                },
+                "pickup_address": {
+                    "$ref": "#/definitions/einride.saga.extend.book.v1beta1.Address",
+                    "additionalProperties": true,
+                    "description": "The address where the shipment is picked up. Supply when creating shipment if different from the sender default pickup address."
+                },
+                "pickup_instructions": {
+                    "type": "string",
+                    "description": "Instructions for the pickup."
+                },
+                "requested_pickup_start_time": {
+                    "type": "string",
+                    "description": "The shipment should be picked up after this time",
+                    "format": "date-time"
+                },
+                "requested_pickup_end_time": {
+                    "type": "string",
+                    "description": "The shipment should be picked up before this time",
+                    "format": "date-time"
+                },
+                "delivery_address": {
+                    "$ref": "#/definitions/einride.saga.extend.book.v1beta1.Address",
+                    "additionalProperties": true,
+                    "description": "The address where the shipment is delivered to."
+                },
+                "delivery_instructions": {
+                    "type": "string",
+                    "description": "Instructions for the delivery."
+                },
+                "requested_delivery_start_time": {
+                    "type": "string",
+                    "description": "The shipment should be delivered after this time",
+                    "format": "date-time"
+                },
+                "requested_delivery_end_time": {
+                    "type": "string",
+                    "description": "The shipment should be delivered before this time",
+                    "format": "date-time"
+                },
+                "units": {
+                    "items": {
+                        "$ref": "#/definitions/einride.saga.extend.book.v1beta1.Unit"
+                    },
+                    "type": "array",
+                    "description": "Shipment units"
+                },
+                "external_reference_id": {
+                    "type": "string",
+                    "description": "An external reference for this shipment."
+                },
+                "booking": {
+                    "type": "string",
+                    "description": "Resource name of the booking this shipment relates to."
+                },
+                "state": {
+                    "enum": [
+                        "STATE_UNSPECIFIED",
+                        "ACTIVE",
+                        "RELEASED"
+                    ],
+                    "type": "string",
+                    "title": "State",
+                    "description": "Shipment state"
+                },
+                "delivery_state": {
+                    "enum": [
+                        "DELIVERY_STATE_UNSPECIFIED",
+                        "AWAITING",
+                        "IN_TRANSIT",
+                        "DELIVERED"
+                    ],
+                    "type": "string",
+                    "title": "Delivery State",
+                    "description": "Shipment delivery state"
+                },
+                "vehicle": {
+                    "$ref": "#/definitions/einride.saga.extend.book.v1beta1.Vehicle",
+                    "additionalProperties": true,
+                    "description": "Vehicle information for the shipment"
+                },
+                "annotations": {
+                    "additionalProperties": {
+                        "type": "string"
+                    },
+                    "type": "object",
+                    "description": "Annotations for the shipment"
+                },
+                "service": {
+                    "enum": [
+                        "SERVICE_UNSPECIFIED",
+                        "PALLET",
+                        "FTL",
+                        "DRAYAGE"
+                    ],
+                    "type": "string",
+                    "title": "Service",
+                    "description": "Shipment service type"
+                }
+            },
+            "additionalProperties": true,
+            "type": "object",
+            "title": "Shipment",
+            "description": "A shipment represents a demand to deliver goods from an origin to a destination."
+        },
+        "einride.saga.extend.book.v1beta1.Unit": {
+            "properties": {
+                "type": {
+                    "type": "string",
+                    "description": "Type of unit"
+                },
+                "external_reference_id": {
+                    "type": "string",
+                    "description": "External reference ID of the unit"
+                },
+                "description": {
+                    "type": "string",
+                    "description": "Description of the unit"
+                },
+                "tracking_id": {
+                    "type": "string",
+                    "description": "Unique unit tracking ID"
+                },
+                "weight": {
+                    "$ref": "#/definitions/einride.saga.extend.book.v1beta1.Unit.Weight",
+                    "additionalProperties": true,
+                    "description": "Unit weight"
+                },
+                "length": {
+                    "$ref": "#/definitions/einride.saga.extend.book.v1beta1.Unit.Length",
+                    "additionalProperties": true,
+                    "description": "Unit length"
+                },
+                "height": {
+                    "$ref": "#/definitions/einride.saga.extend.book.v1beta1.Unit.Length",
+                    "additionalProperties": true,
+                    "description": "Unit height"
+                },
+                "width": {
+                    "$ref": "#/definitions/einride.saga.extend.book.v1beta1.Unit.Length",
+                    "additionalProperties": true,
+                    "description": "Unit width"
+                },
+                "volume": {
+                    "$ref": "#/definitions/einride.saga.extend.book.v1beta1.Unit.Volume",
+                    "additionalProperties": true,
+                    "description": "Unit volume"
+                }
+            },
+            "additionalProperties": true,
+            "type": "object",
+            "title": "Unit",
+            "description": "A unit is a holder of goods such as a EUR-pallet."
+        },
+        "einride.saga.extend.book.v1beta1.Unit.Length": {
+            "properties": {
+                "value": {
+                    "type": "number",
+                    "description": "Length value"
+                },
+                "unit": {
+                    "enum": [
+                        "UNIT_UNSPECIFIED",
+                        "CM",
+                        "IN"
+                    ],
+                    "type": "string",
+                    "title": "Unit",
+                    "description": "Length units"
+                }
+            },
+            "additionalProperties": true,
+            "type": "object",
+            "title": "Length",
+            "description": "Length specified in different units"
+        },
+        "einride.saga.extend.book.v1beta1.Unit.Volume": {
+            "properties": {
+                "value": {
+                    "type": "number",
+                    "description": "Volume value"
+                },
+                "unit": {
+                    "enum": [
+                        "UNIT_UNSPECIFIED",
+                        "CBM",
+                        "CBFT"
+                    ],
+                    "type": "string",
+                    "title": "Unit",
+                    "description": "Volume units"
+                }
+            },
+            "additionalProperties": true,
+            "type": "object",
+            "title": "Volume",
+            "description": "Volume specified in different units"
+        },
+        "einride.saga.extend.book.v1beta1.Unit.Weight": {
+            "properties": {
+                "value": {
+                    "type": "number",
+                    "description": "Weight value"
+                },
+                "unit": {
+                    "enum": [
+                        "UNIT_UNSPECIFIED",
+                        "KG",
+                        "LBS"
+                    ],
+                    "type": "string",
+                    "title": "Unit",
+                    "description": "Weight units"
+                }
+            },
+            "additionalProperties": true,
+            "type": "object",
+            "title": "Weight",
+            "description": "Weight specified in different units"
+        },
+        "einride.saga.extend.book.v1beta1.Vehicle": {
+            "properties": {
+                "reference_id": {
+                    "type": "string",
+                    "description": "Reference id"
+                },
+                "driver_reference_id": {
+                    "type": "string",
+                    "description": "Driver reference id"
+                },
+                "carrier_reference_id": {
+                    "type": "string",
+                    "description": "Carrier reference id"
+                }
+            },
+            "additionalProperties": true,
+            "type": "object",
+            "title": "Vehicle",
+            "description": "Holds vehicle information"
+        },
+        "google.type.LatLng": {
+            "properties": {
+                "latitude": {
+                    "type": "number",
+                    "description": "The latitude in degrees. It must be in the range [-90.0, +90.0]."
+                },
+                "longitude": {
+                    "type": "number",
+                    "description": "The longitude in degrees. It must be in the range [-180.0, +180.0]."
+                }
+            },
+            "additionalProperties": true,
+            "type": "object",
+            "title": "Lat Lng",
+            "description": "An object that represents a latitude/longitude pair. This is expressed as a pair of doubles to represent degrees latitude and degrees longitude. Unless specified otherwise, this must conform to the \u003ca href=\"http://www.unoosa.org/pdf/icg/2012/template/WGS_84.pdf\"\u003eWGS84 standard\u003c/a\u003e. Values must be within normalized ranges."
+        }
+    }
+}
