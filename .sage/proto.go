@@ -113,26 +113,6 @@ func (Proto) ProtocGenGoIam(ctx context.Context) error {
 	return err
 }
 
-// func (Proto) ProtocGenJsonSchema(ctx context.Context) error {
-// 	sg.Deps(
-// 		ctx,
-// 		sgprotocgenjsonschema.PrepareCommand,
-// 	)
-// 	sg.Logger(ctx).Println("generating protobuf json schemas...")
-// 	if err := os.RemoveAll(sg.FromGitRoot("jsonschemas")); err != nil {
-// 		return err
-// 	}
-// 	cmd := sgprotocgenjsonschema.Command(
-// 		ctx,
-// 		"--include_imports",
-// 		"--jsonschema_out="+sg.FromGitRoot("jsonschemas"),
-// 		"--proto_path="+sg.FromGitRoot("proto", "einride", "saga", "extend", "book", "v1beta1"),
-// 		sg.FromGitRoot("proto", "einride", "saga", "extend", "book", "v1beta1", "address.proto"),
-// 	)
-// 	cmd.Dir = sg.FromGitRoot("proto")
-// 	return cmd.Run()
-// }
-
 func (Proto) CleanGenerated(ctx context.Context) error {
 	sg.Logger(ctx).Println("cleaning generated files...")
 	if err := os.RemoveAll(sg.FromGitRoot("proto", "gen")); err != nil {
