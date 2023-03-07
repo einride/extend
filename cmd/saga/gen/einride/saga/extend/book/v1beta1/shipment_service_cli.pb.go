@@ -44,7 +44,7 @@ func NewShipmentServiceCommand(config aipcli.Config) *cobra.Command {
 				"einride.saga.extend.book.v1beta1.Shipment.delivery_address":              " The address where the shipment is delivered to.\n",
 				"einride.saga.extend.book.v1beta1.Shipment.delivery_instructions":         " Instructions for the delivery.\n",
 				"einride.saga.extend.book.v1beta1.Shipment.delivery_state":                " Shipment delivery state\n",
-				"einride.saga.extend.book.v1beta1.Shipment.external_reference_id":         " An external reference for this shipment.\n",
+				"einride.saga.extend.book.v1beta1.Shipment.external_reference_id":         " An external reference for this shipment. If supplied then it must be unique within the space.\n",
 				"einride.saga.extend.book.v1beta1.Shipment.name":                          " The resource name of the shipment.\n",
 				"einride.saga.extend.book.v1beta1.Shipment.pickup_address":                " The address where the shipment is picked up.\n Supply when creating shipment if different from the sender default pickup address.\n",
 				"einride.saga.extend.book.v1beta1.Shipment.pickup_instructions":           " Instructions for the pickup.\n",
