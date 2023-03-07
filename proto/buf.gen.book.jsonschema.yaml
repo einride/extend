@@ -11,12 +11,9 @@ managed:
       buf.build/einride/grpc-service-config: go.einride.tech/grpc-service-config/gen
 
 plugins:
-  - name: openapiv2
-    out: openapiv2
+  - name: jsonschema
+    out: jsonschema
     strategy: all
     opt:
-      - output_format=yaml
-      - allow_merge=true
-      - merge_file_name=book
-      - omit_enum_default_value=true
-
+      - enums_as_strings_only
+      - disallow_additional_properties

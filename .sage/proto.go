@@ -157,7 +157,7 @@ func (Proto) BufGenerateAuth(ctx context.Context) error {
 }
 
 func (Proto) BufGenerateBook(ctx context.Context) error {
-	sg.Deps(ctx, Proto.ProtocGenOpenApiV2, sgprotocgenjsonschema.PrepareCommand)
+	sg.Deps(ctx, Proto.ProtocGenOpenApiV2)
 	sg.Logger(ctx).Println("generating proto stubs...")
 	cmd := sgbuf.Command(
 		ctx,
@@ -166,6 +166,25 @@ func (Proto) BufGenerateBook(ctx context.Context) error {
 		sg.FromGitRoot(),
 		"--template",
 		"buf.gen.book.yaml",
+		"--path",
+		"einride/saga/extend/book/v1beta1",
+	)
+	cmd.Dir = sg.FromGitRoot("proto")
+	return cmd.Run()
+}
+
+// Temporarily made as a separate function to prevent JSON Schemas
+// to be generated on BufGenerateBook execution
+func (Proto) BufGenerateBookJsonSchemas(ctx context.Context) error {
+	sg.Deps(ctx, sgprotocgenjsonschema.PrepareCommand)
+	sg.Logger(ctx).Println("generating proto stubs...")
+	cmd := sgbuf.Command(
+		ctx,
+		"generate",
+		"--output",
+		sg.FromGitRoot(),
+		"--template",
+		"buf.gen.book.jsonschema.yaml",
 		"--path",
 		"einride/saga/extend/book/v1beta1",
 	)

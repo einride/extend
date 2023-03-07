@@ -63,6 +63,10 @@ buf-generate-auth: $(sagefile)
 buf-generate-book: $(sagefile)
 	@$(sagefile) Proto:BufGenerateBook
 
+.PHONY: buf-generate-book-json-schemas
+buf-generate-book-json-schemas: $(sagefile)
+	@$(sagefile) Proto:BufGenerateBookJsonSchemas
+
 .PHONY: buf-generate-cli
 buf-generate-cli: $(sagefile)
 	@$(sagefile) Proto:BufGenerateCLI
