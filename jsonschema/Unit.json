@@ -22,31 +22,31 @@
                 },
                 "weight": {
                     "$ref": "#/definitions/einride.saga.extend.book.v1beta1.Unit.Weight",
-                    "additionalProperties": true,
+                    "additionalProperties": false,
                     "description": "Unit weight"
                 },
                 "length": {
                     "$ref": "#/definitions/einride.saga.extend.book.v1beta1.Unit.Length",
-                    "additionalProperties": true,
+                    "additionalProperties": false,
                     "description": "Unit length"
                 },
                 "height": {
                     "$ref": "#/definitions/einride.saga.extend.book.v1beta1.Unit.Length",
-                    "additionalProperties": true,
+                    "additionalProperties": false,
                     "description": "Unit height"
                 },
                 "width": {
                     "$ref": "#/definitions/einride.saga.extend.book.v1beta1.Unit.Length",
-                    "additionalProperties": true,
+                    "additionalProperties": false,
                     "description": "Unit width"
                 },
                 "volume": {
                     "$ref": "#/definitions/einride.saga.extend.book.v1beta1.Unit.Volume",
-                    "additionalProperties": true,
+                    "additionalProperties": false,
                     "description": "Unit volume"
                 }
             },
-            "additionalProperties": true,
+            "additionalProperties": false,
             "type": "object",
             "title": "Unit",
             "description": "A unit is a holder of goods such as a EUR-pallet."
@@ -68,7 +68,7 @@
                     "description": "Length units"
                 }
             },
-            "additionalProperties": true,
+            "additionalProperties": false,
             "type": "object",
             "title": "Length",
             "description": "Length specified in different units"
@@ -90,7 +90,7 @@
                     "description": "Volume units"
                 }
             },
-            "additionalProperties": true,
+            "additionalProperties": false,
             "type": "object",
             "title": "Volume",
             "description": "Volume specified in different units"
@@ -112,7 +112,7 @@
                     "description": "Weight units"
                 }
             },
-            "additionalProperties": true,
+            "additionalProperties": false,
             "type": "object",
             "title": "Weight",
             "description": "Weight specified in different units"

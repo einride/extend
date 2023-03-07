@@ -8,6 +8,7 @@
                     "items": {
                         "$ref": "#/definitions/einride.saga.extend.book.v1beta1.ShipmentTrackingEvent"
                     },
+                    "additionalProperties": false,
                     "type": "array",
                     "description": "The list of shipment tracking events."
                 },
@@ -16,7 +17,7 @@
                     "description": "A token to retrieve next page of results.  Pass this value in the [ListShipmentTrackingEventsRequest.page_token][einride.saga.extend.book.v1beta1.ListShipmentTrackingEventsRequest.page_token] field in the subsequent call to `ListShipmentTrackingEvents` method to retrieve the next page of results."
                 }
             },
-            "additionalProperties": true,
+            "additionalProperties": false,
             "type": "object",
             "title": "List Shipment Tracking Events Response",
             "description": "Response message for ShipmentTrackingEventService.ListShipmentTrackingEvents."
@@ -65,11 +66,11 @@
                 },
                 "lat_lng": {
                     "$ref": "#/definitions/google.type.LatLng",
-                    "additionalProperties": true,
+                    "additionalProperties": false,
                     "description": "The geographic location of the address"
                 }
             },
-            "additionalProperties": true,
+            "additionalProperties": false,
             "type": "object",
             "title": "Address",
             "description": "An Address is where goods are picked up or delivered."
@@ -122,7 +123,7 @@
                 },
                 "address": {
                     "$ref": "#/definitions/einride.saga.extend.book.v1beta1.Address",
-                    "additionalProperties": true,
+                    "additionalProperties": false,
                     "description": "The address where the event happened."
                 },
                 "description": {
@@ -131,11 +132,11 @@
                 },
                 "vehicle": {
                     "$ref": "#/definitions/einride.saga.extend.book.v1beta1.Vehicle",
-                    "additionalProperties": true,
+                    "additionalProperties": false,
                     "description": "On what vehicle did this event occur"
                 }
             },
-            "additionalProperties": true,
+            "additionalProperties": false,
             "type": "object",
             "title": "Shipment Tracking Event",
             "description": "A shipment tracking event represents an event on a shipment."
@@ -155,7 +156,7 @@
                     "description": "Carrier reference id"
                 }
             },
-            "additionalProperties": true,
+            "additionalProperties": false,
             "type": "object",
             "title": "Vehicle",
             "description": "Holds vehicle information"
@@ -171,7 +172,7 @@
                     "description": "The longitude in degrees. It must be in the range [-180.0, +180.0]."
                 }
             },
-            "additionalProperties": true,
+            "additionalProperties": false,
             "type": "object",
             "title": "Lat Lng",
             "description": "An object that represents a latitude/longitude pair. This is expressed as a pair of doubles to represent degrees latitude and degrees longitude. Unless specified otherwise, this must conform to the \u003ca href=\"http://www.unoosa.org/pdf/icg/2012/template/WGS_84.pdf\"\u003eWGS84 standard\u003c/a\u003e. Values must be within normalized ranges."

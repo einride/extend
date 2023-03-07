@@ -9,7 +9,7 @@
                     "description": "The resource name of the booking to retrieve."
                 }
             },
-            "additionalProperties": true,
+            "additionalProperties": false,
             "type": "object",
             "title": "Get Booking Request",
             "description": "The request message to get a booking."

@@ -24,3 +24,4 @@ plugins:
     strategy: all
     opt:
       - enums_as_strings_only
+      - disallow_additional_properties

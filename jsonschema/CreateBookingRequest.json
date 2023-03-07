@@ -1,24 +1,22 @@
 {
     "$schema": "http://json-schema.org/draft-04/schema#",
     "$ref": "#/definitions/CreateBookingRequest",
-    "definitions": {
-        "CreateBookingRequest": {
-            "properties": {
-                "parent": {
-                    "type": "string",
-                    "description": "The parent space in which to create the booking."
-                },
-                "booking": {
-                    "$ref": "#/definitions/einride.saga.extend.book.v1beta1.Booking",
-                    "additionalProperties": true,
-                    "description": "The booking to create."
-                }
-            },
-            "additionalProperties": true,
-            "type": "object",
-            "title": "Create Booking Request",
-            "description": "The request message to create a booking."
+    "properties": {
+        "parent": {
+            "type": "string",
+            "description": "The parent space in which to create the booking."
         },
+        "booking": {
+            "$ref": "#/definitions/einride.saga.extend.book.v1beta1.Booking",
+            "additionalProperties": false,
+            "description": "The booking to create."
+        }
+    },
+    "additionalProperties": false,
+    "type": "object",
+    "title": "Create Booking Request",
+    "description": "The request message to create a booking.",
+    "definitions": {
         "einride.saga.extend.book.v1beta1.Address": {
             "properties": {
                 "recipient": {
@@ -63,11 +61,11 @@
                 },
                 "lat_lng": {
                     "$ref": "#/definitions/google.type.LatLng",
-                    "additionalProperties": true,
+                    "additionalProperties": false,
                     "description": "The geographic location of the address"
                 }
             },
-            "additionalProperties": true,
+            "additionalProperties": false,
             "type": "object",
             "title": "Address",
             "description": "An Address is where goods are picked up or delivered."
@@ -143,6 +141,7 @@
                     "items": {
                         "$ref": "#/definitions/einride.saga.extend.book.v1beta1.Unit"
                     },
+                    "additionalProperties": false,
                     "type": "array",
                     "description": "The units included in this booking."
                 },
@@ -150,6 +149,7 @@
                     "items": {
                         "$ref": "#/definitions/einride.saga.extend.book.v1beta1.Booking.Stop"
                     },
+                    "additionalProperties": false,
                     "type": "array",
                     "description": "The stops included in this booking."
                 },
@@ -165,7 +165,7 @@
                     "description": "The state of the booking."
                 }
             },
-            "additionalProperties": true,
+            "additionalProperties": false,
             "type": "object",
             "title": "Booking",
             "description": "A booking represents an estimated demand to deliver goods."
@@ -174,7 +174,7 @@
             "properties": {
                 "address": {
                     "$ref": "#/definitions/einride.saga.extend.book.v1beta1.Address",
-                    "additionalProperties": true,
+                    "additionalProperties": false,
                     "description": "The address of this stop."
                 },
                 "stop_type": {
@@ -209,7 +209,7 @@
                     "description": "The unit external reference id associated with this stop. E.g. for a pickup stop this will hold the units to pickup."
                 }
             },
-            "additionalProperties": true,
+            "additionalProperties": false,
             "type": "object",
             "title": "Stop",
             "description": "A stop is an address where an event is going to happen. The event could be to deliver goods, charge the vehicle etc."
@@ -234,31 +234,31 @@
                 },
                 "weight": {
                     "$ref": "#/definitions/einride.saga.extend.book.v1beta1.Unit.Weight",
-                    "additionalProperties": true,
+                    "additionalProperties": false,
                     "description": "Unit weight"
                 },
                 "length": {
                     "$ref": "#/definitions/einride.saga.extend.book.v1beta1.Unit.Length",
-                    "additionalProperties": true,
+                    "additionalProperties": false,
                     "description": "Unit length"
                 },
                 "height": {
                     "$ref": "#/definitions/einride.saga.extend.book.v1beta1.Unit.Length",
-                    "additionalProperties": true,
+                    "additionalProperties": false,
                     "description": "Unit height"
                 },
                 "width": {
                     "$ref": "#/definitions/einride.saga.extend.book.v1beta1.Unit.Length",
-                    "additionalProperties": true,
+                    "additionalProperties": false,
                     "description": "Unit width"
                 },
                 "volume": {
                     "$ref": "#/definitions/einride.saga.extend.book.v1beta1.Unit.Volume",
-                    "additionalProperties": true,
+                    "additionalProperties": false,
                     "description": "Unit volume"
                 }
             },
-            "additionalProperties": true,
+            "additionalProperties": false,
             "type": "object",
             "title": "Unit",
             "description": "A unit is a holder of goods such as a EUR-pallet."
@@ -280,7 +280,7 @@
                     "description": "Length units"
                 }
             },
-            "additionalProperties": true,
+            "additionalProperties": false,
             "type": "object",
             "title": "Length",
             "description": "Length specified in different units"
@@ -302,7 +302,7 @@
                     "description": "Volume units"
                 }
             },
-            "additionalProperties": true,
+            "additionalProperties": false,
             "type": "object",
             "title": "Volume",
             "description": "Volume specified in different units"
@@ -324,7 +324,7 @@
                     "description": "Weight units"
                 }
             },
-            "additionalProperties": true,
+            "additionalProperties": false,
             "type": "object",
             "title": "Weight",
             "description": "Weight specified in different units"
@@ -340,7 +340,7 @@
                     "description": "The longitude in degrees. It must be in the range [-180.0, +180.0]."
                 }
             },
-            "additionalProperties": true,
+            "additionalProperties": false,
             "type": "object",
             "title": "Lat Lng",
             "description": "An object that represents a latitude/longitude pair. This is expressed as a pair of doubles to represent degrees latitude and degrees longitude. Unless specified otherwise, this must conform to the \u003ca href=\"http://www.unoosa.org/pdf/icg/2012/template/WGS_84.pdf\"\u003eWGS84 standard\u003c/a\u003e. Values must be within normalized ranges."

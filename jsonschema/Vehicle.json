@@ -17,7 +17,7 @@
                     "description": "Carrier reference id"
                 }
             },
-            "additionalProperties": true,
+            "additionalProperties": false,
             "type": "object",
             "title": "Vehicle",
             "description": "Holds vehicle information"

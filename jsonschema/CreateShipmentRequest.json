@@ -1,24 +1,22 @@
 {
     "$schema": "http://json-schema.org/draft-04/schema#",
     "$ref": "#/definitions/CreateShipmentRequest",
-    "definitions": {
-        "CreateShipmentRequest": {
-            "properties": {
-                "parent": {
-                    "type": "string",
-                    "description": "The parent space in which to create the shipment."
-                },
-                "shipment": {
-                    "$ref": "#/definitions/einride.saga.extend.book.v1beta1.Shipment",
-                    "additionalProperties": true,
-                    "description": "The shipment to create."
-                }
-            },
-            "additionalProperties": true,
-            "type": "object",
-            "title": "Create Shipment Request",
-            "description": "Request message for BookService.CreateShipment."
+    "properties": {
+        "parent": {
+            "type": "string",
+            "description": "The parent space in which to create the shipment."
         },
+        "shipment": {
+            "$ref": "#/definitions/einride.saga.extend.book.v1beta1.Shipment",
+            "additionalProperties": false,
+            "description": "The shipment to create."
+        }
+    },
+    "additionalProperties": false,
+    "type": "object",
+    "title": "Create Shipment Request",
+    "description": "Request message for BookService.CreateShipment.",
+    "definitions": {
         "einride.saga.extend.book.v1beta1.Address": {
             "properties": {
                 "recipient": {
@@ -63,11 +61,11 @@
                 },
                 "lat_lng": {
                     "$ref": "#/definitions/google.type.LatLng",
-                    "additionalProperties": true,
+                    "additionalProperties": false,
                     "description": "The geographic location of the address"
                 }
             },
-            "additionalProperties": true,
+            "additionalProperties": false,
             "type": "object",
             "title": "Address",
             "description": "An Address is where goods are picked up or delivered."
@@ -107,7 +105,7 @@
                 },
                 "pickup_address": {
                     "$ref": "#/definitions/einride.saga.extend.book.v1beta1.Address",
-                    "additionalProperties": true,
+                    "additionalProperties": false,
                     "description": "The address where the shipment is picked up. Supply when creating shipment if different from the sender default pickup address."
                 },
                 "pickup_instructions": {
@@ -126,7 +124,7 @@
                 },
                 "delivery_address": {
                     "$ref": "#/definitions/einride.saga.extend.book.v1beta1.Address",
-                    "additionalProperties": true,
+                    "additionalProperties": false,
                     "description": "The address where the shipment is delivered to."
                 },
                 "delivery_instructions": {
@@ -147,6 +145,7 @@
                     "items": {
                         "$ref": "#/definitions/einride.saga.extend.book.v1beta1.Unit"
                     },
+                    "additionalProperties": false,
                     "type": "array",
                     "description": "Shipment units"
                 },
@@ -181,7 +180,7 @@
                 },
                 "vehicle": {
                     "$ref": "#/definitions/einride.saga.extend.book.v1beta1.Vehicle",
-                    "additionalProperties": true,
+                    "additionalProperties": false,
                     "description": "Vehicle information for the shipment"
                 },
                 "annotations": {
@@ -203,7 +202,7 @@
                     "description": "Shipment service type"
                 }
             },
-            "additionalProperties": true,
+            "additionalProperties": false,
             "type": "object",
             "title": "Shipment",
             "description": "A shipment represents a demand to deliver goods from an origin to a destination."
@@ -228,31 +227,31 @@
                 },
                 "weight": {
                     "$ref": "#/definitions/einride.saga.extend.book.v1beta1.Unit.Weight",
-                    "additionalProperties": true,
+                    "additionalProperties": false,
                     "description": "Unit weight"
                 },
                 "length": {
                     "$ref": "#/definitions/einride.saga.extend.book.v1beta1.Unit.Length",
-                    "additionalProperties": true,
+                    "additionalProperties": false,
                     "description": "Unit length"
                 },
                 "height": {
                     "$ref": "#/definitions/einride.saga.extend.book.v1beta1.Unit.Length",
-                    "additionalProperties": true,
+                    "additionalProperties": false,
                     "description": "Unit height"
                 },
                 "width": {
                     "$ref": "#/definitions/einride.saga.extend.book.v1beta1.Unit.Length",
-                    "additionalProperties": true,
+                    "additionalProperties": false,
                     "description": "Unit width"
                 },
                 "volume": {
                     "$ref": "#/definitions/einride.saga.extend.book.v1beta1.Unit.Volume",
-                    "additionalProperties": true,
+                    "additionalProperties": false,
                     "description": "Unit volume"
                 }
             },
-            "additionalProperties": true,
+            "additionalProperties": false,
             "type": "object",
             "title": "Unit",
             "description": "A unit is a holder of goods such as a EUR-pallet."
@@ -274,7 +273,7 @@
                     "description": "Length units"
                 }
             },
-            "additionalProperties": true,
+            "additionalProperties": false,
             "type": "object",
             "title": "Length",
             "description": "Length specified in different units"
@@ -296,7 +295,7 @@
                     "description": "Volume units"
                 }
             },
-            "additionalProperties": true,
+            "additionalProperties": false,
             "type": "object",
             "title": "Volume",
             "description": "Volume specified in different units"
@@ -318,7 +317,7 @@
                     "description": "Weight units"
                 }
             },
-            "additionalProperties": true,
+            "additionalProperties": false,
             "type": "object",
             "title": "Weight",
             "description": "Weight specified in different units"
@@ -338,7 +337,7 @@
                     "description": "Carrier reference id"
                 }
             },
-            "additionalProperties": true,
+            "additionalProperties": false,
             "type": "object",
             "title": "Vehicle",
             "description": "Holds vehicle information"
@@ -354,7 +353,7 @@
                     "description": "The longitude in degrees. It must be in the range [-180.0, +180.0]."
                 }
             },
-            "additionalProperties": true,
+            "additionalProperties": false,
             "type": "object",
             "title": "Lat Lng",
             "description": "An object that represents a latitude/longitude pair. This is expressed as a pair of doubles to represent degrees latitude and degrees longitude. Unless specified otherwise, this must conform to the \u003ca href=\"http://www.unoosa.org/pdf/icg/2012/template/WGS_84.pdf\"\u003eWGS84 standard\u003c/a\u003e. Values must be within normalized ranges."

@@ -46,11 +46,11 @@
                 },
                 "lat_lng": {
                     "$ref": "#/definitions/google.type.LatLng",
-                    "additionalProperties": true,
+                    "additionalProperties": false,
                     "description": "The geographic location of the address"
                 }
             },
-            "additionalProperties": true,
+            "additionalProperties": false,
             "type": "object",
             "title": "Address",
             "description": "An Address is where goods are picked up or delivered."
@@ -66,7 +66,7 @@
                     "description": "The longitude in degrees. It must be in the range [-180.0, +180.0]."
                 }
             },
-            "additionalProperties": true,
+            "additionalProperties": false,
             "type": "object",
             "title": "Lat Lng",
             "description": "An object that represents a latitude/longitude pair. This is expressed as a pair of doubles to represent degrees latitude and degrees longitude. Unless specified otherwise, this must conform to the \u003ca href=\"http://www.unoosa.org/pdf/icg/2012/template/WGS_84.pdf\"\u003eWGS84 standard\u003c/a\u003e. Values must be within normalized ranges."

@@ -9,7 +9,7 @@
                     "description": "The resource name of the shipment tracking event to retrieve. Format: spaces/{space}/shipments/{shipment}/trackingEvents/{shipmentTrackingEvent}"
                 }
             },
-            "additionalProperties": true,
+            "additionalProperties": false,
             "type": "object",
             "title": "Get Shipment Tracking Event Request",
             "description": "Request message for ShipmentTrackingEventService.GetShipmentTrackingEvent."

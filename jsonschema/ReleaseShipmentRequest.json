@@ -9,7 +9,7 @@
                     "description": "The resource name of the shipment to release."
                 }
             },
-            "additionalProperties": true,
+            "additionalProperties": false,
             "type": "object",
             "title": "Release Shipment Request",
             "description": "Request message for BookService.ReleaseShipment."

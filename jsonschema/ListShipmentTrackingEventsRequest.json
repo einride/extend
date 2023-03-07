@@ -17,7 +17,7 @@
                     "description": "A token identifying a page of results the server should return. Typically, this is the value of [ListShipmentTrackingEventsResponse.page_token][einride.saga.extend.book.v1beta1.ListShipmentTrackingEventsResponse.page_token] returned from the previous call to `ListShipmentTrackingEvents` method."
                 }
             },
-            "additionalProperties": true,
+            "additionalProperties": false,
             "type": "object",
             "title": "List Shipment Tracking Events Request",
             "description": "Request message for ShipmentTrackingEventService.ListShipmentTrackingEvents."
