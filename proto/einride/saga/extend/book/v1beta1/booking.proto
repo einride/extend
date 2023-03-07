@@ -119,9 +119,9 @@ message Booking {
     // Instructions for this stop.
     string instructions = 3;
     // The earliest time to arrive this stop.
-    google.protobuf.Timestamp requested_start_time = 4;
+    google.protobuf.Timestamp requested_start_time = 4 [(google.api.field_behavior) = REQUIRED];
     // The latest time to depart this stop.
-    google.protobuf.Timestamp requested_end_time = 5;
+    google.protobuf.Timestamp requested_end_time = 5 [(google.api.field_behavior) = REQUIRED];
     // The unit external reference id associated with this stop. E.g. for a pickup stop this will hold the units to pickup.
     repeated string unit_external_reference_ids = 6 [(google.api.field_behavior) = REQUIRED];
 
