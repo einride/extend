@@ -754,7 +754,7 @@ definitions:
         readOnly: true
       externalReferenceId:
         type: string
-        description: An external reference for this shipment.
+        description: An external reference for this shipment. If supplied then it must be unique within the space.
       name:
         type: string
         description: The resource name of the shipment.

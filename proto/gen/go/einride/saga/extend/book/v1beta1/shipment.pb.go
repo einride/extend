@@ -229,7 +229,7 @@ type Shipment struct {
 	RequestedDeliveryEndTime *timestamppb.Timestamp `protobuf:"bytes,15,opt,name=requested_delivery_end_time,json=requestedDeliveryEndTime,proto3" json:"requested_delivery_end_time,omitempty"`
 	// Shipment units
 	Units []*Unit `protobuf:"bytes,16,rep,name=units,proto3" json:"units,omitempty"`
-	// An external reference for this shipment.
+	// An external reference for this shipment. If supplied then it must be unique within the space.
 	ExternalReferenceId string `protobuf:"bytes,17,opt,name=external_reference_id,json=externalReferenceId,proto3" json:"external_reference_id,omitempty"`
 	// Resource name of the booking this shipment relates to.
 	Booking string `protobuf:"bytes,18,opt,name=booking,proto3" json:"booking,omitempty"`
