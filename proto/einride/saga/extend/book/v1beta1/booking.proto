@@ -9,6 +9,7 @@ import "google/api/resource.proto";
 import "google/protobuf/timestamp.proto";
 
 // A booking represents an estimated demand to deliver goods.
+// Deprecated: will be removed in next release. Use Tour instead.
 message Booking {
   option (google.api.resource) = {
     type: "api.saga.einride.tech/Booking"
