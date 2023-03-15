@@ -4,10 +4,12 @@ package einride.saga.extend.book.v1beta1;
 
 import "einride/iam/v1/annotations.proto";
 import "einride/saga/extend/book/v1beta1/booking.proto";
+import "einride/saga/extend/book/v1beta1/tour.proto";
 import "google/api/annotations.proto";
 import "google/api/client.proto";
 import "google/api/field_behavior.proto";
 import "google/api/resource.proto";
+import "google/protobuf/field_mask.proto";
 import "protoc-gen-openapiv2/options/annotations.proto";
 
 // Booking service.
@@ -17,6 +19,7 @@ service BookingService {
   // Create a booking in a space.
   //
   // This is an AIP standard [Create](https://google.aip.dev/133) method.
+  // Deprecated: Use CreateTour instead.
   rpc CreateBooking(CreateBookingRequest) returns (Booking) {
     option (google.api.http) = {
       post: "/v1beta1/{parent=spaces/*}/bookings"
@@ -35,6 +38,7 @@ service BookingService {
   // Get a booking.
   //
   // This is an AIP standard [Get](https://google.aip.dev/131) method.
+  // Deprecated: Use GetTour instead.
   rpc GetBooking(GetBookingRequest) returns (Booking) {
     option (google.api.http) = {get: "/v1beta1/{name=spaces/*/bookings/*}"};
     option (google.api.method_signature) = "name";
@@ -43,6 +47,71 @@ service BookingService {
       before: {
         expression: "test(caller, request.name)"
         description: "The caller must have permission to get the booking"
+      }
+    };
+  }
+
+  // Create a truck tour booking in a space.
+  //
+  // This is an AIP standard [Create](https://google.aip.dev/133) method.
+  rpc CreateTour(CreateTourRequest) returns (Tour) {
+    option (google.api.http) = {
+      post: "/v1beta1/{parent=spaces/*}/tours"
+      body: "tour"
+    };
+    option (google.api.method_signature) = "parent,tour";
+    option (einride.iam.v1.method_authorization) = {
+      permission: "book.tours.create"
+      before: {
+        expression: "test(caller, request.parent)"
+        description: "The caller must have permission to create a tour in the parent space."
+      }
+    };
+  }
+
+  // Get an existing truck tour booking.
+  //
+  // This is an AIP standard [Get](https://google.aip.dev/131) method.
+  rpc GetTour(GetTourRequest) returns (Tour) {
+    option (google.api.http) = {get: "/v1beta1/{name=spaces/*/tours/*}"};
+    option (google.api.method_signature) = "name";
+    option (einride.iam.v1.method_authorization) = {
+      permission: "book.tours.get"
+      before: {
+        expression: "test(caller, request.name)"
+        description: "The caller must have permission to get the tour"
+      }
+    };
+  }
+
+  // Confirm a Provisional tour.
+  // Reconfirming a tour that is already confirmed will return an InvalidArgument Error.
+  // When a tour has been accepted by Saga and confirmed by the user, Shipments will be created.
+  rpc ConfirmTour(ConfirmTourRequest) returns (Tour) {
+    option (google.api.http) = {get: "/v1beta1/{name=spaces/*/tours/*}:confirm"};
+    option (google.api.method_signature) = "name";
+    option (einride.iam.v1.method_authorization) = {
+      permission: "book.tours.confirm"
+      before: {
+        expression: "test(caller, request.name)"
+        description: "The caller must have permission to confirm the tour"
+      }
+    };
+  }
+
+  // Update a tour.
+  // See: https://google.aip.dev/134 (Standard methods: Update).
+  rpc UpdateTour(UpdateTourRequest) returns (Tour) {
+    option (google.api.http) = {
+      patch: "/v1beta1/{tour.name=spaces/*/tours/*}"
+      body: "tour"
+    };
+    option (google.api.method_signature) = "tour,update_mask";
+    option (einride.iam.v1.method_authorization) = {
+      permission: "book.tours.update"
+      before: {
+        expression: "test(caller, request.tour.name)"
+        description: "The caller must have permission to update a tour."
       }
     };
   }
@@ -73,4 +142,53 @@ message GetBookingRequest {
       field_configuration: {path_param_name: "booking"}
     }
   ];
+}
+
+// The request message to create a tour.
+message CreateTourRequest {
+  // The parent space in which to create the tour.
+  string parent = 1 [
+    (google.api.field_behavior) = REQUIRED,
+    (google.api.resource_reference) = {type: "api.saga.einride.tech/Space"},
+    (grpc.gateway.protoc_gen_openapiv2.options.openapiv2_field) = {
+      field_configuration: {path_param_name: "space"}
+    }
+  ];
+
+  // The tour to create.
+  Tour tour = 2 [(google.api.field_behavior) = REQUIRED];
+}
+
+// The request message to get a tour.
+message GetTourRequest {
+  // The resource name of the tour to retrieve.
+  string name = 1 [
+    (google.api.field_behavior) = REQUIRED,
+    (google.api.resource_reference) = {type: "api.saga.einride.tech/Tour"},
+    (grpc.gateway.protoc_gen_openapiv2.options.openapiv2_field) = {
+      field_configuration: {path_param_name: "tour"}
+    }
+  ];
+}
+
+// The request message to confirm a tour.
+message ConfirmTourRequest {
+  // The resource name of the tour to confirm.
+  string name = 1 [
+    (google.api.field_behavior) = REQUIRED,
+    (google.api.resource_reference) = {type: "api.saga.einride.tech/Tour"},
+    (grpc.gateway.protoc_gen_openapiv2.options.openapiv2_field) = {
+      field_configuration: {path_param_name: "tour"}
+    }
+  ];
+}
+
+// Request to UpdateTour method.
+message UpdateTourRequest {
+  // The resource which replaces the current resource.
+  Tour tour = 1 [(google.api.field_behavior) = REQUIRED];
+  // The update mask applies to the tour.
+  // For the `FieldMask` definition, see:
+  // https://developers.google.com/protocol-buffers/docs/reference/google.protobuf#fieldmask
+  google.protobuf.FieldMask update_mask = 2 [(google.api.field_behavior) = REQUIRED];
 }

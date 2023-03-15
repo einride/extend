@@ -74,7 +74,9 @@ paths:
   /v1beta1/{booking}:
     get:
       summary: Get a booking.
-      description: This is an AIP standard [Get](https://google.aip.dev/131) method.
+      description: |-
+        This is an AIP standard [Get](https://google.aip.dev/131) method.
+        Deprecated: Use GetTour instead.
       operationId: BookingService_GetBooking
       responses:
         "200":
@@ -250,7 +252,9 @@ paths:
   /v1beta1/{space}/bookings:
     post:
       summary: Create a booking in a space.
-      description: This is an AIP standard [Create](https://google.aip.dev/133) method.
+      description: |-
+        This is an AIP standard [Create](https://google.aip.dev/133) method.
+        Deprecated: Use CreateTour instead.
       operationId: BookingService_CreateBooking
       responses:
         "200":
@@ -309,21 +313,189 @@ paths:
               - shipment
       tags:
         - ShipmentService
+  /v1beta1/{space}/tours:
+    post:
+      summary: Create a truck tour booking in a space.
+      description: This is an AIP standard [Create](https://google.aip.dev/133) method.
+      operationId: BookingService_CreateTour
+      responses:
+        "200":
+          description: A successful response.
+          schema:
+            $ref: '#/definitions/v1beta1Tour'
+        default:
+          description: An unexpected error response.
+          schema:
+            $ref: '#/definitions/rpcStatus'
+      parameters:
+        - name: space
+          description: The parent space in which to create the tour.
+          in: path
+          required: true
+          type: string
+          pattern: spaces/[^/]+
+        - name: tour
+          description: The tour to create.
+          in: body
+          required: true
+          schema:
+            $ref: '#/definitions/v1beta1Tour'
+            required:
+              - tour
+      tags:
+        - BookingService
+  /v1beta1/{tour.name}:
+    patch:
+      summary: |-
+        Update a tour.
+        See: https://google.aip.dev/134 (Standard methods: Update).
+      operationId: BookingService_UpdateTour
+      responses:
+        "200":
+          description: A successful response.
+          schema:
+            $ref: '#/definitions/v1beta1Tour'
+        default:
+          description: An unexpected error response.
+          schema:
+            $ref: '#/definitions/rpcStatus'
+      parameters:
+        - name: tour.name
+          description: The resource name of the tour.
+          in: path
+          required: true
+          type: string
+          pattern: spaces/[^/]+/tours/[^/]+
+        - name: tour
+          description: The resource which replaces the current resource.
+          in: body
+          required: true
+          schema:
+            type: object
+            properties:
+              space:
+                type: string
+                description: Resource name of the space that owns the tour.
+                readOnly: true
+              sender:
+                type: string
+                description: Resource name of the sender of the tour.
+              createTime:
+                type: string
+                format: date-time
+                description: The creation timestamp of the tour.
+                readOnly: true
+              updateTime:
+                type: string
+                format: date-time
+                description: |-
+                  The last update timestamp of the tour.
+                  Updated when create/update/delete operation is performed.
+                readOnly: true
+              deleteTime:
+                type: string
+                format: date-time
+                description: The deletion timestamp of the tour. This is set if the tour is deleted.
+                readOnly: true
+              state:
+                $ref: '#/definitions/v1beta1TourState'
+                description: |-
+                  The state of the tour. Set to PENDING upon creation.
+                  A tour is then either accepted or rejected.
+                readOnly: true
+              type:
+                $ref: '#/definitions/TourTourType'
+                description: The type of tour, either PROVISIONAL or CONFIRMED. Defaults to PROVISIONAL.
+              serviceType:
+                $ref: '#/definitions/v1beta1TourServiceType'
+                description: The type of service to create a tour for.
+              externalReferenceId:
+                type: string
+                description: External reference ID is a unique identifier that can be set by the client.
+              automationRule:
+                $ref: '#/definitions/v1beta1TourAutomationRule'
+                description: The rule that is applied when a confirmed tour is accepted. Defaults to CREATE_SHIPMENTS.
+              units:
+                type: array
+                items:
+                  type: object
+                  $ref: '#/definitions/bookv1beta1Unit'
+                description: The units included in this tour.
+              stops:
+                type: array
+                items:
+                  type: object
+                  $ref: '#/definitions/v1beta1TourStop'
+                description: The ordered list of stops included in this tour.
+              shipments:
+                type: array
+                items:
+                  type: object
+                  $ref: '#/definitions/v1beta1Shipment'
+                description: The shipments that are associated with the tour. These are created when a tour is CONFIRMED and ACCEPTED.
+                readOnly: true
+              annotations:
+                type: object
+                additionalProperties:
+                  type: string
+                description: Supplementary annotation metadata for the tour.
+            title: The resource which replaces the current resource.
+            required:
+              - sender
+              - serviceType
+              - units
+              - stops
+      tags:
+        - BookingService
+  /v1beta1/{tour}:
+    get:
+      summary: Get an existing truck tour booking.
+      description: This is an AIP standard [Get](https://google.aip.dev/131) method.
+      operationId: BookingService_GetTour
+      responses:
+        "200":
+          description: A successful response.
+          schema:
+            $ref: '#/definitions/v1beta1Tour'
+        default:
+          description: An unexpected error response.
+          schema:
+            $ref: '#/definitions/rpcStatus'
+      parameters:
+        - name: tour
+          description: The resource name of the tour to retrieve.
+          in: path
+          required: true
+          type: string
+          pattern: spaces/[^/]+/tours/[^/]+
+      tags:
+        - BookingService
+  /v1beta1/{tour}:confirm:
+    get:
+      summary: |-
+        Confirm a Provisional tour.
+        Reconfirming a tour that is already confirmed will return an InvalidArgument Error.
+        When a tour has been accepted by Saga and confirmed by the user, Shipments will be created.
+      operationId: BookingService_ConfirmTour
+      responses:
+        "200":
+          description: A successful response.
+          schema:
+            $ref: '#/definitions/v1beta1Tour'
+        default:
+          description: An unexpected error response.
+          schema:
+            $ref: '#/definitions/rpcStatus'
+      parameters:
+        - name: tour
+          description: The resource name of the tour to confirm.
+          in: path
+          required: true
+          type: string
+          pattern: spaces/[^/]+/tours/[^/]+
+      tags:
+        - BookingService
 definitions:
-  BookingAutomationRule:
-    type: string
-    enum:
-      - NONE
-      - CREATE_SHIPMENTS
-      - CREATE_AND_RELEASE_SHIPMENTS
-    description: |-
-      The rule that is applied when a confirmed booking is accepted.
-
-       - AUTOMATION_RULE_UNSPECIFIED: Unspecified auto rule.
-       - NONE: No automation rule
-       - CREATE_SHIPMENTS: When the confirmed booking is accepted, shipments will be created automatically from its stops and units.
-       - CREATE_AND_RELEASE_SHIPMENTS: When the confirmed booking is accepted, shipments will be created automatically from its stops and units
-      and then released.
   BookingBookingType:
     type: string
     enum:
@@ -335,66 +507,6 @@ definitions:
        - BOOKING_TYPE_UNSPECIFIED: Unspecified booking type
        - PROVISIONAL: The booking is provisional and can be updated.
        - CONFIRMED: The booking is confirmed and can not be updated.
-  BookingServiceType:
-    type: string
-    enum:
-      - FULL_TRUCK_LOAD
-      - DISTRIBUTION
-      - SHUTTLE
-      - MILK_RUN
-      - DRAYAGE
-    description: |-
-      The service type of the booking.
-
-       - SERVICE_TYPE_UNSPECIFIED: Unspecified service type.
-       - FULL_TRUCK_LOAD: Service type FTL.
-       - DISTRIBUTION: Service type distribution.
-       - SHUTTLE: Service type shuttle.
-       - MILK_RUN: Service type milk run.
-       - DRAYAGE: Service type drayage.
-  BookingStop:
-    type: object
-    properties:
-      address:
-        $ref: '#/definitions/v1beta1Address'
-        description: The address of this stop.
-      stopType:
-        $ref: '#/definitions/BookingStopType'
-        description: The type of stop.
-      instructions:
-        type: string
-        description: Instructions for this stop.
-      requestedStartTime:
-        type: string
-        format: date-time
-        description: The earliest time to arrive this stop.
-      requestedEndTime:
-        type: string
-        format: date-time
-        description: The latest time to depart this stop.
-      unitExternalReferenceIds:
-        type: array
-        items:
-          type: string
-        description: The unit external reference id associated with this stop. E.g. for a pickup stop this will hold the units to pickup.
-    description: |-
-      A stop is an address where an event is going to happen. The event could be
-      to deliver goods, charge the vehicle etc.
-    required:
-      - address
-      - stopType
-      - unitExternalReferenceIds
-  BookingStopType:
-    type: string
-    enum:
-      - PICKUP
-      - DELIVER
-    description: |-
-      Type describes the reason for the stop. E.g. a stop to deliver or pickup.
-
-       - TYPE_UNSPECIFIED: Unknown type.
-       - PICKUP: Stop to pick up goods.
-       - DELIVER: Stop to deliver goods.
   ShipmentDeliveryState:
     type: string
     enum:
@@ -441,6 +553,17 @@ definitions:
        - STARTED_AT_DELIVERY: Started at delivery.
        - COMPLETED_DELIVERY: Completed delivery.
     title: Event code
+  TourTourType:
+    type: string
+    enum:
+      - PROVISIONAL
+      - CONFIRMED
+    description: |-
+      The tour type.
+
+       - TOUR_TYPE_UNSPECIFIED: Unspecified tour type
+       - PROVISIONAL: The tour is provisional and can be updated.
+       - CONFIRMED: The tour is confirmed and can not be updated.
   UnitLength:
     type: object
     properties:
@@ -662,13 +785,13 @@ definitions:
         $ref: '#/definitions/BookingBookingType'
         description: Booking type. Defaults to PROVISIONAL.
       serviceType:
-        $ref: '#/definitions/BookingServiceType'
+        $ref: '#/definitions/v1beta1BookingServiceType'
         description: The type of service to create a booking for.
       externalReferenceId:
         type: string
         description: External reference ID is a unique identifier that can be set by the client.
       automationRule:
-        $ref: '#/definitions/BookingAutomationRule'
+        $ref: '#/definitions/v1beta1BookingAutomationRule'
         description: The rule that is applied when a confirmed booking is accepted. Defaults to NONE.
       units:
         type: array
@@ -680,7 +803,7 @@ definitions:
         type: array
         items:
           type: object
-          $ref: '#/definitions/BookingStop'
+          $ref: '#/definitions/v1beta1BookingStop'
         description: The stops included in this booking.
       state:
         $ref: '#/definitions/v1beta1BookingState'
@@ -688,12 +811,45 @@ definitions:
           The state of the booking. Set to PENDING upon creation.
           A booking is then either accepted or rejected.
         readOnly: true
-    description: A booking represents an estimated demand to deliver goods.
+    description: |-
+      A booking represents an estimated demand to deliver goods.
+      Deprecated: will be removed in next release. Use Tour instead.
     required:
       - sender
       - serviceType
       - units
       - stops
+  v1beta1BookingAutomationRule:
+    type: string
+    enum:
+      - NONE
+      - CREATE_SHIPMENTS
+      - CREATE_AND_RELEASE_SHIPMENTS
+    description: |-
+      The rule that is applied when a confirmed booking is accepted.
+
+       - AUTOMATION_RULE_UNSPECIFIED: Unspecified auto rule.
+       - NONE: No automation rule
+       - CREATE_SHIPMENTS: When the confirmed booking is accepted, shipments will be created automatically from its stops and units.
+       - CREATE_AND_RELEASE_SHIPMENTS: When the confirmed booking is accepted, shipments will be created automatically from its stops and units
+      and then released.
+  v1beta1BookingServiceType:
+    type: string
+    enum:
+      - FULL_TRUCK_LOAD
+      - DISTRIBUTION
+      - SHUTTLE
+      - MILK_RUN
+      - DRAYAGE
+    description: |-
+      The service type of the booking.
+
+       - SERVICE_TYPE_UNSPECIFIED: Unspecified service type.
+       - FULL_TRUCK_LOAD: Service type FTL.
+       - DISTRIBUTION: Service type distribution.
+       - SHUTTLE: Service type shuttle.
+       - MILK_RUN: Service type milk run.
+       - DRAYAGE: Service type drayage.
   v1beta1BookingState:
     type: string
     enum:
@@ -707,6 +863,49 @@ definitions:
        - PENDING: The booking is received. Awaiting accept/reject.
        - ACCEPTED: The booking is accepted.
        - REJECTED: The booking is rejected.
+  v1beta1BookingStop:
+    type: object
+    properties:
+      address:
+        $ref: '#/definitions/v1beta1Address'
+        description: The address of this stop.
+      stopType:
+        $ref: '#/definitions/v1beta1BookingStopType'
+        description: The type of stop.
+      instructions:
+        type: string
+        description: Instructions for this stop.
+      requestedStartTime:
+        type: string
+        format: date-time
+        description: The earliest time to arrive this stop.
+      requestedEndTime:
+        type: string
+        format: date-time
+        description: The latest time to depart this stop.
+      unitExternalReferenceIds:
+        type: array
+        items:
+          type: string
+        description: The unit external reference id associated with this stop. E.g. for a pickup stop this will hold the units to pickup.
+    description: |-
+      A stop is an address where an event is going to happen. The event could be
+      to deliver goods, charge the vehicle etc.
+    required:
+      - address
+      - stopType
+      - unitExternalReferenceIds
+  v1beta1BookingStopType:
+    type: string
+    enum:
+      - PICKUP
+      - DELIVER
+    description: |-
+      Type describes the reason for the stop. E.g. a stop to deliver or pickup.
+
+       - TYPE_UNSPECIFIED: Unknown type.
+       - PICKUP: Stop to pick up goods.
+       - DELIVER: Stop to deliver goods.
   v1beta1ListShipmentTrackingEventsResponse:
     type: object
     properties:
@@ -884,6 +1083,177 @@ definitions:
     required:
       - code
       - occurredTime
+  v1beta1Tour:
+    type: object
+    properties:
+      name:
+        type: string
+        description: The resource name of the tour.
+      space:
+        type: string
+        description: Resource name of the space that owns the tour.
+        readOnly: true
+      sender:
+        type: string
+        description: Resource name of the sender of the tour.
+      createTime:
+        type: string
+        format: date-time
+        description: The creation timestamp of the tour.
+        readOnly: true
+      updateTime:
+        type: string
+        format: date-time
+        description: |-
+          The last update timestamp of the tour.
+          Updated when create/update/delete operation is performed.
+        readOnly: true
+      deleteTime:
+        type: string
+        format: date-time
+        description: The deletion timestamp of the tour. This is set if the tour is deleted.
+        readOnly: true
+      state:
+        $ref: '#/definitions/v1beta1TourState'
+        description: |-
+          The state of the tour. Set to PENDING upon creation.
+          A tour is then either accepted or rejected.
+        readOnly: true
+      type:
+        $ref: '#/definitions/TourTourType'
+        description: The type of tour, either PROVISIONAL or CONFIRMED. Defaults to PROVISIONAL.
+      serviceType:
+        $ref: '#/definitions/v1beta1TourServiceType'
+        description: The type of service to create a tour for.
+      externalReferenceId:
+        type: string
+        description: External reference ID is a unique identifier that can be set by the client.
+      automationRule:
+        $ref: '#/definitions/v1beta1TourAutomationRule'
+        description: The rule that is applied when a confirmed tour is accepted. Defaults to CREATE_SHIPMENTS.
+      units:
+        type: array
+        items:
+          type: object
+          $ref: '#/definitions/bookv1beta1Unit'
+        description: The units included in this tour.
+      stops:
+        type: array
+        items:
+          type: object
+          $ref: '#/definitions/v1beta1TourStop'
+        description: The ordered list of stops included in this tour.
+      shipments:
+        type: array
+        items:
+          type: object
+          $ref: '#/definitions/v1beta1Shipment'
+        description: The shipments that are associated with the tour. These are created when a tour is CONFIRMED and ACCEPTED.
+        readOnly: true
+      annotations:
+        type: object
+        additionalProperties:
+          type: string
+        description: Supplementary annotation metadata for the tour.
+    description: |-
+      A Tour is a preplanned truck tour that includes what goods are to be picked up and delivered, where, at what times, and in what order.
+      When a tour is accepted and confirmed by Saga, Shipments based on the data provided in the Tour will be created.
+    required:
+      - sender
+      - serviceType
+      - units
+      - stops
+  v1beta1TourAutomationRule:
+    type: string
+    enum:
+      - CREATE_SHIPMENTS
+      - CREATE_AND_RELEASE_SHIPMENTS
+    description: |-
+      The rule that is applied when a confirmed tour is accepted.
+
+       - AUTOMATION_RULE_UNSPECIFIED: Unspecified auto rule.
+       - CREATE_SHIPMENTS: When the confirmed tour is accepted, shipments will be created automatically from its stops and units.
+       - CREATE_AND_RELEASE_SHIPMENTS: When the confirmed tour is accepted, shipments will be created automatically from its stops and units
+      and then released.
+  v1beta1TourServiceType:
+    type: string
+    enum:
+      - FULL_TRUCK_LOAD
+      - DISTRIBUTION
+      - SHUTTLE
+      - MILK_RUN
+      - DRAYAGE
+    description: |-
+      The service type of the tour.
+
+       - SERVICE_TYPE_UNSPECIFIED: Unspecified service type.
+       - FULL_TRUCK_LOAD: Service type FTL.
+       - DISTRIBUTION: Service type distribution.
+       - SHUTTLE: Service type shuttle.
+       - MILK_RUN: Service type milk run.
+       - DRAYAGE: Service type drayage.
+  v1beta1TourState:
+    type: string
+    enum:
+      - PENDING
+      - ACCEPTED
+      - REJECTED
+    description: |-
+      The state of the tour.
+
+       - STATE_UNSPECIFIED: Unspecified state
+       - PENDING: The tour is received. Awaiting accept/reject.
+       - ACCEPTED: The tour is accepted.
+       - REJECTED: The tour is rejected.
+  v1beta1TourStop:
+    type: object
+    properties:
+      address:
+        $ref: '#/definitions/v1beta1Address'
+        description: The address of this stop.
+      stopType:
+        $ref: '#/definitions/v1beta1TourStopType'
+        description: The type of stop.
+      instructions:
+        type: string
+        description: Instructions for this stop.
+      requestedStartTime:
+        type: string
+        format: date-time
+        description: The earliest time to arrive this stop.
+      requestedEndTime:
+        type: string
+        format: date-time
+        description: The latest time to depart this stop.
+      unitExternalReferenceIds:
+        type: array
+        items:
+          type: string
+        description: The unit external reference id associated with this stop. E.g. for a pickup stop this will hold the units to pickup.
+      shipments:
+        type: array
+        items:
+          type: string
+        description: The shipments that are associated with this stop.
+        readOnly: true
+    description: A stop is an address where an event is going to happen. The event is either to pickup or deliver goods.
+    required:
+      - address
+      - stopType
+      - requestedStartTime
+      - requestedEndTime
+      - unitExternalReferenceIds
+  v1beta1TourStopType:
+    type: string
+    enum:
+      - PICKUP
+      - DELIVER
+    description: |-
+      Type describes the reason for the stop. E.g. a stop to deliver or pickup.
+
+       - TYPE_UNSPECIFIED: Unknown type.
+       - PICKUP: Stop to pick up goods.
+       - DELIVER: Stop to deliver goods.
   v1beta1Vehicle:
     type: object
     properties:

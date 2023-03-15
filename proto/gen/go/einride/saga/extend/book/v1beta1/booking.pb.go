@@ -309,6 +309,7 @@ func (Booking_Stop_Type) EnumDescriptor() ([]byte, []int) {
 }
 
 // A booking represents an estimated demand to deliver goods.
+// Deprecated: will be removed in next release. Use Tour instead.
 type Booking struct {
 	state         protoimpl.MessageState
 	sizeCache     protoimpl.SizeCache
