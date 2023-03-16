@@ -501,7 +501,6 @@ definitions:
         title: Weight unit
     title: Weight specified in different units
     required:
-      - value
       - unit
   UnitWeightUnit:
     type: string

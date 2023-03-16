@@ -28,7 +28,7 @@ message Unit {
   // Weight specified in different units
   message Weight {
     // Weight value
-    double value = 1 [(google.api.field_behavior) = REQUIRED];
+    double value = 1;
     // Weight unit
     Unit unit = 2 [(google.api.field_behavior) = REQUIRED];
 
