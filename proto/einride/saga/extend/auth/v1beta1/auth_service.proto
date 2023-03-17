@@ -118,9 +118,7 @@ message ExchangeSecretRequest {
     (grpc.gateway.protoc_gen_openapiv2.options.openapiv2_field) = {
       description: "The client secret.",
       format: "password",
-      field_configuration: {
-        path_param_name: "secret"
-      }
+      field_configuration: {path_param_name: "secret"}
     }
   ];
 }

@@ -36,9 +36,7 @@ service BookingService {
   //
   // This is an AIP standard [Get](https://google.aip.dev/131) method.
   rpc GetBooking(GetBookingRequest) returns (Booking) {
-    option (google.api.http) = {
-      get: "/v1beta1/{name=spaces/*/bookings/*}"
-    };
+    option (google.api.http) = {get: "/v1beta1/{name=spaces/*/bookings/*}"};
     option (google.api.method_signature) = "name";
     option (einride.iam.v1.method_authorization) = {
       permission: "book.bookings.get"
@@ -55,13 +53,9 @@ message CreateBookingRequest {
   // The parent space in which to create the booking.
   string parent = 1 [
     (google.api.field_behavior) = REQUIRED,
-    (google.api.resource_reference) = {
-      type: "api.saga.einride.tech/Space"
-    },
+    (google.api.resource_reference) = {type: "api.saga.einride.tech/Space"},
     (grpc.gateway.protoc_gen_openapiv2.options.openapiv2_field) = {
-      field_configuration: {
-        path_param_name: "space"
-      }
+      field_configuration: {path_param_name: "space"}
     }
   ];
 
@@ -74,13 +68,9 @@ message GetBookingRequest {
   // The resource name of the booking to retrieve.
   string name = 1 [
     (google.api.field_behavior) = REQUIRED,
-    (google.api.resource_reference) = {
-      type: "api.saga.einride.tech/Booking"
-    },
+    (google.api.resource_reference) = {type: "api.saga.einride.tech/Booking"},
     (grpc.gateway.protoc_gen_openapiv2.options.openapiv2_field) = {
-      field_configuration: {
-        path_param_name: "booking"
-      }
+      field_configuration: {path_param_name: "booking"}
     }
   ];
 }

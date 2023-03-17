@@ -140,9 +140,7 @@ service ShipmentService {
   //
   // This is an AIP standard [Get](https://google.aip.dev/131) method.
   rpc GetShipment(GetShipmentRequest) returns (Shipment) {
-    option (google.api.http) = {
-      get: "/v1beta1/{name=spaces/*/shipments/*}"
-    };
+    option (google.api.http) = {get: "/v1beta1/{name=spaces/*/shipments/*}"};
     option (google.api.method_signature) = "name";
     option (einride.iam.v1.method_authorization) = {
       permission: "book.shipments.get"
@@ -179,13 +177,9 @@ message CreateShipmentRequest {
   // The parent space in which to create the shipment.
   string parent = 1 [
     (google.api.field_behavior) = REQUIRED,
-    (google.api.resource_reference) = {
-      type: "api.saga.einride.tech/Space"
-    },
+    (google.api.resource_reference) = {type: "api.saga.einride.tech/Space"},
     (grpc.gateway.protoc_gen_openapiv2.options.openapiv2_field) = {
-      field_configuration: {
-        path_param_name: "space"
-      }
+      field_configuration: {path_param_name: "space"}
     }
   ];
 
@@ -198,13 +192,9 @@ message GetShipmentRequest {
   // The resource name of the shipment to retrieve.
   string name = 1 [
     (google.api.field_behavior) = REQUIRED,
-    (google.api.resource_reference) = {
-      type: "api.saga.einride.tech/Shipment"
-    },
+    (google.api.resource_reference) = {type: "api.saga.einride.tech/Shipment"},
     (grpc.gateway.protoc_gen_openapiv2.options.openapiv2_field) = {
-      field_configuration: {
-        path_param_name: "shipment"
-      }
+      field_configuration: {path_param_name: "shipment"}
     }
   ];
 }
@@ -214,13 +204,9 @@ message ReleaseShipmentRequest {
   // The resource name of the shipment to release.
   string name = 1 [
     (google.api.field_behavior) = REQUIRED,
-    (google.api.resource_reference) = {
-      type: "api.saga.einride.tech/Shipment"
-    },
+    (google.api.resource_reference) = {type: "api.saga.einride.tech/Shipment"},
     (grpc.gateway.protoc_gen_openapiv2.options.openapiv2_field) = {
-      field_configuration: {
-        path_param_name: "shipment"
-      }
+      field_configuration: {path_param_name: "shipment"}
     }
   ];
 }
