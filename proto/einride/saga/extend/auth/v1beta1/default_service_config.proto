@@ -7,16 +7,12 @@ import "einride/serviceconfig/v1/annotations.proto";
 option (einride.serviceconfig.v1.default_service_config) = {
   method_config: {
     name: {}
-    timeout: {
-      seconds: 10
-    }
+    timeout: {seconds: 10}
     retry_policy: {
       initial_backoff: {
         nanos: 200000000 // 0.2s
       }
-      max_backoff: {
-        seconds: 60
-      }
+      max_backoff: {seconds: 60}
       max_attempts: 5
       backoff_multiplier: 2
       retryable_status_codes: UNAVAILABLE

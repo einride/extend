@@ -47,12 +47,13 @@ definitions:
       code:
         type: integer
         format: int32
+      message:
+        type: string
       details:
         type: array
         items:
+          type: object
           $ref: '#/definitions/protobufAny'
-      message:
-        type: string
   v1beta1ExchangeSecretRequest:
     type: object
     properties:

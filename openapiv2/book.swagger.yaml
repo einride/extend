@@ -358,20 +358,20 @@ definitions:
       address:
         $ref: '#/definitions/v1beta1Address'
         description: The address of this stop.
+      stopType:
+        $ref: '#/definitions/BookingStopType'
+        description: The type of stop.
       instructions:
         type: string
         description: Instructions for this stop.
-      requestedEndTime:
-        type: string
-        format: date-time
-        description: The latest time to depart this stop.
       requestedStartTime:
         type: string
         format: date-time
         description: The earliest time to arrive this stop.
-      stopType:
-        $ref: '#/definitions/BookingStopType'
-        description: The type of stop.
+      requestedEndTime:
+        type: string
+        format: date-time
+        description: The latest time to depart this stop.
       unitExternalReferenceIds:
         type: array
         items:
@@ -444,13 +444,13 @@ definitions:
   UnitLength:
     type: object
     properties:
-      unit:
-        $ref: '#/definitions/UnitLengthUnit'
-        title: Length unit
       value:
         type: number
         format: double
         title: Length value
+      unit:
+        $ref: '#/definitions/UnitLengthUnit'
+        title: Length unit
     title: Length specified in different units
     required:
       - value
@@ -468,13 +468,13 @@ definitions:
   UnitVolume:
     type: object
     properties:
-      unit:
-        $ref: '#/definitions/UnitVolumeUnit'
-        title: Volume unit
       value:
         type: number
         format: double
         title: Volume value
+      unit:
+        $ref: '#/definitions/UnitVolumeUnit'
+        title: Volume unit
     title: Volume specified in different units
     required:
       - value
@@ -492,13 +492,13 @@ definitions:
   UnitWeight:
     type: object
     properties:
-      unit:
-        $ref: '#/definitions/UnitWeightUnit'
-        title: Weight unit
       value:
         type: number
         format: double
         title: Weight value
+      unit:
+        $ref: '#/definitions/UnitWeightUnit'
+        title: Weight unit
     title: Weight specified in different units
     required:
       - value
@@ -516,34 +516,34 @@ definitions:
   bookv1beta1Unit:
     type: object
     properties:
-      description:
+      type:
         type: string
-        title: Description of the unit
+        title: Type of unit
       externalReferenceId:
         type: string
         title: External reference ID of the unit
-      height:
-        $ref: '#/definitions/UnitLength'
-        title: Unit height
-      length:
-        $ref: '#/definitions/UnitLength'
-        title: Unit length
+      description:
+        type: string
+        title: Description of the unit
       trackingId:
         type: string
         title: Unique unit tracking ID
         readOnly: true
-      type:
-        type: string
-        title: Type of unit
-      volume:
-        $ref: '#/definitions/UnitVolume'
-        title: Unit volume
       weight:
         $ref: '#/definitions/UnitWeight'
         title: Unit weight
+      length:
+        $ref: '#/definitions/UnitLength'
+        title: Unit length
+      height:
+        $ref: '#/definitions/UnitLength'
+        title: Unit height
       width:
         $ref: '#/definitions/UnitLength'
         title: Unit width
+      volume:
+        $ref: '#/definitions/UnitVolume'
+        title: Unit volume
     description: A unit is a holder of goods such as a EUR-pallet.
     required:
       - type
@@ -560,12 +560,13 @@ definitions:
       code:
         type: integer
         format: int32
+      message:
+        type: string
       details:
         type: array
         items:
+          type: object
           $ref: '#/definitions/protobufAny'
-      message:
-        type: string
   typeLatLng:
     type: object
     properties:
@@ -586,21 +587,12 @@ definitions:
   v1beta1Address:
     type: object
     properties:
-      city:
+      recipient:
         type: string
-        title: City
+        title: Recipient
       co:
         type: string
         title: Care of (C/O)
-      contactInfo:
-        type: string
-        title: Contact information
-      displayName:
-        type: string
-        title: The displayed name of the address
-      latLng:
-        $ref: '#/definitions/typeLatLng'
-        title: The geographic location of the address
       line1:
         type: string
         title: Address line 1
@@ -610,9 +602,9 @@ definitions:
       postalCode:
         type: string
         title: Postal code
-      recipient:
+      city:
         type: string
-        title: Recipient
+        title: City
       regionCode:
         type: string
         title: |-
@@ -621,6 +613,15 @@ definitions:
       stateCode:
         type: string
         title: State code
+      displayName:
+        type: string
+        title: The displayed name of the address
+      contactInfo:
+        type: string
+        title: Contact information
+      latLng:
+        $ref: '#/definitions/typeLatLng'
+        title: The geographic location of the address
     description: An Address is where goods are picked up or delivered.
     required:
       - recipient
@@ -631,60 +632,62 @@ definitions:
   v1beta1Booking:
     type: object
     properties:
-      automationRule:
-        $ref: '#/definitions/BookingAutomationRule'
-        description: The rule that is applied when a confirmed booking is accepted. Defaults to NONE.
+      name:
+        type: string
+        description: The resource name of the booking.
+      space:
+        type: string
+        description: Resource name of the space that owns the booking.
+        readOnly: true
+      sender:
+        type: string
+        description: Resource name of the sender of the booking.
       createTime:
         type: string
         format: date-time
         description: The creation timestamp of the booking.
         readOnly: true
-      deleteTime:
-        type: string
-        format: date-time
-        description: The deletion timestamp of the booking. Set if the booking is deleted.
-        readOnly: true
-      externalReferenceId:
-        type: string
-        description: External reference ID is a unique identifier that can be set by the client.
-      name:
-        type: string
-        description: The resource name of the booking.
-      sender:
-        type: string
-        description: Resource name of the sender of the booking.
-      serviceType:
-        $ref: '#/definitions/BookingServiceType'
-        description: The type of service to create a booking for.
-      space:
-        type: string
-        description: Resource name of the space that owns the booking.
-        readOnly: true
-      state:
-        $ref: '#/definitions/v1beta1BookingState'
-        description: |-
-          The state of the booking. Set to PENDING upon creation.
-          A booking is then either accepted or rejected.
-        readOnly: true
-      stops:
-        type: array
-        items:
-          $ref: '#/definitions/BookingStop'
-        description: The stops included in this booking.
-      type:
-        $ref: '#/definitions/BookingBookingType'
-        description: Booking type. Defaults to PROVISIONAL.
-      units:
-        type: array
-        items:
-          $ref: '#/definitions/bookv1beta1Unit'
-        description: The units included in this booking.
       updateTime:
         type: string
         format: date-time
         description: |-
           The last update timestamp of the booking.
           Updated when create/update/delete operation is performed.
+        readOnly: true
+      deleteTime:
+        type: string
+        format: date-time
+        description: The deletion timestamp of the booking. Set if the booking is deleted.
+        readOnly: true
+      type:
+        $ref: '#/definitions/BookingBookingType'
+        description: Booking type. Defaults to PROVISIONAL.
+      serviceType:
+        $ref: '#/definitions/BookingServiceType'
+        description: The type of service to create a booking for.
+      externalReferenceId:
+        type: string
+        description: External reference ID is a unique identifier that can be set by the client.
+      automationRule:
+        $ref: '#/definitions/BookingAutomationRule'
+        description: The rule that is applied when a confirmed booking is accepted. Defaults to NONE.
+      units:
+        type: array
+        items:
+          type: object
+          $ref: '#/definitions/bookv1beta1Unit'
+        description: The units included in this booking.
+      stops:
+        type: array
+        items:
+          type: object
+          $ref: '#/definitions/BookingStop'
+        description: The stops included in this booking.
+      state:
+        $ref: '#/definitions/v1beta1BookingState'
+        description: |-
+          The state of the booking. Set to PENDING upon creation.
+          A booking is then either accepted or rejected.
         readOnly: true
     description: A booking represents an estimated demand to deliver goods.
     required:
@@ -708,6 +711,12 @@ definitions:
   v1beta1ListShipmentTrackingEventsResponse:
     type: object
     properties:
+      shipmentTrackingEvents:
+        type: array
+        items:
+          type: object
+          $ref: '#/definitions/v1beta1ShipmentTrackingEvent'
+        description: The list of shipment tracking events.
       nextPageToken:
         type: string
         description: |-
@@ -715,49 +724,41 @@ definitions:
           [ListShipmentTrackingEventsRequest.page_token][einride.saga.extend.book.v1beta1.ListShipmentTrackingEventsRequest.page_token]
           field in the subsequent call to `ListShipmentTrackingEvents` method to retrieve the next
           page of results.
-      shipmentTrackingEvents:
-        type: array
-        items:
-          $ref: '#/definitions/v1beta1ShipmentTrackingEvent'
-        description: The list of shipment tracking events.
     description: Response message for ShipmentTrackingEventService.ListShipmentTrackingEvents.
   v1beta1Shipment:
     type: object
     properties:
-      annotations:
-        type: object
-        additionalProperties:
-          type: string
-        title: Annotations for the shipment
-      booking:
+      name:
         type: string
-        description: Resource name of the booking this shipment relates to.
+        description: The resource name of the shipment.
+        readOnly: true
+      space:
+        type: string
+        description: Resource name of the space that owns the shipment.
+        readOnly: true
+      sender:
+        type: string
+        description: Resource name of the sender of the shipment.
       createTime:
         type: string
         format: date-time
         description: The creation timestamp of the shipment.
+        readOnly: true
+      updateTime:
+        type: string
+        format: date-time
+        description: |-
+          The last update timestamp of the shipment.
+          Updated when create/update/delete operation is performed.
         readOnly: true
       deleteTime:
         type: string
         format: date-time
         description: The deletion timestamp of the shipment. Set if the shipment is deleted.
         readOnly: true
-      deliveryAddress:
-        $ref: '#/definitions/v1beta1Address'
-        description: The address where the shipment is delivered to.
-      deliveryInstructions:
+      trackingId:
         type: string
-        description: Instructions for the delivery.
-      deliveryState:
-        $ref: '#/definitions/ShipmentDeliveryState'
-        title: Shipment delivery state
-        readOnly: true
-      externalReferenceId:
-        type: string
-        description: An external reference for this shipment. If supplied then it must be unique within the space.
-      name:
-        type: string
-        description: The resource name of the shipment.
+        description: A generated tracking ID for this shipment.
         readOnly: true
       pickupAddress:
         $ref: '#/definitions/v1beta1Address'
@@ -767,56 +768,60 @@ definitions:
       pickupInstructions:
         type: string
         description: Instructions for the pickup.
-      requestedDeliveryEndTime:
-        type: string
-        format: date-time
-        title: The shipment should be delivered before this time
-      requestedDeliveryStartTime:
-        type: string
-        format: date-time
-        title: The shipment should be delivered after this time
-      requestedPickupEndTime:
-        type: string
-        format: date-time
-        title: The shipment should be picked up before this time
       requestedPickupStartTime:
         type: string
         format: date-time
         title: The shipment should be picked up after this time
-      sender:
+      requestedPickupEndTime:
         type: string
-        description: Resource name of the sender of the shipment.
-      service:
-        $ref: '#/definitions/ShipmentService'
-        title: Shipment service, defaults to PALLET
-      space:
+        format: date-time
+        title: The shipment should be picked up before this time
+      deliveryAddress:
+        $ref: '#/definitions/v1beta1Address'
+        description: The address where the shipment is delivered to.
+      deliveryInstructions:
         type: string
-        description: Resource name of the space that owns the shipment.
-        readOnly: true
+        description: Instructions for the delivery.
+      requestedDeliveryStartTime:
+        type: string
+        format: date-time
+        title: The shipment should be delivered after this time
+      requestedDeliveryEndTime:
+        type: string
+        format: date-time
+        title: The shipment should be delivered before this time
+      units:
+        type: array
+        items:
+          type: object
+          $ref: '#/definitions/bookv1beta1Unit'
+        title: Shipment units
+      externalReferenceId:
+        type: string
+        description: An external reference for this shipment. If supplied then it must be unique within the space.
+      booking:
+        type: string
+        description: Resource name of the booking this shipment relates to.
       state:
         $ref: '#/definitions/v1beta1ShipmentState'
         description: |-
           Shipment state
           Can be set to ACTIVE (default) or RELEASED when creating a shipment.
-      trackingId:
-        type: string
-        description: A generated tracking ID for this shipment.
-        readOnly: true
-      units:
-        type: array
-        items:
-          $ref: '#/definitions/bookv1beta1Unit'
-        title: Shipment units
-      updateTime:
-        type: string
-        format: date-time
-        description: |-
-          The last update timestamp of the shipment.
-          Updated when create/update/delete operation is performed.
+      deliveryState:
+        $ref: '#/definitions/ShipmentDeliveryState'
+        title: Shipment delivery state
         readOnly: true
       vehicle:
         $ref: '#/definitions/v1beta1Vehicle'
         title: Vehicle information for the shipment
+      annotations:
+        type: object
+        additionalProperties:
+          type: string
+        title: Annotations for the shipment
+      service:
+        $ref: '#/definitions/ShipmentService'
+        title: Shipment service, defaults to PALLET
     description: A shipment represents a demand to deliver goods from an origin to a destination.
     required:
       - sender
@@ -835,36 +840,18 @@ definitions:
   v1beta1ShipmentTrackingEvent:
     type: object
     properties:
-      address:
-        $ref: '#/definitions/v1beta1Address'
-        description: The address where the event happened.
-      code:
-        $ref: '#/definitions/ShipmentTrackingEventEventCode'
-        title: The kind of tracking event that happened
-      createTime:
-        type: string
-        format: date-time
-        description: The creation timestamp of the ShipmentTrackingEvent. When this event was received by Einride.
-        readOnly: true
-      deleteTime:
-        type: string
-        format: date-time
-        description: The deletion timestamp of the ShipmentTrackingEvent. Set if the event is deleted.
-        readOnly: true
-      description:
-        type: string
-        description: Description for the ShipmentTrackingEvent.
       name:
         type: string
         description: The resource name of the ShipmentTrackingEvent.
         readOnly: true
-      occurredTime:
-        type: string
-        format: date-time
-        description: When the event occurred.
       shipment:
         type: string
         description: Resource name of the shipment that owns the ShipmentTrackingEvent.
+        readOnly: true
+      createTime:
+        type: string
+        format: date-time
+        description: The creation timestamp of the ShipmentTrackingEvent. When this event was received by Einride.
         readOnly: true
       updateTime:
         type: string
@@ -873,6 +860,24 @@ definitions:
           The last update timestamp of the ShipmentTrackingEvent.
           Updated when create/update/delete operation is performed.
         readOnly: true
+      deleteTime:
+        type: string
+        format: date-time
+        description: The deletion timestamp of the ShipmentTrackingEvent. Set if the event is deleted.
+        readOnly: true
+      code:
+        $ref: '#/definitions/ShipmentTrackingEventEventCode'
+        title: The kind of tracking event that happened
+      occurredTime:
+        type: string
+        format: date-time
+        description: When the event occurred.
+      address:
+        $ref: '#/definitions/v1beta1Address'
+        description: The address where the event happened.
+      description:
+        type: string
+        description: Description for the ShipmentTrackingEvent.
       vehicle:
         $ref: '#/definitions/v1beta1Vehicle'
         title: On what vehicle did this event occur
@@ -883,15 +888,15 @@ definitions:
   v1beta1Vehicle:
     type: object
     properties:
-      carrierReferenceId:
-        type: string
-        title: Carrier reference id
-      driverReferenceId:
-        type: string
-        title: Driver reference id
       referenceId:
         type: string
         title: Reference id
+      driverReferenceId:
+        type: string
+        title: Driver reference id
+      carrierReferenceId:
+        type: string
+        title: Carrier reference id
     title: Holds vehicle information
     required:
       - referenceId

@@ -23,9 +23,7 @@ message ShipmentTrackingEvent {
   // Resource name of the shipment that owns the ShipmentTrackingEvent.
   string shipment = 2 [
     (google.api.field_behavior) = OUTPUT_ONLY,
-    (google.api.resource_reference) = {
-      type: "api.saga.einride.tech/Shipment"
-    }
+    (google.api.resource_reference) = {type: "api.saga.einride.tech/Shipment"}
   ];
 
   // The creation timestamp of the ShipmentTrackingEvent. When this event was received by Einride.

@@ -120,9 +120,7 @@ service ShipmentTrackingEventService {
   //
   // This is an AIP standard [Get](https://google.aip.dev/131) method.
   rpc GetShipmentTrackingEvent(GetShipmentTrackingEventRequest) returns (ShipmentTrackingEvent) {
-    option (google.api.http) = {
-      get: "/v1beta1/{name=spaces/*/shipments/*/trackingEvents/*}"
-    };
+    option (google.api.http) = {get: "/v1beta1/{name=spaces/*/shipments/*/trackingEvents/*}"};
     option (google.api.method_signature) = "name";
     option (einride.iam.v1.method_authorization) = {
       permission: "book.shipmentTrackingEvent.get"
@@ -137,9 +135,7 @@ service ShipmentTrackingEventService {
   //
   // See: https://google.aip.dev/132 (Standard methods: List).
   rpc ListShipmentTrackingEvents(ListShipmentTrackingEventsRequest) returns (ListShipmentTrackingEventsResponse) {
-    option (google.api.http) = {
-      get: "/v1beta1/{parent=spaces/*/shipments/*}/trackingEvents"
-    };
+    option (google.api.http) = {get: "/v1beta1/{parent=spaces/*/shipments/*}/trackingEvents"};
     option (google.api.method_signature) = "parent";
     option (einride.iam.v1.method_authorization) = {
       permission: "book.shipmentTrackingEvent.list"
@@ -156,13 +152,9 @@ message CreateShipmentTrackingEventRequest {
   // The parent shipment in which to create the event.
   string parent = 1 [
     (google.api.field_behavior) = REQUIRED,
-    (google.api.resource_reference) = {
-      type: "api.saga.einride.tech/Shipment"
-    },
+    (google.api.resource_reference) = {type: "api.saga.einride.tech/Shipment"},
     (grpc.gateway.protoc_gen_openapiv2.options.openapiv2_field) = {
-      field_configuration: {
-        path_param_name: "shipment"
-      }
+      field_configuration: {path_param_name: "shipment"}
     }
   ];
 
@@ -176,13 +168,9 @@ message GetShipmentTrackingEventRequest {
   // Format: spaces/{space}/shipments/{shipment}/trackingEvents/{shipmentTrackingEvent}
   string name = 1 [
     (google.api.field_behavior) = REQUIRED,
-    (google.api.resource_reference) = {
-      type: "api.saga.einride.tech/ShipmentTrackingEvent"
-    },
+    (google.api.resource_reference) = {type: "api.saga.einride.tech/ShipmentTrackingEvent"},
     (grpc.gateway.protoc_gen_openapiv2.options.openapiv2_field) = {
-      field_configuration: {
-        path_param_name: "shipmentTrackingEvent"
-      }
+      field_configuration: {path_param_name: "shipmentTrackingEvent"}
     }
   ];
 }
@@ -193,9 +181,7 @@ message ListShipmentTrackingEventsRequest {
   // Format: spaces/{space}/shipments/{shipment}/trackingEvents
   string parent = 1 [
     (google.api.field_behavior) = REQUIRED,
-    (google.api.resource_reference) = {
-      type: "api.saga.einride.tech/Shipment"
-    }
+    (google.api.resource_reference) = {type: "api.saga.einride.tech/Shipment"}
   ];
 
   // Requested page size. Server may return fewer shipment tracking events than requested.
