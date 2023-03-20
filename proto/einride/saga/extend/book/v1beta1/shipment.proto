@@ -69,7 +69,7 @@ message Shipment {
   repeated Unit units = 16 [(google.api.field_behavior) = REQUIRED];
 
   // An external reference for this shipment. If supplied then it must be unique within the space.
-  string external_reference_id = 17 [(google.api.field_behavior) = IMMUTABLE];
+  string external_reference_id = 17;
 
   // Resource name of the booking this shipment relates to.
   string booking = 18 [(google.api.resource_reference) = {type: "api.saga.einride.tech/Booking"}];

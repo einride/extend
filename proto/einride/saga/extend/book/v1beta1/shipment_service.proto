@@ -8,6 +8,7 @@ import "google/api/annotations.proto";
 import "google/api/client.proto";
 import "google/api/field_behavior.proto";
 import "google/api/resource.proto";
+import "google/protobuf/field_mask.proto";
 import "protoc-gen-openapiv2/options/annotations.proto";
 
 // A Saga space.
@@ -170,6 +171,24 @@ service ShipmentService {
       }
     };
   }
+
+  // Update a shipment in a space.
+  //
+  // This is an AIP standard [Update](https://google.aip.dev/134) method.
+  rpc UpdateShipment(UpdateShipmentRequest) returns (Shipment) {
+    option (google.api.http) = {
+      patch: "/v1beta1/{shipment.name=spaces/*/shipments/*}"
+      body: "shipment"
+    };
+    option (google.api.method_signature) = "shipment,update_mask";
+    option (einride.iam.v1.method_authorization) = {
+      permission: "book.shipments.update"
+      before: {
+        expression: "test(caller, request.shipment.name)"
+        description: "The caller must have permission to update the shipment."
+      }
+    };
+  }
 }
 
 // Request message for BookService.CreateShipment.
@@ -209,4 +228,18 @@ message ReleaseShipmentRequest {
       field_configuration: {path_param_name: "shipment"}
     }
   ];
+}
+
+// Request to UpdateShipment method.
+message UpdateShipmentRequest {
+  // The resource which replaces the current resource.
+  Shipment shipment = 1 [(google.api.field_behavior) = REQUIRED];
+  // The update mask applies to the shipment.
+  //
+  // Currently only allows updating external_reference_id and units
+  // For units you cannot update individual units, so you MUST provide all the other units
+  //
+  // For the `FieldMask` definition, see:
+  // https://developers.google.com/protocol-buffers/docs/reference/google.protobuf#fieldmask
+  google.protobuf.FieldMask update_mask = 2 [(google.api.field_behavior) = REQUIRED];
 }
