@@ -12,7 +12,7 @@ require (
 	go.einride.tech/protobuf-sensitive v0.3.0
 	google.golang.org/genproto v0.0.0-20230223222841-637eb2293923
 	google.golang.org/grpc v1.53.0
-	google.golang.org/protobuf v1.28.1
+	google.golang.org/protobuf v1.30.0
 	gotest.tools/v3 v3.4.0
 )
 
