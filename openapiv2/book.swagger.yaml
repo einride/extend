@@ -138,6 +138,131 @@ paths:
           type: string
       tags:
         - ShipmentTrackingEventService
+  /v1beta1/{shipment.name}:
+    patch:
+      summary: Update a shipment in a space.
+      description: This is an AIP standard [Update](https://google.aip.dev/134) method.
+      operationId: ShipmentService_UpdateShipment
+      responses:
+        "200":
+          description: A successful response.
+          schema:
+            $ref: '#/definitions/v1beta1Shipment'
+        default:
+          description: An unexpected error response.
+          schema:
+            $ref: '#/definitions/rpcStatus'
+      parameters:
+        - name: shipment.name
+          description: The resource name of the shipment.
+          in: path
+          required: true
+          type: string
+          pattern: spaces/[^/]+/shipments/[^/]+
+        - name: shipment
+          description: The resource which replaces the current resource.
+          in: body
+          required: true
+          schema:
+            type: object
+            properties:
+              space:
+                type: string
+                description: Resource name of the space that owns the shipment.
+                readOnly: true
+              sender:
+                type: string
+                description: Resource name of the sender of the shipment.
+              createTime:
+                type: string
+                format: date-time
+                description: The creation timestamp of the shipment.
+                readOnly: true
+              updateTime:
+                type: string
+                format: date-time
+                description: |-
+                  The last update timestamp of the shipment.
+                  Updated when create/update/delete operation is performed.
+                readOnly: true
+              deleteTime:
+                type: string
+                format: date-time
+                description: The deletion timestamp of the shipment. Set if the shipment is deleted.
+                readOnly: true
+              trackingId:
+                type: string
+                description: A generated tracking ID for this shipment.
+                readOnly: true
+              pickupAddress:
+                $ref: '#/definitions/v1beta1Address'
+                description: |-
+                  The address where the shipment is picked up.
+                  Supply when creating shipment if different from the sender default pickup address.
+              pickupInstructions:
+                type: string
+                description: Instructions for the pickup.
+              requestedPickupStartTime:
+                type: string
+                format: date-time
+                title: The shipment should be picked up after this time
+              requestedPickupEndTime:
+                type: string
+                format: date-time
+                title: The shipment should be picked up before this time
+              deliveryAddress:
+                $ref: '#/definitions/v1beta1Address'
+                description: The address where the shipment is delivered to.
+              deliveryInstructions:
+                type: string
+                description: Instructions for the delivery.
+              requestedDeliveryStartTime:
+                type: string
+                format: date-time
+                title: The shipment should be delivered after this time
+              requestedDeliveryEndTime:
+                type: string
+                format: date-time
+                title: The shipment should be delivered before this time
+              units:
+                type: array
+                items:
+                  type: object
+                  $ref: '#/definitions/bookv1beta1Unit'
+                title: Shipment units
+              externalReferenceId:
+                type: string
+                description: An external reference for this shipment. If supplied then it must be unique within the space.
+              booking:
+                type: string
+                description: Resource name of the booking this shipment relates to.
+              state:
+                $ref: '#/definitions/v1beta1ShipmentState'
+                description: |-
+                  Shipment state
+                  Can be set to ACTIVE (default) or RELEASED when creating a shipment.
+              deliveryState:
+                $ref: '#/definitions/ShipmentDeliveryState'
+                title: Shipment delivery state
+                readOnly: true
+              vehicle:
+                $ref: '#/definitions/v1beta1Vehicle'
+                title: Vehicle information for the shipment
+              annotations:
+                type: object
+                additionalProperties:
+                  type: string
+                title: Annotations for the shipment
+              service:
+                $ref: '#/definitions/ShipmentService'
+                title: Shipment service, defaults to PALLET
+            title: The resource which replaces the current resource.
+            required:
+              - sender
+              - deliveryAddress
+              - units
+      tags:
+        - ShipmentService
   /v1beta1/{shipment}:
     get:
       summary: Get a shipment.
