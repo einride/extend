@@ -22,16 +22,6 @@ const _ = grpc.SupportPackageIsVersion7
 //
 // For semantics around ctx use and closing/ending streaming RPCs, please refer to https://pkg.go.dev/google.golang.org/grpc/?tab=doc#ClientConn.NewStream.
 type BookingServiceClient interface {
-	// Create a booking in a space.
-	//
-	// This is an AIP standard [Create](https://google.aip.dev/133) method.
-	// Deprecated: Use CreateTour instead.
-	CreateBooking(ctx context.Context, in *CreateBookingRequest, opts ...grpc.CallOption) (*Booking, error)
-	// Get a booking.
-	//
-	// This is an AIP standard [Get](https://google.aip.dev/131) method.
-	// Deprecated: Use GetTour instead.
-	GetBooking(ctx context.Context, in *GetBookingRequest, opts ...grpc.CallOption) (*Booking, error)
 	// Create a truck tour booking in a space.
 	//
 	// This is an AIP standard [Create](https://google.aip.dev/133) method.
@@ -57,24 +47,6 @@ type bookingServiceClient struct {
 
 func NewBookingServiceClient(cc grpc.ClientConnInterface) BookingServiceClient {
 	return &bookingServiceClient{cc}
-}
-
-func (c *bookingServiceClient) CreateBooking(ctx context.Context, in *CreateBookingRequest, opts ...grpc.CallOption) (*Booking, error) {
-	out := new(Booking)
-	err := c.cc.Invoke(ctx, "/einride.saga.extend.book.v1beta1.BookingService/CreateBooking", in, out, opts...)
-	if err != nil {
-		return nil, err
-	}
-	return out, nil
-}
-
-func (c *bookingServiceClient) GetBooking(ctx context.Context, in *GetBookingRequest, opts ...grpc.CallOption) (*Booking, error) {
-	out := new(Booking)
-	err := c.cc.Invoke(ctx, "/einride.saga.extend.book.v1beta1.BookingService/GetBooking", in, out, opts...)
-	if err != nil {
-		return nil, err
-	}
-	return out, nil
 }
 
 func (c *bookingServiceClient) CreateTour(ctx context.Context, in *CreateTourRequest, opts ...grpc.CallOption) (*Tour, error) {
@@ -117,16 +89,6 @@ func (c *bookingServiceClient) UpdateTour(ctx context.Context, in *UpdateTourReq
 // All implementations should embed UnimplementedBookingServiceServer
 // for forward compatibility
 type BookingServiceServer interface {
-	// Create a booking in a space.
-	//
-	// This is an AIP standard [Create](https://google.aip.dev/133) method.
-	// Deprecated: Use CreateTour instead.
-	CreateBooking(context.Context, *CreateBookingRequest) (*Booking, error)
-	// Get a booking.
-	//
-	// This is an AIP standard [Get](https://google.aip.dev/131) method.
-	// Deprecated: Use GetTour instead.
-	GetBooking(context.Context, *GetBookingRequest) (*Booking, error)
 	// Create a truck tour booking in a space.
 	//
 	// This is an AIP standard [Create](https://google.aip.dev/133) method.
@@ -150,12 +112,6 @@ type BookingServiceServer interface {
 type UnimplementedBookingServiceServer struct {
 }
 
-func (UnimplementedBookingServiceServer) CreateBooking(context.Context, *CreateBookingRequest) (*Booking, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method CreateBooking not implemented")
-}
-func (UnimplementedBookingServiceServer) GetBooking(context.Context, *GetBookingRequest) (*Booking, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method GetBooking not implemented")
-}
 func (UnimplementedBookingServiceServer) CreateTour(context.Context, *CreateTourRequest) (*Tour, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method CreateTour not implemented")
 }
@@ -178,42 +134,6 @@ type UnsafeBookingServiceServer interface {
 
 func RegisterBookingServiceServer(s grpc.ServiceRegistrar, srv BookingServiceServer) {
 	s.RegisterService(&BookingService_ServiceDesc, srv)
-}
-
-func _BookingService_CreateBooking_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(CreateBookingRequest)
-	if err := dec(in); err != nil {
-		return nil, err
-	}
-	if interceptor == nil {
-		return srv.(BookingServiceServer).CreateBooking(ctx, in)
-	}
-	info := &grpc.UnaryServerInfo{
-		Server:     srv,
-		FullMethod: "/einride.saga.extend.book.v1beta1.BookingService/CreateBooking",
-	}
-	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(BookingServiceServer).CreateBooking(ctx, req.(*CreateBookingRequest))
-	}
-	return interceptor(ctx, in, info, handler)
-}
-
-func _BookingService_GetBooking_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(GetBookingRequest)
-	if err := dec(in); err != nil {
-		return nil, err
-	}
-	if interceptor == nil {
-		return srv.(BookingServiceServer).GetBooking(ctx, in)
-	}
-	info := &grpc.UnaryServerInfo{
-		Server:     srv,
-		FullMethod: "/einride.saga.extend.book.v1beta1.BookingService/GetBooking",
-	}
-	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(BookingServiceServer).GetBooking(ctx, req.(*GetBookingRequest))
-	}
-	return interceptor(ctx, in, info, handler)
 }
 
 func _BookingService_CreateTour_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
@@ -295,14 +215,6 @@ var BookingService_ServiceDesc = grpc.ServiceDesc{
 	ServiceName: "einride.saga.extend.book.v1beta1.BookingService",
 	HandlerType: (*BookingServiceServer)(nil),
 	Methods: []grpc.MethodDesc{
-		{
-			MethodName: "CreateBooking",
-			Handler:    _BookingService_CreateBooking_Handler,
-		},
-		{
-			MethodName: "GetBooking",
-			Handler:    _BookingService_GetBooking_Handler,
-		},
 		{
 			MethodName: "CreateTour",
 			Handler:    _BookingService_CreateTour_Handler,
