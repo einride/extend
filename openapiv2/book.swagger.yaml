@@ -208,9 +208,9 @@ paths:
               externalReferenceId:
                 type: string
                 description: An external reference for this shipment. If supplied then it must be unique within the space.
-              booking:
+              tour:
                 type: string
-                description: Resource name of the booking this shipment relates to.
+                description: Resource name of the truck tour booking this shipment relates to.
               state:
                 $ref: '#/definitions/v1beta1ShipmentState'
                 description: |-
@@ -975,9 +975,9 @@ definitions:
       externalReferenceId:
         type: string
         description: An external reference for this shipment. If supplied then it must be unique within the space.
-      booking:
+      tour:
         type: string
-        description: Resource name of the booking this shipment relates to.
+        description: Resource name of the truck tour booking this shipment relates to.
       state:
         $ref: '#/definitions/v1beta1ShipmentState'
         description: |-

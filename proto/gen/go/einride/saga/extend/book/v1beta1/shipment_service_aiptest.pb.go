@@ -277,7 +277,7 @@ func (fx *ShipmentTestSuiteConfig) testCreate(t *testing.T) {
 			})
 			assert.Equal(t, codes.InvalidArgument, status.Code(err), err)
 		})
-		t.Run(".booking", func(t *testing.T) {
+		t.Run(".tour", func(t *testing.T) {
 			fx.maybeSkip(t)
 			parent := fx.nextParent(t, false)
 			msg := fx.Create(parent)
@@ -285,7 +285,7 @@ func (fx *ShipmentTestSuiteConfig) testCreate(t *testing.T) {
 			if container == nil {
 				t.Skip("not reachable")
 			}
-			container.Booking = "invalid resource name"
+			container.Tour = "invalid resource name"
 			_, err := fx.service.CreateShipment(fx.ctx, &CreateShipmentRequest{
 				Parent:   parent,
 				Shipment: msg,
