@@ -41,10 +41,12 @@ type BookingServiceClient interface {
 	// This is an AIP standard [Get](https://google.aip.dev/131) method.
 	GetTour(ctx context.Context, in *GetTourRequest, opts ...grpc.CallOption) (*Tour, error)
 	// Confirm a Provisional tour.
+	//
 	// Reconfirming a tour that is already confirmed will return an InvalidArgument Error.
 	// When a tour has been accepted by Saga and confirmed by the user, Shipments will be created.
 	ConfirmTour(ctx context.Context, in *ConfirmTourRequest, opts ...grpc.CallOption) (*Tour, error)
 	// Update a tour.
+	//
 	// See: https://google.aip.dev/134 (Standard methods: Update).
 	UpdateTour(ctx context.Context, in *UpdateTourRequest, opts ...grpc.CallOption) (*Tour, error)
 }
@@ -134,10 +136,12 @@ type BookingServiceServer interface {
 	// This is an AIP standard [Get](https://google.aip.dev/131) method.
 	GetTour(context.Context, *GetTourRequest) (*Tour, error)
 	// Confirm a Provisional tour.
+	//
 	// Reconfirming a tour that is already confirmed will return an InvalidArgument Error.
 	// When a tour has been accepted by Saga and confirmed by the user, Shipments will be created.
 	ConfirmTour(context.Context, *ConfirmTourRequest) (*Tour, error)
 	// Update a tour.
+	//
 	// See: https://google.aip.dev/134 (Standard methods: Update).
 	UpdateTour(context.Context, *UpdateTourRequest) (*Tour, error)
 }

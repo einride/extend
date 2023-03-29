@@ -85,6 +85,7 @@ service BookingService {
   }
 
   // Confirm a Provisional tour.
+  //
   // Reconfirming a tour that is already confirmed will return an InvalidArgument Error.
   // When a tour has been accepted by Saga and confirmed by the user, Shipments will be created.
   rpc ConfirmTour(ConfirmTourRequest) returns (Tour) {
@@ -100,6 +101,7 @@ service BookingService {
   }
 
   // Update a tour.
+  //
   // See: https://google.aip.dev/134 (Standard methods: Update).
   rpc UpdateTour(UpdateTourRequest) returns (Tour) {
     option (google.api.http) = {

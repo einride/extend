@@ -471,9 +471,8 @@ paths:
         - BookingService
   /v1beta1/{tour.name}:
     patch:
-      summary: |-
-        Update a tour.
-        See: https://google.aip.dev/134 (Standard methods: Update).
+      summary: Update a tour.
+      description: 'See: https://google.aip.dev/134 (Standard methods: Update).'
       operationId: BookingService_UpdateTour
       responses:
         "200":
@@ -597,8 +596,8 @@ paths:
         - BookingService
   /v1beta1/{tour}:confirm:
     get:
-      summary: |-
-        Confirm a Provisional tour.
+      summary: Confirm a Provisional tour.
+      description: |-
         Reconfirming a tour that is already confirmed will return an InvalidArgument Error.
         When a tour has been accepted by Saga and confirmed by the user, Shipments will be created.
       operationId: BookingService_ConfirmTour
