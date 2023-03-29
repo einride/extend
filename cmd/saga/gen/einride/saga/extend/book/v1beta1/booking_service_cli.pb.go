@@ -199,7 +199,7 @@ func NewBookingServiceCommand(config aipcli.Config) *cobra.Command {
 			&ConfirmTourRequest{},
 			&Tour{},
 			map[protoreflect.FullName]string{
-				"einride.saga.extend.book.v1beta1.BookingService.ConfirmTour": " Confirm a Provisional tour.\n Reconfirming a tour that is already confirmed will return an InvalidArgument Error.\n When a tour has been accepted by Saga and confirmed by the user, Shipments will be created.\n",
+				"einride.saga.extend.book.v1beta1.BookingService.ConfirmTour": " Confirm a Provisional tour.\n\n Reconfirming a tour that is already confirmed will return an InvalidArgument Error.\n When a tour has been accepted by Saga and confirmed by the user, Shipments will be created.\n",
 				"einride.saga.extend.book.v1beta1.ConfirmTourRequest.name":    " The resource name of the tour to confirm.\n",
 			},
 		),
@@ -221,7 +221,7 @@ func NewBookingServiceCommand(config aipcli.Config) *cobra.Command {
 				"einride.saga.extend.book.v1beta1.Address.recipient":                      " Recipient\n",
 				"einride.saga.extend.book.v1beta1.Address.region_code":                    " Region code (Unicode CLDR region code)\n https://cldr.unicode.org/\n",
 				"einride.saga.extend.book.v1beta1.Address.state_code":                     " State code\n",
-				"einride.saga.extend.book.v1beta1.BookingService.UpdateTour":              " Update a tour.\n See: https://google.aip.dev/134 (Standard methods: Update).\n",
+				"einride.saga.extend.book.v1beta1.BookingService.UpdateTour":              " Update a tour.\n\n See: https://google.aip.dev/134 (Standard methods: Update).\n",
 				"einride.saga.extend.book.v1beta1.Shipment.AnnotationsEntry.key":          "",
 				"einride.saga.extend.book.v1beta1.Shipment.AnnotationsEntry.value":        "",
 				"einride.saga.extend.book.v1beta1.Shipment.annotations":                   " Annotations for the shipment\n",
