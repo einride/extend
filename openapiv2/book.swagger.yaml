@@ -71,31 +71,6 @@ consumes:
 produces:
   - application/json
 paths:
-  /v1beta1/{booking}:
-    get:
-      summary: Get a booking.
-      description: |-
-        This is an AIP standard [Get](https://google.aip.dev/131) method.
-        Deprecated: Use GetTour instead.
-      operationId: BookingService_GetBooking
-      responses:
-        "200":
-          description: A successful response.
-          schema:
-            $ref: '#/definitions/v1beta1Booking'
-        default:
-          description: An unexpected error response.
-          schema:
-            $ref: '#/definitions/rpcStatus'
-      parameters:
-        - name: booking
-          description: The resource name of the booking to retrieve.
-          in: path
-          required: true
-          type: string
-          pattern: spaces/[^/]+/bookings/[^/]+
-      tags:
-        - BookingService
   /v1beta1/{parent}/trackingEvents:
     get:
       summary: List shipment tracking events.
@@ -374,39 +349,6 @@ paths:
           pattern: spaces/[^/]+/shipments/[^/]+/trackingEvents/[^/]+
       tags:
         - ShipmentTrackingEventService
-  /v1beta1/{space}/bookings:
-    post:
-      summary: Create a booking in a space.
-      description: |-
-        This is an AIP standard [Create](https://google.aip.dev/133) method.
-        Deprecated: Use CreateTour instead.
-      operationId: BookingService_CreateBooking
-      responses:
-        "200":
-          description: A successful response.
-          schema:
-            $ref: '#/definitions/v1beta1Booking'
-        default:
-          description: An unexpected error response.
-          schema:
-            $ref: '#/definitions/rpcStatus'
-      parameters:
-        - name: space
-          description: The parent space in which to create the booking.
-          in: path
-          required: true
-          type: string
-          pattern: spaces/[^/]+
-        - name: booking
-          description: The booking to create.
-          in: body
-          required: true
-          schema:
-            $ref: '#/definitions/v1beta1Booking'
-            required:
-              - booking
-      tags:
-        - BookingService
   /v1beta1/{space}/shipments:
     post:
       summary: Create a shipment in a space.
@@ -531,13 +473,13 @@ paths:
                 $ref: '#/definitions/TourTourType'
                 description: The type of tour, either PROVISIONAL or CONFIRMED. Defaults to PROVISIONAL.
               serviceType:
-                $ref: '#/definitions/v1beta1TourServiceType'
+                $ref: '#/definitions/TourServiceType'
                 description: The type of service to create a tour for.
               externalReferenceId:
                 type: string
                 description: External reference ID is a unique identifier that can be set by the client.
               automationRule:
-                $ref: '#/definitions/v1beta1TourAutomationRule'
+                $ref: '#/definitions/TourAutomationRule'
                 description: The rule that is applied when a confirmed tour is accepted. Defaults to CREATE_SHIPMENTS.
               units:
                 type: array
@@ -549,7 +491,7 @@ paths:
                 type: array
                 items:
                   type: object
-                  $ref: '#/definitions/v1beta1TourStop'
+                  $ref: '#/definitions/TourStop'
                 description: The ordered list of stops included in this tour.
               shipments:
                 type: array
@@ -620,17 +562,6 @@ paths:
       tags:
         - BookingService
 definitions:
-  BookingBookingType:
-    type: string
-    enum:
-      - PROVISIONAL
-      - CONFIRMED
-    description: |-
-      The booking type.
-
-       - BOOKING_TYPE_UNSPECIFIED: Unspecified booking type
-       - PROVISIONAL: The booking is provisional and can be updated.
-       - CONFIRMED: The booking is confirmed and can not be updated.
   ShipmentDeliveryState:
     type: string
     enum:
@@ -677,6 +608,84 @@ definitions:
        - STARTED_AT_DELIVERY: Started at delivery.
        - COMPLETED_DELIVERY: Completed delivery.
     title: Event code
+  TourAutomationRule:
+    type: string
+    enum:
+      - CREATE_SHIPMENTS
+      - CREATE_AND_RELEASE_SHIPMENTS
+    description: |-
+      The rule that is applied when a confirmed tour is accepted.
+
+       - AUTOMATION_RULE_UNSPECIFIED: Unspecified auto rule.
+       - CREATE_SHIPMENTS: When the confirmed tour is accepted, shipments will be created automatically from its stops and units.
+       - CREATE_AND_RELEASE_SHIPMENTS: When the confirmed tour is accepted, shipments will be created automatically from its stops and units
+      and then released.
+  TourServiceType:
+    type: string
+    enum:
+      - FULL_TRUCK_LOAD
+      - DISTRIBUTION
+      - SHUTTLE
+      - MILK_RUN
+      - DRAYAGE
+    description: |-
+      The service type of the tour.
+
+       - SERVICE_TYPE_UNSPECIFIED: Unspecified service type.
+       - FULL_TRUCK_LOAD: Service type FTL.
+       - DISTRIBUTION: Service type distribution.
+       - SHUTTLE: Service type shuttle.
+       - MILK_RUN: Service type milk run.
+       - DRAYAGE: Service type drayage.
+  TourStop:
+    type: object
+    properties:
+      address:
+        $ref: '#/definitions/v1beta1Address'
+        description: The address of this stop.
+      stopType:
+        $ref: '#/definitions/TourStopType'
+        description: The type of stop.
+      instructions:
+        type: string
+        description: Instructions for this stop.
+      requestedStartTime:
+        type: string
+        format: date-time
+        description: The earliest time to arrive this stop.
+      requestedEndTime:
+        type: string
+        format: date-time
+        description: The latest time to depart this stop.
+      unitExternalReferenceIds:
+        type: array
+        items:
+          type: string
+        description: The unit external reference id associated with this stop. E.g. for a pickup stop this will hold the units to pickup.
+      shipments:
+        type: array
+        items:
+          type: string
+        description: The shipments that are associated with this stop.
+        readOnly: true
+    description: A stop is an address where an event is going to happen. The event is either to pickup or deliver goods.
+    required:
+      - address
+      - stopType
+      - requestedStartTime
+      - requestedEndTime
+      - unitExternalReferenceIds
+  TourStopType:
+    type: string
+    enum:
+      - PICKUP
+      - DELIVER
+    description: |-
+      Type describes the reason for the stop. E.g. a stop to deliver or pickup.
+
+       - TYPE_UNSPECIFIED: Unknown type.
+       - PICKUP: Stop to pick up goods.
+       - DELIVER: Stop to deliver goods.
   TourTourType:
     type: string
     enum:
@@ -875,161 +884,6 @@ definitions:
       - postalCode
       - city
       - regionCode
-  v1beta1Booking:
-    type: object
-    properties:
-      name:
-        type: string
-        description: The resource name of the booking.
-      space:
-        type: string
-        description: Resource name of the space that owns the booking.
-        readOnly: true
-      sender:
-        type: string
-        description: Resource name of the sender of the booking.
-      createTime:
-        type: string
-        format: date-time
-        description: The creation timestamp of the booking.
-        readOnly: true
-      updateTime:
-        type: string
-        format: date-time
-        description: |-
-          The last update timestamp of the booking.
-          Updated when create/update/delete operation is performed.
-        readOnly: true
-      deleteTime:
-        type: string
-        format: date-time
-        description: The deletion timestamp of the booking. Set if the booking is deleted.
-        readOnly: true
-      type:
-        $ref: '#/definitions/BookingBookingType'
-        description: Booking type. Defaults to PROVISIONAL.
-      serviceType:
-        $ref: '#/definitions/v1beta1BookingServiceType'
-        description: The type of service to create a booking for.
-      externalReferenceId:
-        type: string
-        description: External reference ID is a unique identifier that can be set by the client.
-      automationRule:
-        $ref: '#/definitions/v1beta1BookingAutomationRule'
-        description: The rule that is applied when a confirmed booking is accepted. Defaults to NONE.
-      units:
-        type: array
-        items:
-          type: object
-          $ref: '#/definitions/bookv1beta1Unit'
-        description: The units included in this booking.
-      stops:
-        type: array
-        items:
-          type: object
-          $ref: '#/definitions/v1beta1BookingStop'
-        description: The stops included in this booking.
-      state:
-        $ref: '#/definitions/v1beta1BookingState'
-        description: |-
-          The state of the booking. Set to PENDING upon creation.
-          A booking is then either accepted or rejected.
-        readOnly: true
-    description: |-
-      A booking represents an estimated demand to deliver goods.
-      Deprecated: will be removed in next release. Use Tour instead.
-    required:
-      - sender
-      - serviceType
-      - units
-      - stops
-  v1beta1BookingAutomationRule:
-    type: string
-    enum:
-      - NONE
-      - CREATE_SHIPMENTS
-      - CREATE_AND_RELEASE_SHIPMENTS
-    description: |-
-      The rule that is applied when a confirmed booking is accepted.
-
-       - AUTOMATION_RULE_UNSPECIFIED: Unspecified auto rule.
-       - NONE: No automation rule
-       - CREATE_SHIPMENTS: When the confirmed booking is accepted, shipments will be created automatically from its stops and units.
-       - CREATE_AND_RELEASE_SHIPMENTS: When the confirmed booking is accepted, shipments will be created automatically from its stops and units
-      and then released.
-  v1beta1BookingServiceType:
-    type: string
-    enum:
-      - FULL_TRUCK_LOAD
-      - DISTRIBUTION
-      - SHUTTLE
-      - MILK_RUN
-      - DRAYAGE
-    description: |-
-      The service type of the booking.
-
-       - SERVICE_TYPE_UNSPECIFIED: Unspecified service type.
-       - FULL_TRUCK_LOAD: Service type FTL.
-       - DISTRIBUTION: Service type distribution.
-       - SHUTTLE: Service type shuttle.
-       - MILK_RUN: Service type milk run.
-       - DRAYAGE: Service type drayage.
-  v1beta1BookingState:
-    type: string
-    enum:
-      - PENDING
-      - ACCEPTED
-      - REJECTED
-    description: |-
-      The state of the booking.
-
-       - STATE_UNSPECIFIED: Unspecified state
-       - PENDING: The booking is received. Awaiting accept/reject.
-       - ACCEPTED: The booking is accepted.
-       - REJECTED: The booking is rejected.
-  v1beta1BookingStop:
-    type: object
-    properties:
-      address:
-        $ref: '#/definitions/v1beta1Address'
-        description: The address of this stop.
-      stopType:
-        $ref: '#/definitions/v1beta1BookingStopType'
-        description: The type of stop.
-      instructions:
-        type: string
-        description: Instructions for this stop.
-      requestedStartTime:
-        type: string
-        format: date-time
-        description: The earliest time to arrive this stop.
-      requestedEndTime:
-        type: string
-        format: date-time
-        description: The latest time to depart this stop.
-      unitExternalReferenceIds:
-        type: array
-        items:
-          type: string
-        description: The unit external reference id associated with this stop. E.g. for a pickup stop this will hold the units to pickup.
-    description: |-
-      A stop is an address where an event is going to happen. The event could be
-      to deliver goods, charge the vehicle etc.
-    required:
-      - address
-      - stopType
-      - unitExternalReferenceIds
-  v1beta1BookingStopType:
-    type: string
-    enum:
-      - PICKUP
-      - DELIVER
-    description: |-
-      Type describes the reason for the stop. E.g. a stop to deliver or pickup.
-
-       - TYPE_UNSPECIFIED: Unknown type.
-       - PICKUP: Stop to pick up goods.
-       - DELIVER: Stop to deliver goods.
   v1beta1ListShipmentTrackingEventsResponse:
     type: object
     properties:
@@ -1247,13 +1101,13 @@ definitions:
         $ref: '#/definitions/TourTourType'
         description: The type of tour, either PROVISIONAL or CONFIRMED. Defaults to PROVISIONAL.
       serviceType:
-        $ref: '#/definitions/v1beta1TourServiceType'
+        $ref: '#/definitions/TourServiceType'
         description: The type of service to create a tour for.
       externalReferenceId:
         type: string
         description: External reference ID is a unique identifier that can be set by the client.
       automationRule:
-        $ref: '#/definitions/v1beta1TourAutomationRule'
+        $ref: '#/definitions/TourAutomationRule'
         description: The rule that is applied when a confirmed tour is accepted. Defaults to CREATE_SHIPMENTS.
       units:
         type: array
@@ -1265,7 +1119,7 @@ definitions:
         type: array
         items:
           type: object
-          $ref: '#/definitions/v1beta1TourStop'
+          $ref: '#/definitions/TourStop'
         description: The ordered list of stops included in this tour.
       shipments:
         type: array
@@ -1287,35 +1141,6 @@ definitions:
       - serviceType
       - units
       - stops
-  v1beta1TourAutomationRule:
-    type: string
-    enum:
-      - CREATE_SHIPMENTS
-      - CREATE_AND_RELEASE_SHIPMENTS
-    description: |-
-      The rule that is applied when a confirmed tour is accepted.
-
-       - AUTOMATION_RULE_UNSPECIFIED: Unspecified auto rule.
-       - CREATE_SHIPMENTS: When the confirmed tour is accepted, shipments will be created automatically from its stops and units.
-       - CREATE_AND_RELEASE_SHIPMENTS: When the confirmed tour is accepted, shipments will be created automatically from its stops and units
-      and then released.
-  v1beta1TourServiceType:
-    type: string
-    enum:
-      - FULL_TRUCK_LOAD
-      - DISTRIBUTION
-      - SHUTTLE
-      - MILK_RUN
-      - DRAYAGE
-    description: |-
-      The service type of the tour.
-
-       - SERVICE_TYPE_UNSPECIFIED: Unspecified service type.
-       - FULL_TRUCK_LOAD: Service type FTL.
-       - DISTRIBUTION: Service type distribution.
-       - SHUTTLE: Service type shuttle.
-       - MILK_RUN: Service type milk run.
-       - DRAYAGE: Service type drayage.
   v1beta1TourState:
     type: string
     enum:
@@ -1329,55 +1154,6 @@ definitions:
        - PENDING: The tour is received. Awaiting accept/reject.
        - ACCEPTED: The tour is accepted.
        - REJECTED: The tour is rejected.
-  v1beta1TourStop:
-    type: object
-    properties:
-      address:
-        $ref: '#/definitions/v1beta1Address'
-        description: The address of this stop.
-      stopType:
-        $ref: '#/definitions/v1beta1TourStopType'
-        description: The type of stop.
-      instructions:
-        type: string
-        description: Instructions for this stop.
-      requestedStartTime:
-        type: string
-        format: date-time
-        description: The earliest time to arrive this stop.
-      requestedEndTime:
-        type: string
-        format: date-time
-        description: The latest time to depart this stop.
-      unitExternalReferenceIds:
-        type: array
-        items:
-          type: string
-        description: The unit external reference id associated with this stop. E.g. for a pickup stop this will hold the units to pickup.
-      shipments:
-        type: array
-        items:
-          type: string
-        description: The shipments that are associated with this stop.
-        readOnly: true
-    description: A stop is an address where an event is going to happen. The event is either to pickup or deliver goods.
-    required:
-      - address
-      - stopType
-      - requestedStartTime
-      - requestedEndTime
-      - unitExternalReferenceIds
-  v1beta1TourStopType:
-    type: string
-    enum:
-      - PICKUP
-      - DELIVER
-    description: |-
-      Type describes the reason for the stop. E.g. a stop to deliver or pickup.
-
-       - TYPE_UNSPECIFIED: Unknown type.
-       - PICKUP: Stop to pick up goods.
-       - DELIVER: Stop to deliver goods.
   v1beta1Vehicle:
     type: object
     properties:
