@@ -36,6 +36,12 @@ type ShipmentServiceClient interface {
 	//
 	// This is an AIP [state](https://google.aip.dev/216) transition method.
 	ReleaseShipment(ctx context.Context, in *ReleaseShipmentRequest, opts ...grpc.CallOption) (*Shipment, error)
+	// Cancel a shipment.
+	//
+	// The state of the shipment after cancelling it is CANCELLED.
+	//
+	// This is an AIP [state](https://google.aip.dev/216) transition method.
+	CancelShipment(ctx context.Context, in *CancelShipmentRequest, opts ...grpc.CallOption) (*Shipment, error)
 	// Update a shipment in a space.
 	//
 	// This is an AIP standard [Update](https://google.aip.dev/134) method.
@@ -77,6 +83,15 @@ func (c *shipmentServiceClient) ReleaseShipment(ctx context.Context, in *Release
 	return out, nil
 }
 
+func (c *shipmentServiceClient) CancelShipment(ctx context.Context, in *CancelShipmentRequest, opts ...grpc.CallOption) (*Shipment, error) {
+	out := new(Shipment)
+	err := c.cc.Invoke(ctx, "/einride.saga.extend.book.v1beta1.ShipmentService/CancelShipment", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 func (c *shipmentServiceClient) UpdateShipment(ctx context.Context, in *UpdateShipmentRequest, opts ...grpc.CallOption) (*Shipment, error) {
 	out := new(Shipment)
 	err := c.cc.Invoke(ctx, "/einride.saga.extend.book.v1beta1.ShipmentService/UpdateShipment", in, out, opts...)
@@ -104,6 +119,12 @@ type ShipmentServiceServer interface {
 	//
 	// This is an AIP [state](https://google.aip.dev/216) transition method.
 	ReleaseShipment(context.Context, *ReleaseShipmentRequest) (*Shipment, error)
+	// Cancel a shipment.
+	//
+	// The state of the shipment after cancelling it is CANCELLED.
+	//
+	// This is an AIP [state](https://google.aip.dev/216) transition method.
+	CancelShipment(context.Context, *CancelShipmentRequest) (*Shipment, error)
 	// Update a shipment in a space.
 	//
 	// This is an AIP standard [Update](https://google.aip.dev/134) method.
@@ -122,6 +143,9 @@ func (UnimplementedShipmentServiceServer) GetShipment(context.Context, *GetShipm
 }
 func (UnimplementedShipmentServiceServer) ReleaseShipment(context.Context, *ReleaseShipmentRequest) (*Shipment, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method ReleaseShipment not implemented")
+}
+func (UnimplementedShipmentServiceServer) CancelShipment(context.Context, *CancelShipmentRequest) (*Shipment, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method CancelShipment not implemented")
 }
 func (UnimplementedShipmentServiceServer) UpdateShipment(context.Context, *UpdateShipmentRequest) (*Shipment, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method UpdateShipment not implemented")
@@ -192,6 +216,24 @@ func _ShipmentService_ReleaseShipment_Handler(srv interface{}, ctx context.Conte
 	return interceptor(ctx, in, info, handler)
 }
 
+func _ShipmentService_CancelShipment_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(CancelShipmentRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(ShipmentServiceServer).CancelShipment(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/einride.saga.extend.book.v1beta1.ShipmentService/CancelShipment",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(ShipmentServiceServer).CancelShipment(ctx, req.(*CancelShipmentRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
 func _ShipmentService_UpdateShipment_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
 	in := new(UpdateShipmentRequest)
 	if err := dec(in); err != nil {
@@ -228,6 +270,10 @@ var ShipmentService_ServiceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "ReleaseShipment",
 			Handler:    _ShipmentService_ReleaseShipment_Handler,
+		},
+		{
+			MethodName: "CancelShipment",
+			Handler:    _ShipmentService_CancelShipment_Handler,
 		},
 		{
 			MethodName: "UpdateShipment",

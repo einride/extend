@@ -88,6 +88,8 @@ message Shipment {
     ACTIVE = 1;
     // Shipment is ready for pickup.
     RELEASED = 2;
+    // Shipment is cancelled
+    CANCELLED = 3;
   }
 
   // Shipment delivery state
