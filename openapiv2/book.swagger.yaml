@@ -292,6 +292,38 @@ paths:
               - shipmentTrackingEvent
       tags:
         - ShipmentTrackingEventService
+  /v1beta1/{shipment}:cancel:
+    post:
+      summary: Cancel a shipment.
+      description: |-
+        The state of the shipment after cancelling it is CANCELLED.
+
+        This is an AIP [state](https://google.aip.dev/216) transition method.
+      operationId: ShipmentService_CancelShipment
+      responses:
+        "200":
+          description: A successful response.
+          schema:
+            $ref: '#/definitions/v1beta1Shipment'
+        default:
+          description: An unexpected error response.
+          schema:
+            $ref: '#/definitions/rpcStatus'
+      parameters:
+        - name: shipment
+          description: The resource name of the shipment to cancel.
+          in: path
+          required: true
+          type: string
+          pattern: spaces/[^/]+/shipments/[^/]+
+        - name: body
+          in: body
+          required: true
+          schema:
+            type: object
+            description: Request message for BookService.CancelShipment.
+      tags:
+        - ShipmentService
   /v1beta1/{shipment}:release:
     post:
       summary: Release a shipment.
@@ -1008,10 +1040,12 @@ definitions:
     enum:
       - ACTIVE
       - RELEASED
+      - CANCELLED
     description: |-
       - STATE_UNSPECIFIED: Unspecified shipment state.
        - ACTIVE: Shipment is active (initial state).
        - RELEASED: Shipment is ready for pickup.
+       - CANCELLED: Shipment is cancelled
     title: Shipment state
   v1beta1ShipmentTrackingEvent:
     type: object

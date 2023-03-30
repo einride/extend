@@ -20,6 +20,7 @@ type ShipmentServiceIAMDescriptor struct {
 	CreateShipmentAuthorization  *v1.MethodAuthorizationOptions
 	GetShipmentAuthorization     *v1.MethodAuthorizationOptions
 	ReleaseShipmentAuthorization *v1.MethodAuthorizationOptions
+	CancelShipmentAuthorization  *v1.MethodAuthorizationOptions
 	UpdateShipmentAuthorization  *v1.MethodAuthorizationOptions
 }
 
@@ -29,6 +30,7 @@ func NewShipmentServiceIAMDescriptor() (*ShipmentServiceIAMDescriptor, error) {
 		CreateShipmentAuthorization:  &v1.MethodAuthorizationOptions{},
 		GetShipmentAuthorization:     &v1.MethodAuthorizationOptions{},
 		ReleaseShipmentAuthorization: &v1.MethodAuthorizationOptions{},
+		CancelShipmentAuthorization:  &v1.MethodAuthorizationOptions{},
 		UpdateShipmentAuthorization:  &v1.MethodAuthorizationOptions{},
 	}
 	if err := proto.Unmarshal(
@@ -48,6 +50,12 @@ func NewShipmentServiceIAMDescriptor() (*ShipmentServiceIAMDescriptor, error) {
 		result.ReleaseShipmentAuthorization,
 	); err != nil {
 		return nil, fmt.Errorf("new ShipmentService IAM descriptor: unmarshal ReleaseShipment method authorization: %w", err)
+	}
+	if err := proto.Unmarshal(
+		[]byte{0xa, 0x15, 0x62, 0x6f, 0x6f, 0x6b, 0x2e, 0x73, 0x68, 0x69, 0x70, 0x6d, 0x65, 0x6e, 0x74, 0x73, 0x2e, 0x63, 0x61, 0x6e, 0x63, 0x65, 0x6c, 0x1a, 0x51, 0xa, 0x1a, 0x74, 0x65, 0x73, 0x74, 0x28, 0x63, 0x61, 0x6c, 0x6c, 0x65, 0x72, 0x2c, 0x20, 0x72, 0x65, 0x71, 0x75, 0x65, 0x73, 0x74, 0x2e, 0x6e, 0x61, 0x6d, 0x65, 0x29, 0x1a, 0x33, 0x54, 0x68, 0x65, 0x20, 0x63, 0x61, 0x6c, 0x6c, 0x65, 0x72, 0x20, 0x6d, 0x75, 0x73, 0x74, 0x20, 0x68, 0x61, 0x76, 0x65, 0x20, 0x70, 0x65, 0x72, 0x6d, 0x69, 0x73, 0x73, 0x69, 0x6f, 0x6e, 0x20, 0x74, 0x6f, 0x20, 0x63, 0x61, 0x6e, 0x63, 0x65, 0x6c, 0x20, 0x73, 0x68, 0x69, 0x70, 0x6d, 0x65, 0x6e, 0x74, 0x2e},
+		result.CancelShipmentAuthorization,
+	); err != nil {
+		return nil, fmt.Errorf("new ShipmentService IAM descriptor: unmarshal CancelShipment method authorization: %w", err)
 	}
 	if err := proto.Unmarshal(
 		[]byte{0xa, 0x15, 0x62, 0x6f, 0x6f, 0x6b, 0x2e, 0x73, 0x68, 0x69, 0x70, 0x6d, 0x65, 0x6e, 0x74, 0x73, 0x2e, 0x75, 0x70, 0x64, 0x61, 0x74, 0x65, 0x1a, 0x5e, 0xa, 0x23, 0x74, 0x65, 0x73, 0x74, 0x28, 0x63, 0x61, 0x6c, 0x6c, 0x65, 0x72, 0x2c, 0x20, 0x72, 0x65, 0x71, 0x75, 0x65, 0x73, 0x74, 0x2e, 0x73, 0x68, 0x69, 0x70, 0x6d, 0x65, 0x6e, 0x74, 0x2e, 0x6e, 0x61, 0x6d, 0x65, 0x29, 0x1a, 0x37, 0x54, 0x68, 0x65, 0x20, 0x63, 0x61, 0x6c, 0x6c, 0x65, 0x72, 0x20, 0x6d, 0x75, 0x73, 0x74, 0x20, 0x68, 0x61, 0x76, 0x65, 0x20, 0x70, 0x65, 0x72, 0x6d, 0x69, 0x73, 0x73, 0x69, 0x6f, 0x6e, 0x20, 0x74, 0x6f, 0x20, 0x75, 0x70, 0x64, 0x61, 0x74, 0x65, 0x20, 0x74, 0x68, 0x65, 0x20, 0x73, 0x68, 0x69, 0x70, 0x6d, 0x65, 0x6e, 0x74, 0x2e},
@@ -125,6 +133,24 @@ func NewShipmentServiceAuthorization(
 		return nil, fmt.Errorf("new ShipmentService authorization: %w", err)
 	}
 	result.beforeReleaseShipment = beforeReleaseShipment
+	descriptorCancelShipment, err := protoregistry.GlobalFiles.FindDescriptorByName("einride.saga.extend.book.v1beta1.ShipmentService.CancelShipment")
+	if err != nil {
+		return nil, fmt.Errorf("new ShipmentService authorization: failed to find descriptor for CancelShipment")
+	}
+	methodCancelShipment, ok := descriptorCancelShipment.(protoreflect.MethodDescriptor)
+	if !ok {
+		return nil, fmt.Errorf("new ShipmentService authorization: got non-method descriptor for CancelShipment")
+	}
+	beforeCancelShipment, err := iamauthz.NewBeforeMethodAuthorization(
+		methodCancelShipment,
+		descriptor.CancelShipmentAuthorization,
+		permissionTester,
+		callerResolver,
+	)
+	if err != nil {
+		return nil, fmt.Errorf("new ShipmentService authorization: %w", err)
+	}
+	result.beforeCancelShipment = beforeCancelShipment
 	descriptorUpdateShipment, err := protoregistry.GlobalFiles.FindDescriptorByName("einride.saga.extend.book.v1beta1.ShipmentService.UpdateShipment")
 	if err != nil {
 		return nil, fmt.Errorf("new ShipmentService authorization: failed to find descriptor for UpdateShipment")
@@ -151,6 +177,7 @@ type ShipmentServiceAuthorization struct {
 	beforeCreateShipment  *iamauthz.BeforeMethodAuthorization
 	beforeGetShipment     *iamauthz.BeforeMethodAuthorization
 	beforeReleaseShipment *iamauthz.BeforeMethodAuthorization
+	beforeCancelShipment  *iamauthz.BeforeMethodAuthorization
 	beforeUpdateShipment  *iamauthz.BeforeMethodAuthorization
 }
 
@@ -185,6 +212,17 @@ func (a *ShipmentServiceAuthorization) ReleaseShipment(
 		return nil, err
 	}
 	return a.next.ReleaseShipment(ctx, request)
+}
+
+func (a *ShipmentServiceAuthorization) CancelShipment(
+	ctx context.Context,
+	request *CancelShipmentRequest,
+) (*Shipment, error) {
+	ctx, err := a.beforeCancelShipment.AuthorizeRequest(ctx, request)
+	if err != nil {
+		return nil, err
+	}
+	return a.next.CancelShipment(ctx, request)
 }
 
 func (a *ShipmentServiceAuthorization) UpdateShipment(

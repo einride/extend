@@ -110,6 +110,17 @@ func NewShipmentServiceCommand(config aipcli.Config) *cobra.Command {
 		aipcli.NewMethodCommand(
 			config,
 			File_einride_saga_extend_book_v1beta1_shipment_service_proto.
+				Services().ByName("ShipmentService").Methods().ByName("CancelShipment"),
+			&CancelShipmentRequest{},
+			&Shipment{},
+			map[protoreflect.FullName]string{
+				"einride.saga.extend.book.v1beta1.CancelShipmentRequest.name":     " The resource name of the shipment to cancel.\n",
+				"einride.saga.extend.book.v1beta1.ShipmentService.CancelShipment": " Cancel a shipment.\n\n The state of the shipment after cancelling it is CANCELLED.\n\n This is an AIP [state](https://google.aip.dev/216) transition method.\n",
+			},
+		),
+		aipcli.NewMethodCommand(
+			config,
+			File_einride_saga_extend_book_v1beta1_shipment_service_proto.
 				Services().ByName("ShipmentService").Methods().ByName("UpdateShipment"),
 			&UpdateShipmentRequest{},
 			&Shipment{},
@@ -167,7 +178,7 @@ func NewShipmentServiceCommand(config aipcli.Config) *cobra.Command {
 				"einride.saga.extend.book.v1beta1.Unit.weight":                            " Unit weight\n",
 				"einride.saga.extend.book.v1beta1.Unit.width":                             " Unit width\n",
 				"einride.saga.extend.book.v1beta1.UpdateShipmentRequest.shipment":         " The resource which replaces the current resource.\n",
-				"einride.saga.extend.book.v1beta1.UpdateShipmentRequest.update_mask":      " The update mask applies to the shipment.\n\n Currently only allows updating external_reference_id and units\n For units you cannot update individual units, so you MUST provide all the other units\n\n For the `FieldMask` definition, see:\n https://developers.google.com/protocol-buffers/docs/reference/google.protobuf#fieldmask\n",
+				"einride.saga.extend.book.v1beta1.UpdateShipmentRequest.update_mask":      " The update mask applies to the shipment.\n\n Currently, it allows updating with the following:\n * external_reference_id\n * units\n For units you cannot update individual units, so you MUST provide all the other units\n * vehicle\n * vehicle.reference_id\n * vehicle.driver_reference_id\n * vehicle.carrier_reference_id\n * pickup_address\n * pickup_instructions\n * delivery_address\n * delivery_instructions\n * annotations\n * service\n\n The star (*) update mask will update the above listed masks\n This applies also for empty update mask partial update\n For the `FieldMask` definition, see:\n https://developers.google.com/protocol-buffers/docs/reference/google.protobuf#fieldmask\n",
 				"einride.saga.extend.book.v1beta1.Vehicle.carrier_reference_id":           " Carrier reference id\n",
 				"einride.saga.extend.book.v1beta1.Vehicle.driver_reference_id":            " Driver reference id\n",
 				"einride.saga.extend.book.v1beta1.Vehicle.reference_id":                   " Reference id\n",

@@ -172,6 +172,26 @@ service ShipmentService {
     };
   }
 
+  // Cancel a shipment.
+  //
+  // The state of the shipment after cancelling it is CANCELLED.
+  //
+  // This is an AIP [state](https://google.aip.dev/216) transition method.
+  rpc CancelShipment(CancelShipmentRequest) returns (Shipment) {
+    option (google.api.http) = {
+      post: "/v1beta1/{name=spaces/*/shipments/*}:cancel"
+      body: "*"
+    };
+    option (google.api.method_signature) = "name";
+    option (einride.iam.v1.method_authorization) = {
+      permission: "book.shipments.cancel"
+      before: {
+        expression: "test(caller, request.name)"
+        description: "The caller must have permission to cancel shipment."
+      }
+    };
+  }
+
   // Update a shipment in a space.
   //
   // This is an AIP standard [Update](https://google.aip.dev/134) method.
@@ -230,15 +250,41 @@ message ReleaseShipmentRequest {
   ];
 }
 
+// Request message for BookService.CancelShipment.
+message CancelShipmentRequest {
+  // The resource name of the shipment to cancel.
+  string name = 1 [
+    (google.api.field_behavior) = REQUIRED,
+    (google.api.resource_reference) = {type: "api.saga.einride.tech/Shipment"},
+    (grpc.gateway.protoc_gen_openapiv2.options.openapiv2_field) = {
+      field_configuration: {path_param_name: "shipment"}
+    }
+  ];
+}
+
 // Request to UpdateShipment method.
 message UpdateShipmentRequest {
   // The resource which replaces the current resource.
   Shipment shipment = 1 [(google.api.field_behavior) = REQUIRED];
   // The update mask applies to the shipment.
   //
-  // Currently only allows updating external_reference_id and units
+  // Currently, it allows updating with the following:
+  // * external_reference_id
+  // * units
   // For units you cannot update individual units, so you MUST provide all the other units
+  // * vehicle
+  // * vehicle.reference_id
+  // * vehicle.driver_reference_id
+  // * vehicle.carrier_reference_id
+  // * pickup_address
+  // * pickup_instructions
+  // * delivery_address
+  // * delivery_instructions
+  // * annotations
+  // * service
   //
+  // The star (*) update mask will update the above listed masks
+  // This applies also for empty update mask partial update
   // For the `FieldMask` definition, see:
   // https://developers.google.com/protocol-buffers/docs/reference/google.protobuf#fieldmask
   google.protobuf.FieldMask update_mask = 2 [(google.api.field_behavior) = REQUIRED];
