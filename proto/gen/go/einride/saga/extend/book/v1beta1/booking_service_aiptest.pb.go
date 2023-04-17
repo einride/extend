@@ -144,7 +144,7 @@ func (fx *TourTestSuiteConfig) testCreate(t *testing.T) {
 			})
 			assert.Equal(t, codes.InvalidArgument, status.Code(err), err)
 		})
-		t.Run(".units", func(t *testing.T) {
+		t.Run(".preliminary_shipments", func(t *testing.T) {
 			fx.maybeSkip(t)
 			parent := fx.nextParent(t, false)
 			msg := fx.Create(parent)
@@ -152,7 +152,7 @@ func (fx *TourTestSuiteConfig) testCreate(t *testing.T) {
 			if container == nil {
 				t.Skip("not reachable")
 			}
-			fd := container.ProtoReflect().Descriptor().Fields().ByName("units")
+			fd := container.ProtoReflect().Descriptor().Fields().ByName("preliminary_shipments")
 			container.ProtoReflect().Clear(fd)
 			_, err := fx.service.CreateTour(fx.ctx, &CreateTourRequest{
 				Parent: parent,
@@ -396,14 +396,14 @@ func (fx *TourTestSuiteConfig) testUpdate(t *testing.T) {
 			})
 			assert.Equal(t, codes.InvalidArgument, status.Code(err), err)
 		})
-		t.Run(".units", func(t *testing.T) {
+		t.Run(".preliminary_shipments", func(t *testing.T) {
 			fx.maybeSkip(t)
 			msg := proto.Clone(created).(*Tour)
 			container := msg
 			if container == nil {
 				t.Skip("not reachable")
 			}
-			fd := container.ProtoReflect().Descriptor().Fields().ByName("units")
+			fd := container.ProtoReflect().Descriptor().Fields().ByName("preliminary_shipments")
 			container.ProtoReflect().Clear(fd)
 			_, err := fx.service.UpdateTour(fx.ctx, &UpdateTourRequest{
 				Tour: msg,

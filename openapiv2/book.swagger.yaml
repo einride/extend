@@ -513,19 +513,21 @@ paths:
               automationRule:
                 $ref: '#/definitions/TourAutomationRule'
                 description: The rule that is applied when a confirmed tour is accepted. Defaults to CREATE_SHIPMENTS.
-              units:
+              preliminaryShipments:
                 type: array
                 items:
                   type: object
-                  $ref: '#/definitions/bookv1beta1Unit'
-                description: The units included in this tour.
+                  $ref: '#/definitions/TourPreliminaryShipment'
+                description: |-
+                  The preliminary shipments included in this tour.
+                  A preliminary shipment includes input about the specific shipments for a tour, including units and references.
               stops:
                 type: array
                 items:
                   type: object
                   $ref: '#/definitions/TourStop'
                 description: The ordered list of stops included in this tour.
-              shipments:
+              createdShipments:
                 type: array
                 items:
                   type: object
@@ -536,12 +538,12 @@ paths:
                 type: object
                 additionalProperties:
                   type: string
-                description: Supplementary annotation metadata for the tour.
+                description: Supplementary annotation metadata for the tour, e.g. customer internal references.
             title: The resource which replaces the current resource.
             required:
               - sender
               - serviceType
-              - units
+              - preliminaryShipments
               - stops
       tags:
         - BookingService
@@ -652,6 +654,27 @@ definitions:
        - CREATE_SHIPMENTS: When the confirmed tour is accepted, shipments will be created automatically from its stops and units.
        - CREATE_AND_RELEASE_SHIPMENTS: When the confirmed tour is accepted, shipments will be created automatically from its stops and units
       and then released.
+  TourPreliminaryShipment:
+    type: object
+    properties:
+      externalReferenceId:
+        type: string
+        description: A customer provided external reference id.
+      units:
+        type: array
+        items:
+          type: object
+          $ref: '#/definitions/bookv1beta1Unit'
+        description: The units that should be shipped.
+      annotations:
+        type: object
+        additionalProperties:
+          type: string
+        description: Annotations for the shipment.
+    description: Customer provided information about a shipment associated with a tour that will be added to the created shipments.
+    required:
+      - externalReferenceId
+      - units
   TourServiceType:
     type: string
     enum:
@@ -689,24 +712,20 @@ definitions:
         type: string
         format: date-time
         description: The latest time to depart this stop.
-      unitExternalReferenceIds:
+      shipmentExternalReferenceIds:
         type: array
         items:
           type: string
-        description: The unit external reference id associated with this stop. E.g. for a pickup stop this will hold the units to pickup.
-      shipments:
-        type: array
-        items:
-          type: string
-        description: The shipments that are associated with this stop.
-        readOnly: true
+        description: |-
+          The shipment external reference ids associated with this stop. E.g. for a pickup stop this will hold the shipments to pickup.
+          The external_reference_ids are defined in preliminary_shipments.
     description: A stop is an address where an event is going to happen. The event is either to pickup or deliver goods.
     required:
       - address
       - stopType
       - requestedStartTime
       - requestedEndTime
-      - unitExternalReferenceIds
+      - shipmentExternalReferenceIds
   TourStopType:
     type: string
     enum:
@@ -1143,19 +1162,21 @@ definitions:
       automationRule:
         $ref: '#/definitions/TourAutomationRule'
         description: The rule that is applied when a confirmed tour is accepted. Defaults to CREATE_SHIPMENTS.
-      units:
+      preliminaryShipments:
         type: array
         items:
           type: object
-          $ref: '#/definitions/bookv1beta1Unit'
-        description: The units included in this tour.
+          $ref: '#/definitions/TourPreliminaryShipment'
+        description: |-
+          The preliminary shipments included in this tour.
+          A preliminary shipment includes input about the specific shipments for a tour, including units and references.
       stops:
         type: array
         items:
           type: object
           $ref: '#/definitions/TourStop'
         description: The ordered list of stops included in this tour.
-      shipments:
+      createdShipments:
         type: array
         items:
           type: object
@@ -1166,14 +1187,14 @@ definitions:
         type: object
         additionalProperties:
           type: string
-        description: Supplementary annotation metadata for the tour.
+        description: Supplementary annotation metadata for the tour, e.g. customer internal references.
     description: |-
-      A Tour is a preplanned truck tour that includes what goods are to be picked up and delivered, where, at what times, and in what order.
+      A Tour is a preplanned definition of what groups of goods are to be picked up and delivered, where, at what times, and in what order.
       When a tour is accepted and confirmed by Saga, Shipments based on the data provided in the Tour will be created.
     required:
       - sender
       - serviceType
-      - units
+      - preliminaryShipments
       - stops
   v1beta1TourState:
     type: string
