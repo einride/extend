@@ -9,7 +9,7 @@ import "google/api/field_behavior.proto";
 import "google/api/resource.proto";
 import "google/protobuf/timestamp.proto";
 
-// A Tour is a preplanned truck tour that includes what goods are to be picked up and delivered, where, at what times, and in what order.
+// A Tour is a preplanned definition of what groups of goods are to be picked up and delivered, where, at what times, and in what order.
 // When a tour is accepted and confirmed by Saga, Shipments based on the data provided in the Tour will be created.
 message Tour {
   option (google.api.resource) = {
@@ -49,15 +49,16 @@ message Tour {
   // The rule that is applied when a confirmed tour is accepted. Defaults to CREATE_SHIPMENTS.
   AutomationRule automation_rule = 11;
 
-  // The units included in this tour.
-  repeated Unit units = 12 [(google.api.field_behavior) = REQUIRED];
+  // The preliminary shipments included in this tour.
+  // A preliminary shipment includes input about the specific shipments for a tour, including units and references.
+  repeated PreliminaryShipment preliminary_shipments = 12 [(google.api.field_behavior) = REQUIRED];
   // The ordered list of stops included in this tour.
   repeated Stop stops = 13 [(google.api.field_behavior) = REQUIRED];
 
   // The shipments that are associated with the tour. These are created when a tour is CONFIRMED and ACCEPTED.
-  repeated Shipment shipments = 14 [(google.api.field_behavior) = OUTPUT_ONLY];
+  repeated Shipment created_shipments = 14 [(google.api.field_behavior) = OUTPUT_ONLY];
 
-  // Supplementary annotation metadata for the tour.
+  // Supplementary annotation metadata for the tour, e.g. customer internal references.
   map<string, string> annotations = 15;
 
   // The tour type.
@@ -121,13 +122,9 @@ message Tour {
     google.protobuf.Timestamp requested_start_time = 4 [(google.api.field_behavior) = REQUIRED];
     // The latest time to depart this stop.
     google.protobuf.Timestamp requested_end_time = 5 [(google.api.field_behavior) = REQUIRED];
-    // The unit external reference id associated with this stop. E.g. for a pickup stop this will hold the units to pickup.
-    repeated string unit_external_reference_ids = 6 [(google.api.field_behavior) = REQUIRED];
-    // The shipments that are associated with this stop.
-    repeated string shipments = 7 [
-      (google.api.field_behavior) = OUTPUT_ONLY,
-      (google.api.resource_reference) = {type: "api.saga.einride.tech/Shipment"}
-    ];
+    // The shipment external reference ids associated with this stop. E.g. for a pickup stop this will hold the shipments to pickup.
+    // The external_reference_ids are defined in preliminary_shipments.
+    repeated string shipment_external_reference_ids = 6 [(google.api.field_behavior) = REQUIRED];
 
     // Type describes the reason for the stop. E.g. a stop to deliver or pickup.
     enum Type {
@@ -138,5 +135,15 @@ message Tour {
       // Stop to deliver goods.
       DELIVER = 2;
     }
+  }
+
+  // Customer provided information about a shipment associated with a tour that will be added to the created shipments.
+  message PreliminaryShipment {
+    // A customer provided external reference id.
+    string external_reference_id = 1 [(google.api.field_behavior) = REQUIRED];
+    // The units that should be shipped.
+    repeated Unit units = 2 [(google.api.field_behavior) = REQUIRED];
+    // Annotations for the shipment.
+    map<string, string> annotations = 3;
   }
 }
