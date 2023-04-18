@@ -296,7 +296,7 @@ paths:
     post:
       summary: Cancel a shipment.
       description: |-
-        The state of the shipment after cancelling it is CANCELLED.
+        The state of the shipment after canceling it is CANCELED.
 
         This is an AIP [state](https://google.aip.dev/216) transition method.
       operationId: ShipmentService_CancelShipment
@@ -1040,12 +1040,14 @@ definitions:
     enum:
       - ACTIVE
       - RELEASED
-      - CANCELLED
+      - CANCELED
     description: |-
       - STATE_UNSPECIFIED: Unspecified shipment state.
        - ACTIVE: Shipment is active (initial state).
        - RELEASED: Shipment is ready for pickup.
-       - CANCELLED: Shipment is cancelled
+       - CANCELED: Shipment is canceled
+      (-- api-linter: core::0216::value-synonyms=disabled
+          aip.dev/not-precedent: We need to do this because we need us spelling.--)
     title: Shipment state
   v1beta1ShipmentTrackingEvent:
     type: object

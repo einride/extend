@@ -88,8 +88,10 @@ message Shipment {
     ACTIVE = 1;
     // Shipment is ready for pickup.
     RELEASED = 2;
-    // Shipment is cancelled
-    CANCELLED = 3;
+    // Shipment is canceled
+    // (-- api-linter: core::0216::value-synonyms=disabled
+    //     aip.dev/not-precedent: We need to do this because we need us spelling.--)
+    CANCELED = 3;
   }
 
   // Shipment delivery state

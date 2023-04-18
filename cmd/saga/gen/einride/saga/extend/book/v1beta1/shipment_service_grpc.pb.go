@@ -38,7 +38,7 @@ type ShipmentServiceClient interface {
 	ReleaseShipment(ctx context.Context, in *ReleaseShipmentRequest, opts ...grpc.CallOption) (*Shipment, error)
 	// Cancel a shipment.
 	//
-	// The state of the shipment after cancelling it is CANCELLED.
+	// The state of the shipment after canceling it is CANCELED.
 	//
 	// This is an AIP [state](https://google.aip.dev/216) transition method.
 	CancelShipment(ctx context.Context, in *CancelShipmentRequest, opts ...grpc.CallOption) (*Shipment, error)
@@ -121,7 +121,7 @@ type ShipmentServiceServer interface {
 	ReleaseShipment(context.Context, *ReleaseShipmentRequest) (*Shipment, error)
 	// Cancel a shipment.
 	//
-	// The state of the shipment after cancelling it is CANCELLED.
+	// The state of the shipment after canceling it is CANCELED.
 	//
 	// This is an AIP [state](https://google.aip.dev/216) transition method.
 	CancelShipment(context.Context, *CancelShipmentRequest) (*Shipment, error)

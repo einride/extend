@@ -174,7 +174,7 @@ service ShipmentService {
 
   // Cancel a shipment.
   //
-  // The state of the shipment after cancelling it is CANCELLED.
+  // The state of the shipment after canceling it is CANCELED.
   //
   // This is an AIP [state](https://google.aip.dev/216) transition method.
   rpc CancelShipment(CancelShipmentRequest) returns (Shipment) {

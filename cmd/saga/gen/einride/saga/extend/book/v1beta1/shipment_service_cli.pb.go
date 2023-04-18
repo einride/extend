@@ -115,7 +115,7 @@ func NewShipmentServiceCommand(config aipcli.Config) *cobra.Command {
 			&Shipment{},
 			map[protoreflect.FullName]string{
 				"einride.saga.extend.book.v1beta1.CancelShipmentRequest.name":     " The resource name of the shipment to cancel.\n",
-				"einride.saga.extend.book.v1beta1.ShipmentService.CancelShipment": " Cancel a shipment.\n\n The state of the shipment after cancelling it is CANCELLED.\n\n This is an AIP [state](https://google.aip.dev/216) transition method.\n",
+				"einride.saga.extend.book.v1beta1.ShipmentService.CancelShipment": " Cancel a shipment.\n\n The state of the shipment after canceling it is CANCELED.\n\n This is an AIP [state](https://google.aip.dev/216) transition method.\n",
 			},
 		),
 		aipcli.NewMethodCommand(
