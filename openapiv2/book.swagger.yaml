@@ -704,6 +704,9 @@ definitions:
       instructions:
         type: string
         description: Instructions for this stop.
+      contactPerson:
+        type: string
+        description: The contact person for this stop.
       requestedStartTime:
         type: string
         format: date-time
