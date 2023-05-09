@@ -118,6 +118,8 @@ message Tour {
     Type stop_type = 2 [(google.api.field_behavior) = REQUIRED];
     // Instructions for this stop.
     string instructions = 3;
+    // The contact person for this stop.
+    string contact_person = 7;
     // The earliest time to arrive this stop.
     google.protobuf.Timestamp requested_start_time = 4 [(google.api.field_behavior) = REQUIRED];
     // The latest time to depart this stop.
