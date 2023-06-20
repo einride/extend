@@ -26,6 +26,7 @@ func NewShipmentTrackingEventServiceCommand(config aipcli.Config) *cobra.Command
 				"einride.saga.extend.book.v1beta1.Address.co":                                                 " Care of (C/O)\n",
 				"einride.saga.extend.book.v1beta1.Address.contact_info":                                       " Contact information\n",
 				"einride.saga.extend.book.v1beta1.Address.display_name":                                       " The displayed name of the address\n",
+				"einride.saga.extend.book.v1beta1.Address.external_reference_id":                              " An external reference for this address.\n",
 				"einride.saga.extend.book.v1beta1.Address.lat_lng":                                            " The geographic location of the address\n",
 				"einride.saga.extend.book.v1beta1.Address.line1":                                              " Address line 1\n",
 				"einride.saga.extend.book.v1beta1.Address.line2":                                              " Address line 2\n",
