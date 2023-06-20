@@ -30,4 +30,6 @@ message Address {
   string contact_info = 10;
   // The geographic location of the address
   google.type.LatLng lat_lng = 11;
+  // An external reference for this address.
+  string external_reference_id = 12;
 }

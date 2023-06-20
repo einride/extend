@@ -931,6 +931,9 @@ definitions:
       latLng:
         $ref: '#/definitions/typeLatLng'
         title: The geographic location of the address
+      externalReferenceId:
+        type: string
+        description: An external reference for this address.
     description: An Address is where goods are picked up or delivered.
     required:
       - recipient
