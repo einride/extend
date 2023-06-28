@@ -8,7 +8,7 @@ require (
 	github.com/spf13/cobra v1.7.0
 	go.einride.tech/aip-cli v0.20.1
 	go.einride.tech/grpc-service-config v0.8.0
-	go.einride.tech/iam v0.48.0
+	go.einride.tech/iam v0.48.1
 	go.einride.tech/protobuf-sensitive v0.3.0
 	google.golang.org/genproto v0.0.0-20230223222841-637eb2293923
 	google.golang.org/grpc v1.54.0
