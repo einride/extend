@@ -13,7 +13,7 @@ require (
 	google.golang.org/genproto v0.0.0-20230526203410-71b5a4ffd15e
 	google.golang.org/genproto/googleapis/api v0.0.0-20230530153820-e85fd2cbaebc
 	google.golang.org/grpc v1.56.1
-	google.golang.org/protobuf v1.30.0
+	google.golang.org/protobuf v1.31.0
 	gotest.tools/v3 v3.5.0
 )
 
