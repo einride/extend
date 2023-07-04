@@ -6,7 +6,7 @@ require (
 	github.com/adrg/xdg v0.4.0
 	github.com/grpc-ecosystem/grpc-gateway/v2 v2.16.0
 	github.com/spf13/cobra v1.7.0
-	go.einride.tech/aip-cli v0.20.1
+	go.einride.tech/aip-cli v0.21.0
 	go.einride.tech/grpc-service-config v0.8.0
 	go.einride.tech/iam v0.48.1
 	go.einride.tech/protobuf-sensitive v0.3.0
@@ -30,7 +30,7 @@ require (
 	github.com/kr/text v0.2.0 // indirect
 	github.com/rogpeppe/go-internal v1.11.0 // indirect
 	github.com/spf13/pflag v1.0.5 // indirect
-	github.com/stoewer/go-strcase v1.2.1 // indirect
+	github.com/stoewer/go-strcase v1.3.0 // indirect
 	go.einride.tech/aip v0.60.0 // indirect
 	golang.org/x/net v0.10.0 // indirect
 	golang.org/x/oauth2 v0.8.0 // indirect

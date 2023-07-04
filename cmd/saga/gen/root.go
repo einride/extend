@@ -27,5 +27,5 @@ func NewModuleCommand(use string, short string, commands ...*cobra.Command) *cob
 }
 
 func NewConfig() aipcli.Config {
-	return aipcli.Config{Hosts: map[string]string{"eu-prod": "eu.api.saga.einride.tech", "us-prod": "us.api.saga.einride.tech"}, DefaultHost: "", Root: "saga", GoogleCloudIdentityTokens: false, CachedIdentityTokenPath: ""}
+	return aipcli.Config{Hosts: map[string]string{"eu-prod": "eu.api.saga.einride.tech", "us-prod": "us.api.saga.einride.tech"}, DefaultHost: "", RootPath: "", Root: "saga", GoogleCloudIdentityTokens: false, CachedIdentityTokenPath: ""}
 }
