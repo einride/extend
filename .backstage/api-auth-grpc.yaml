@@ -1,0 +1,13 @@
+apiVersion: backstage.io/v1alpha1
+kind: API
+metadata:
+  name: auth-grpc
+  description: |
+    Einride Extend: Authentication API (gRPC)
+spec:
+  type: grpc
+  lifecycle: production
+  owner: team-transportation
+  system: extend
+  definition:
+    $text: ../proto/einride/saga/extend/auth/v1beta1/auth_service.proto

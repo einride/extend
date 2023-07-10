@@ -1,0 +1,13 @@
+apiVersion: backstage.io/v1alpha1
+kind: API
+metadata:
+  name: book-openapi
+  description: |
+    Einride Extend: Shipment API (OpenAPI)
+spec:
+  type: openapi
+  lifecycle: production
+  owner: team-transportation
+  system: extend
+  definition:
+    $text: ../openapiv2/book.swagger.yaml
