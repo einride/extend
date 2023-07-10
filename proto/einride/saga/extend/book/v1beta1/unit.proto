@@ -9,26 +9,26 @@ message Unit {
   // Type of unit
   string type = 1 [(google.api.field_behavior) = REQUIRED];
   // External reference ID of the unit
-  string external_reference_id = 2;
+  string external_reference_id = 2 [(google.api.field_behavior) = OPTIONAL];
   // Description of the unit
-  string description = 3;
+  string description = 3 [(google.api.field_behavior) = OPTIONAL];
   // Unique unit tracking ID
   string tracking_id = 4 [(google.api.field_behavior) = OUTPUT_ONLY];
   // Unit weight
   Weight weight = 5 [(google.api.field_behavior) = REQUIRED];
   // Unit length
-  Length length = 6;
+  Length length = 6 [(google.api.field_behavior) = OPTIONAL];
   // Unit height
-  Length height = 7;
+  Length height = 7 [(google.api.field_behavior) = OPTIONAL];
   // Unit width
-  Length width = 8;
+  Length width = 8 [(google.api.field_behavior) = OPTIONAL];
   // Unit volume
-  Volume volume = 9;
+  Volume volume = 9 [(google.api.field_behavior) = OPTIONAL];
 
   // Weight specified in different units
   message Weight {
     // Weight value
-    double value = 1;
+    double value = 1 [(google.api.field_behavior) = REQUIRED];
     // Weight unit
     Unit unit = 2 [(google.api.field_behavior) = REQUIRED];
 

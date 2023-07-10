@@ -13,8 +13,8 @@ message ShipmentTrackingEvent {
   option (google.api.resource) = {
     type: "api.saga.einride.tech/ShipmentTrackingEvent"
     pattern: "spaces/{space}/shipments/{shipment}/trackingEvents/{tracking_event}"
-    plural: "shipment tracking events"
-    singular: "shipment tracking event"
+    plural: "shipmentTrackingEvents"
+    singular: "shipmentTrackingEvent"
   };
 
   // The resource name of the ShipmentTrackingEvent.
@@ -65,11 +65,11 @@ message ShipmentTrackingEvent {
   google.protobuf.Timestamp occurred_time = 7 [(google.api.field_behavior) = REQUIRED];
 
   // The address where the event happened.
-  Address address = 8;
+  Address address = 8 [(google.api.field_behavior) = OPTIONAL];
 
   // Description for the ShipmentTrackingEvent.
-  string description = 9;
+  string description = 9 [(google.api.field_behavior) = OPTIONAL];
 
   // On what vehicle did this event occur
-  Vehicle vehicle = 10;
+  Vehicle vehicle = 10 [(google.api.field_behavior) = OPTIONAL];
 }

@@ -213,9 +213,11 @@ paths:
                 description: Resource name of the truck tour booking this shipment relates to.
               state:
                 $ref: '#/definitions/v1beta1ShipmentState'
-                description: |-
+                title: |-
                   Shipment state
                   Can be set to ACTIVE (default) or RELEASED when creating a shipment.
+                  Disabled as existing API allows setting.
+                  (-- api-linter: core::0216::state-field-output-only=disabled --)
               deliveryState:
                 $ref: '#/definitions/ShipmentDeliveryState'
                 title: Shipment delivery state
@@ -811,6 +813,7 @@ definitions:
         title: Weight unit
     title: Weight specified in different units
     required:
+      - value
       - unit
   UnitWeightUnit:
     type: string
@@ -950,6 +953,7 @@ definitions:
           type: object
           $ref: '#/definitions/v1beta1ShipmentTrackingEvent'
         description: The list of shipment tracking events.
+        readOnly: true
       nextPageToken:
         type: string
         description: |-
@@ -957,6 +961,7 @@ definitions:
           [ListShipmentTrackingEventsRequest.page_token][einride.saga.extend.book.v1beta1.ListShipmentTrackingEventsRequest.page_token]
           field in the subsequent call to `ListShipmentTrackingEvents` method to retrieve the next
           page of results.
+        readOnly: true
     description: Response message for ShipmentTrackingEventService.ListShipmentTrackingEvents.
   v1beta1Shipment:
     type: object
@@ -1037,9 +1042,11 @@ definitions:
         description: Resource name of the truck tour booking this shipment relates to.
       state:
         $ref: '#/definitions/v1beta1ShipmentState'
-        description: |-
+        title: |-
           Shipment state
           Can be set to ACTIVE (default) or RELEASED when creating a shipment.
+          Disabled as existing API allows setting.
+          (-- api-linter: core::0216::state-field-output-only=disabled --)
       deliveryState:
         $ref: '#/definitions/ShipmentDeliveryState'
         title: Shipment delivery state
@@ -1126,6 +1133,7 @@ definitions:
       name:
         type: string
         description: The resource name of the tour.
+        readOnly: true
       space:
         type: string
         description: Resource name of the space that owns the tour.

@@ -10,11 +10,11 @@ message Address {
   // Recipient
   string recipient = 1 [(google.api.field_behavior) = REQUIRED];
   // Care of (C/O)
-  string co = 2;
+  string co = 2 [(google.api.field_behavior) = OPTIONAL];
   // Address line 1
   string line1 = 3 [(google.api.field_behavior) = REQUIRED];
   // Address line 2
-  string line2 = 4;
+  string line2 = 4 [(google.api.field_behavior) = OPTIONAL];
   // Postal code
   string postal_code = 5 [(google.api.field_behavior) = REQUIRED];
   // City
@@ -23,13 +23,13 @@ message Address {
   // https://cldr.unicode.org/
   string region_code = 7 [(google.api.field_behavior) = REQUIRED];
   // State code
-  string state_code = 8;
+  string state_code = 8 [(google.api.field_behavior) = OPTIONAL];
   // The displayed name of the address
-  string display_name = 9;
+  string display_name = 9 [(google.api.field_behavior) = OPTIONAL];
   // Contact information
-  string contact_info = 10;
+  string contact_info = 10 [(google.api.field_behavior) = OPTIONAL];
   // The geographic location of the address
-  google.type.LatLng lat_lng = 11;
+  google.type.LatLng lat_lng = 11 [(google.api.field_behavior) = OPTIONAL];
   // An external reference for this address.
-  string external_reference_id = 12;
+  string external_reference_id = 12 [(google.api.field_behavior) = OPTIONAL];
 }

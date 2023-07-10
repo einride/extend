@@ -186,23 +186,23 @@ message ListShipmentTrackingEventsRequest {
 
   // Requested page size. Server may return fewer shipment tracking events than requested.
   // If unspecified, server will pick an appropriate default.
-  int32 page_size = 2;
+  int32 page_size = 2 [(google.api.field_behavior) = OPTIONAL];
 
   // A token identifying a page of results the server should return.
   // Typically, this is the value of
   // [ListShipmentTrackingEventsResponse.page_token][einride.saga.extend.book.v1beta1.ListShipmentTrackingEventsResponse.page_token]
   // returned from the previous call to `ListShipmentTrackingEvents` method.
-  string page_token = 3;
+  string page_token = 3 [(google.api.field_behavior) = OPTIONAL];
 }
 
 // Response message for ShipmentTrackingEventService.ListShipmentTrackingEvents.
 message ListShipmentTrackingEventsResponse {
   // The list of shipment tracking events.
-  repeated ShipmentTrackingEvent shipment_tracking_events = 1;
+  repeated ShipmentTrackingEvent shipment_tracking_events = 1 [(google.api.field_behavior) = OUTPUT_ONLY];
 
   // A token to retrieve next page of results.  Pass this value in the
   // [ListShipmentTrackingEventsRequest.page_token][einride.saga.extend.book.v1beta1.ListShipmentTrackingEventsRequest.page_token]
   // field in the subsequent call to `ListShipmentTrackingEvents` method to retrieve the next
   // page of results.
-  string next_page_token = 2;
+  string next_page_token = 2 [(google.api.field_behavior) = OUTPUT_ONLY];
 }
