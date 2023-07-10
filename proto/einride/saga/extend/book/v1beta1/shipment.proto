@@ -44,41 +44,43 @@ message Shipment {
 
   // The address where the shipment is picked up.
   // Supply when creating shipment if different from the sender default pickup address.
-  Address pickup_address = 8;
+  Address pickup_address = 8 [(google.api.field_behavior) = OPTIONAL];
 
   // Instructions for the pickup.
-  string pickup_instructions = 9;
+  string pickup_instructions = 9 [(google.api.field_behavior) = OPTIONAL];
 
   // The shipment should be picked up after this time
-  google.protobuf.Timestamp requested_pickup_start_time = 10;
+  google.protobuf.Timestamp requested_pickup_start_time = 10 [(google.api.field_behavior) = OPTIONAL];
 
   // The shipment should be picked up before this time
-  google.protobuf.Timestamp requested_pickup_end_time = 11;
+  google.protobuf.Timestamp requested_pickup_end_time = 11 [(google.api.field_behavior) = OPTIONAL];
 
   // The address where the shipment is delivered to.
   Address delivery_address = 12 [(google.api.field_behavior) = REQUIRED];
 
   // Instructions for the delivery.
-  string delivery_instructions = 13;
+  string delivery_instructions = 13 [(google.api.field_behavior) = OPTIONAL];
 
   // The shipment should be delivered after this time
-  google.protobuf.Timestamp requested_delivery_start_time = 14;
+  google.protobuf.Timestamp requested_delivery_start_time = 14 [(google.api.field_behavior) = OPTIONAL];
 
   // The shipment should be delivered before this time
-  google.protobuf.Timestamp requested_delivery_end_time = 15;
+  google.protobuf.Timestamp requested_delivery_end_time = 15 [(google.api.field_behavior) = OPTIONAL];
 
   // Shipment units
   repeated Unit units = 16 [(google.api.field_behavior) = REQUIRED];
 
   // An external reference for this shipment. If supplied then it must be unique within the space.
-  string external_reference_id = 17;
+  string external_reference_id = 17 [(google.api.field_behavior) = OPTIONAL];
 
   // Resource name of the truck tour booking this shipment relates to.
   string tour = 24 [(google.api.resource_reference) = {type: "api.saga.einride.tech/Tour"}];
 
   // Shipment state
   // Can be set to ACTIVE (default) or RELEASED when creating a shipment.
-  State state = 19;
+  // Disabled as existing API allows setting.
+  // (-- api-linter: core::0216::state-field-output-only=disabled --)
+  State state = 19 [(google.api.field_behavior) = OPTIONAL];
 
   // Shipment state
   enum State {
@@ -108,13 +110,13 @@ message Shipment {
   }
 
   // Vehicle information for the shipment
-  Vehicle vehicle = 21;
+  Vehicle vehicle = 21 [(google.api.field_behavior) = OPTIONAL];
 
   // Annotations for the shipment
-  map<string, string> annotations = 22;
+  map<string, string> annotations = 22 [(google.api.field_behavior) = OPTIONAL];
 
   // Shipment service, defaults to PALLET
-  Service service = 23;
+  Service service = 23 [(google.api.field_behavior) = OPTIONAL];
 
   // Shipment service type
   enum Service {

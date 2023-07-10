@@ -9,7 +9,7 @@ message Vehicle {
   // Reference id
   string reference_id = 1 [(google.api.field_behavior) = REQUIRED];
   // Driver reference id
-  string driver_reference_id = 2;
+  string driver_reference_id = 2 [(google.api.field_behavior) = OPTIONAL];
   // Carrier reference id
-  string carrier_reference_id = 3;
+  string carrier_reference_id = 3 [(google.api.field_behavior) = OPTIONAL];
 }

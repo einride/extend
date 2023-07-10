@@ -19,7 +19,7 @@ message Tour {
     singular: "tour"
   };
   // The resource name of the tour.
-  string name = 1;
+  string name = 1 [(google.api.field_behavior) = OUTPUT_ONLY];
   // Resource name of the space that owns the tour.
   string space = 2 [
     (google.api.field_behavior) = OUTPUT_ONLY,
@@ -41,13 +41,13 @@ message Tour {
   // A tour is then either accepted or rejected.
   State state = 7 [(google.api.field_behavior) = OUTPUT_ONLY];
   // The type of tour, either PROVISIONAL or CONFIRMED. Defaults to PROVISIONAL.
-  TourType type = 8;
+  TourType type = 8 [(google.api.field_behavior) = OPTIONAL];
   // The type of service to create a tour for.
   ServiceType service_type = 9 [(google.api.field_behavior) = REQUIRED];
   // External reference ID is a unique identifier that can be set by the client.
-  string external_reference_id = 10;
+  string external_reference_id = 10 [(google.api.field_behavior) = OPTIONAL];
   // The rule that is applied when a confirmed tour is accepted. Defaults to CREATE_SHIPMENTS.
-  AutomationRule automation_rule = 11;
+  AutomationRule automation_rule = 11 [(google.api.field_behavior) = OPTIONAL];
 
   // The preliminary shipments included in this tour.
   // A preliminary shipment includes input about the specific shipments for a tour, including units and references.
@@ -59,7 +59,7 @@ message Tour {
   repeated Shipment created_shipments = 14 [(google.api.field_behavior) = OUTPUT_ONLY];
 
   // Supplementary annotation metadata for the tour, e.g. customer internal references.
-  map<string, string> annotations = 15;
+  map<string, string> annotations = 15 [(google.api.field_behavior) = OPTIONAL];
 
   // The tour type.
   enum TourType {
@@ -117,9 +117,9 @@ message Tour {
     // The type of stop.
     Type stop_type = 2 [(google.api.field_behavior) = REQUIRED];
     // Instructions for this stop.
-    string instructions = 3;
+    string instructions = 3 [(google.api.field_behavior) = OPTIONAL];
     // The contact person for this stop.
-    string contact_person = 7;
+    string contact_person = 7 [(google.api.field_behavior) = OPTIONAL];
     // The earliest time to arrive this stop.
     google.protobuf.Timestamp requested_start_time = 4 [(google.api.field_behavior) = REQUIRED];
     // The latest time to depart this stop.
@@ -146,6 +146,6 @@ message Tour {
     // The units that should be shipped.
     repeated Unit units = 2 [(google.api.field_behavior) = REQUIRED];
     // Annotations for the shipment.
-    map<string, string> annotations = 3;
+    map<string, string> annotations = 3 [(google.api.field_behavior) = OPTIONAL];
   }
 }

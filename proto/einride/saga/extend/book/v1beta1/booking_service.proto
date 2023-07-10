@@ -129,5 +129,5 @@ message UpdateTourRequest {
   // The update mask applies to the tour.
   // For the `FieldMask` definition, see:
   // https://developers.google.com/protocol-buffers/docs/reference/google.protobuf#fieldmask
-  google.protobuf.FieldMask update_mask = 2;
+  google.protobuf.FieldMask update_mask = 2 [(google.api.field_behavior) = OPTIONAL];
 }
