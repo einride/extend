@@ -1,0 +1,13 @@
+apiVersion: backstage.io/v1alpha1
+kind: API
+metadata:
+  name: auth-openapi
+  description: |
+    Einride Extend: Authentication API (OpenAPI)
+spec:
+  type: openapi
+  lifecycle: production
+  owner: team-transportation
+  system: extend
+  definition:
+    $text: ../openapiv2/auth.swagger.yaml

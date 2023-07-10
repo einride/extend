@@ -1,0 +1,13 @@
+apiVersion: backstage.io/v1alpha1
+kind: API
+metadata:
+  name: book-shipment-grpc
+  description: |
+    Einride Extend: Shipment API (gRPC)
+spec:
+  type: grpc
+  lifecycle: production
+  owner: team-transportation
+  system: extend
+  definition:
+    $text: ../proto/einride/saga/extend/book/v1beta1/shipment_service.proto

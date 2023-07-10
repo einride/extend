@@ -1,0 +1,11 @@
+apiVersion: backstage.io/v1alpha1
+kind: System
+metadata:
+  name: extend
+  description: |
+    Open APIs and developer tools for building extensions and integrations to Saga, Einride's freight mobility platform.
+  annotations:
+    einride.tech/security-level: "1"
+spec:
+  owner: team-transportation
+  domain: External Developer Platform
