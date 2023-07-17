@@ -1,0 +1,62 @@
+{
+  "pdfSortTags": true,
+  "localize": {
+    "index": "INDEX",
+    "api": "API",
+    "apiList": "API List",
+    "apiReference": "API Reference",
+    "apiVersion": "API Version",
+    "contact": "CONTACT",
+    "name": "NAME",
+    "email": "EMAIL",
+    "url": "URL",
+    "termsOfService": "Terms of service",
+    "securityAndAuthentication": "Security and Authentication",
+    "securitySchemes": "SECURITY SCHEMES",
+    "type": "TYPE",
+    "description": "DESCRIPTION",
+    "request": "REQUEST",
+    "requestBody": "REQUEST BODY",
+    "response": "RESPONSE",
+    "responseModel": "RESPONSE MODEL",
+    "statusCode": "STATUS CODE",
+    "deprecated": "DEPRECATED",
+    "allowed": "allowed",
+    "pattern": "pattern",
+    "parameters": "Parameters",
+    "noRequestParameters": "No request parameters",
+    "method": "METHOD"
+  },
+  "pdfStyles": {
+    "gray": {"color": "#b1b1b1"},
+    "darkgray": {"color": "#868686"},
+    "lightgray": {"color": "#d9d9d9"}
+  },
+  "pdfFonts": {
+    "Roboto": {
+      "normal": "https://github.com/kingjan1999/rapipdf-cli/raw/master/fonts/Roboto-Regular.ttf",
+      "bold": "https://github.com/kingjan1999/rapipdf-cli/raw/master/fonts/Roboto-Medium.ttf",
+      "italics": "https://github.com/kingjan1999/rapipdf-cli/raw/master/fonts/Roboto-Italic.ttf",
+      "bolditalics": "https://github.com/kingjan1999/rapipdf-cli/raw/master/fonts/Roboto-Medium.ttf"
+    },
+    "RobotoMono": {
+      "normal": "https://github.com/kingjan1999/rapipdf-cli/raw/master/fonts/RobotoMono-Regular.ttf",
+      "bold": "https://github.com/kingjan1999/rapipdf-cli/raw/master/fonts/RobotoMono-Regular.ttf",
+      "italics": "https://github.com/kingjan1999/rapipdf-cli/raw/master/fonts/RobotoMono-Regular.ttf",
+      "bolditalics": "https://github.com/kingjan1999/rapipdf-cli/raw/master/fonts/RobotoMono-Regular.ttf"
+    }
+  },
+  "pdfPrimaryColor": "#121212",
+  "pdfAlternateColor": "#787878",
+  "pdfTitle": "API Reference <DATE_PLACEHOLDER>",
+  "pdfFooterText": "Einride Copyright",
+  "pdfSchemaStyle": "table",
+  "includeToc": true,
+  "includeApiList": false,
+  "includeApiDetails": true,
+  "includeSecurity": false,
+  "includeInfo": true,
+  "includeExample": false,
+  "logoTop": "pdf/logo-lockup-black-04@2x.png",
+  "logoBottom": ""
+}

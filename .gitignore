@@ -1,2 +1,9 @@
 .idea
 .vscode
+
+# RapiPDF related files
+node_modules
+package.json
+package-lock.json
+yarn.lock
+api_*.pdf

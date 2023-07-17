@@ -2,7 +2,11 @@ package main
 
 import (
 	"context"
+	"fmt"
 	"net/http"
+	"os"
+	"strings"
+	"time"
 
 	"go.einride.tech/sage/sg"
 	"go.einride.tech/sage/tools/sgconvco"
@@ -81,4 +85,77 @@ func ServePDF(ctx context.Context) error {
 		Addr:    addr,
 		Handler: httpMux,
 	}).ListenAndServe()
+}
+
+func GenerateApiDoc(ctx context.Context) error {
+	sg.SerialDeps(ctx, installRapiPdfCli)
+	filePath, err := createTempFile()
+	if err != nil {
+		return err
+	}
+	sg.SerialDeps(ctx, sg.Fn(replaceDatePlaceholderWithActual, filePath))
+	sg.Deps(
+		ctx,
+		sg.Fn(generatePdfFromSwagger, "auth", filePath),
+		sg.Fn(generatePdfFromSwagger, "book", filePath),
+	)
+	return nil
+}
+
+func installRapiPdfCli(ctx context.Context) error {
+	cmd := sg.Command(ctx, "yarn", "add", "@kingjan1999/rapipdf-cli")
+	return cmd.Run()
+}
+
+func createTempFile() (string, error) {
+	// Create a new temporary file that will contain the modified rapipdf config.
+	temp, err := os.CreateTemp("", "rapipdf.copy.json")
+	if err != nil {
+		return "", err
+	}
+	filePath := temp.Name()
+	if err := temp.Close(); err != nil {
+		return "", err
+	}
+	return filePath, nil
+}
+
+func replaceDatePlaceholderWithActual(ctx context.Context, configPath string) error {
+	sg.Logger(ctx).Println("replacing placeholder with today's date...")
+	orginalConfigBytes, err := os.ReadFile(sg.FromGitRoot("pdf/rapipdf.json"))
+	if err != nil {
+		return err
+	}
+	originalConfig := string(orginalConfigBytes)
+	date := time.Now().Format("2006-01-02")
+	updatedConfig := strings.Replace(originalConfig, "<DATE_PLACEHOLDER>", date, 1)
+	f, err := os.OpenFile(configPath, os.O_WRONLY, 0o755)
+	if err != nil {
+		return err
+	}
+	defer func() {
+		if err := f.Close(); err != nil {
+			panic(err)
+		}
+	}()
+	_, err = f.Write([]byte(updatedConfig))
+	return err
+}
+
+func generatePdfFromSwagger(ctx context.Context, name, configPath string) error {
+	filename := fmt.Sprintf("api_%s_latest.pdf", name)
+	api := fmt.Sprintf("openapiv2/%s.swagger.yaml", name)
+	return generatePdf(ctx, configPath, filename, api)
+}
+
+func generatePdf(ctx context.Context, configPath, outputFilename, openApiFileName string) error {
+	cmd := sg.Command(
+		ctx,
+		"yarn",
+		"rapipdf",
+		"--configFile="+configPath,
+		"--outputFile="+outputFilename,
+		openApiFileName,
+	)
+	return cmd.Run()
 }
