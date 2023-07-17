@@ -59,6 +59,10 @@ format-markdown: $(sagefile)
 format-yaml: $(sagefile)
 	@$(sagefile) FormatYaml
 
+.PHONY: generate-api-doc
+generate-api-doc: $(sagefile)
+	@$(sagefile) GenerateApiDoc
+
 .PHONY: git-verify-no-diff
 git-verify-no-diff: $(sagefile)
 	@$(sagefile) GitVerifyNoDiff
