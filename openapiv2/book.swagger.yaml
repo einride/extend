@@ -605,8 +605,7 @@ definitions:
       - IN_TRANSIT
       - DELIVERED
     description: |-
-      - DELIVERY_STATE_UNSPECIFIED: Unspecified shipment delivery state
-       - AWAITING: Shipment delivery hasn't started
+      - AWAITING: Shipment delivery hasn't started
        - IN_TRANSIT: Shipment is in transit
        - DELIVERED: Shipment is delivered
     title: Shipment delivery state
@@ -617,8 +616,7 @@ definitions:
       - FTL
       - DRAYAGE
     description: |-
-      - SERVICE_UNSPECIFIED: Unspecified shipment service
-       - PALLET: Pallet
+      - PALLET: Pallet
        - FTL: Full truck load
        - DRAYAGE: Drayage is the transport of goods over a short distance also known as the "The first mile."
     title: Shipment service type
@@ -634,8 +632,7 @@ definitions:
       - STARTED_AT_DELIVERY
       - COMPLETED_DELIVERY
     description: |-
-      - EVENT_CODE_UNSPECIFIED: Unspecified
-       - ARRIVED_AT_PICKUP: Arrived at pickup.
+      - ARRIVED_AT_PICKUP: Arrived at pickup.
        - DEPARTED_PICKUP: Departed pickup.
        - ARRIVED_AT_DELIVERY: Arrived at delivery.
        - DEPARTED_DELIVERY: Departed delivery.
@@ -652,7 +649,6 @@ definitions:
     description: |-
       The rule that is applied when a confirmed tour is accepted.
 
-       - AUTOMATION_RULE_UNSPECIFIED: Unspecified auto rule.
        - CREATE_SHIPMENTS: When the confirmed tour is accepted, shipments will be created automatically from its stops and units.
        - CREATE_AND_RELEASE_SHIPMENTS: When the confirmed tour is accepted, shipments will be created automatically from its stops and units
       and then released.
@@ -688,7 +684,6 @@ definitions:
     description: |-
       The service type of the tour.
 
-       - SERVICE_TYPE_UNSPECIFIED: Unspecified service type.
        - FULL_TRUCK_LOAD: Service type FTL.
        - DISTRIBUTION: Service type distribution.
        - SHUTTLE: Service type shuttle.
@@ -739,7 +734,6 @@ definitions:
     description: |-
       Type describes the reason for the stop. E.g. a stop to deliver or pickup.
 
-       - TYPE_UNSPECIFIED: Unknown type.
        - PICKUP: Stop to pick up goods.
        - DELIVER: Stop to deliver goods.
   TourTourType:
@@ -750,7 +744,6 @@ definitions:
     description: |-
       The tour type.
 
-       - TOUR_TYPE_UNSPECIFIED: Unspecified tour type
        - PROVISIONAL: The tour is provisional and can be updated.
        - CONFIRMED: The tour is confirmed and can not be updated.
   UnitLength:
@@ -773,8 +766,7 @@ definitions:
       - CM
       - IN
     description: |-
-      - UNIT_UNSPECIFIED: Unspecified unit
-       - CM: Centimeters
+      - CM: Centimeters
        - IN: Inches
     title: Length units
   UnitVolume:
@@ -797,8 +789,7 @@ definitions:
       - CBM
       - CBFT
     description: |-
-      - UNIT_UNSPECIFIED: Unspecified unit
-       - CBM: Cubic meters
+      - CBM: Cubic meters
        - CBFT: Cubic feet
     title: Volume units
   UnitWeight:
@@ -821,8 +812,7 @@ definitions:
       - KG
       - LBS
     description: |-
-      - UNIT_UNSPECIFIED: Unspecified unit
-       - KG: Kilograms
+      - KG: Kilograms
        - LBS: Pounds
     title: Weight units
   bookv1beta1Unit:
@@ -1074,8 +1064,7 @@ definitions:
       - RELEASED
       - CANCELLED
     description: |-
-      - STATE_UNSPECIFIED: Unspecified shipment state.
-       - ACTIVE: Shipment is active (initial state).
+      - ACTIVE: Shipment is active (initial state).
        - RELEASED: Shipment is ready for pickup.
        - CANCELLED: Shipment is cancelled
     title: Shipment state
@@ -1219,7 +1208,6 @@ definitions:
     description: |-
       The state of the tour.
 
-       - STATE_UNSPECIFIED: Unspecified state
        - PENDING: The tour is received. Awaiting accept/reject.
        - ACCEPTED: The tour is accepted.
        - REJECTED: The tour is rejected.
