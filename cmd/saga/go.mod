@@ -6,7 +6,7 @@ require (
 	github.com/adrg/xdg v0.4.0
 	github.com/grpc-ecosystem/grpc-gateway/v2 v2.16.2
 	github.com/spf13/cobra v1.7.0
-	go.einride.tech/aip-cli v0.22.0
+	go.einride.tech/aip-cli v0.23.0
 	go.einride.tech/grpc-service-config v0.9.0
 	go.einride.tech/iam v0.49.0
 	go.einride.tech/protobuf-sensitive v0.3.0
