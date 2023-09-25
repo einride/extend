@@ -86,6 +86,8 @@ service BookingService {
 // The request message to create a tour.
 message CreateTourRequest {
   // The parent space in which to create the tour.
+  // Format:
+  // `spaces/{space}`
   string parent = 1 [
     (google.api.field_behavior) = REQUIRED,
     (google.api.resource_reference) = {type: "api.saga.einride.tech/Space"},
@@ -101,6 +103,8 @@ message CreateTourRequest {
 // The request message to get a tour.
 message GetTourRequest {
   // The resource name of the tour to retrieve.
+  // Format:
+  // `spaces/{space}/tours/{tour_id}`
   string name = 1 [
     (google.api.field_behavior) = REQUIRED,
     (google.api.resource_reference) = {type: "api.saga.einride.tech/Tour"},
@@ -113,6 +117,8 @@ message GetTourRequest {
 // The request message to confirm a tour.
 message ConfirmTourRequest {
   // The resource name of the tour to confirm.
+  // Format:
+  // `spaces/{space}/tours/{tour_id}`
   string name = 1 [
     (google.api.field_behavior) = REQUIRED,
     (google.api.resource_reference) = {type: "api.saga.einride.tech/Tour"},
