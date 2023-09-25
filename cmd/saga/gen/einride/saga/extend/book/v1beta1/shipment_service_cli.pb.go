@@ -34,8 +34,9 @@ func NewShipmentServiceCommand(config aipcli.Config) *cobra.Command {
 				"einride.saga.extend.book.v1beta1.Address.recipient":                      " Recipient\n",
 				"einride.saga.extend.book.v1beta1.Address.region_code":                    " Region code (Unicode CLDR region code)\n https://cldr.unicode.org/\n",
 				"einride.saga.extend.book.v1beta1.Address.state_code":                     " State code\n",
-				"einride.saga.extend.book.v1beta1.CreateShipmentRequest.parent":           " The parent space in which to create the shipment.\n",
+				"einride.saga.extend.book.v1beta1.CreateShipmentRequest.parent":           " The parent Saga Space in which to create the shipment.\n Format:\n `spaces/{space}`\n",
 				"einride.saga.extend.book.v1beta1.CreateShipmentRequest.shipment":         " The shipment to create.\n",
+				"einride.saga.extend.book.v1beta1.CreateShipmentRequest.shipment_id":      " A user specified ID for the shipment resource. This must adhere to these rules:\n   1. Must be unique within a space, including soft-deleted and cancelled shipments.\n   2. Must only contain upper-case letters, lower-case letters, numbers 0-9 and a hyphen '-'.\n   3. Must have a length between 4 and 63 characters.\n   4. Must start with a letter or a number.\n   5. Must end with a letter or a number.\n The following regular expression can be used to validate these rules:\n   ^[a-zA-Z0-9]([a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?$\n If no value is provided then an ID will be generated.\n",
 				"einride.saga.extend.book.v1beta1.Shipment.AnnotationsEntry.key":          "",
 				"einride.saga.extend.book.v1beta1.Shipment.AnnotationsEntry.value":        "",
 				"einride.saga.extend.book.v1beta1.Shipment.annotations":                   " Annotations for the shipment\n",
@@ -93,7 +94,7 @@ func NewShipmentServiceCommand(config aipcli.Config) *cobra.Command {
 			&GetShipmentRequest{},
 			&Shipment{},
 			map[protoreflect.FullName]string{
-				"einride.saga.extend.book.v1beta1.GetShipmentRequest.name":     " The resource name of the shipment to retrieve.\n",
+				"einride.saga.extend.book.v1beta1.GetShipmentRequest.name":     " The resource name of the shipment to retrieve.\n Format:\n `spaces/{space}/shipments{shipment_id}`\n",
 				"einride.saga.extend.book.v1beta1.ShipmentService.GetShipment": " Get a shipment.\n\n This is an AIP standard [Get](https://google.aip.dev/131) method.\n",
 			},
 		),
@@ -104,7 +105,7 @@ func NewShipmentServiceCommand(config aipcli.Config) *cobra.Command {
 			&ReleaseShipmentRequest{},
 			&Shipment{},
 			map[protoreflect.FullName]string{
-				"einride.saga.extend.book.v1beta1.ReleaseShipmentRequest.name":     " The resource name of the shipment to release.\n",
+				"einride.saga.extend.book.v1beta1.ReleaseShipmentRequest.name":     " The resource name of the shipment to release.\n Format:\n `spaces/{space}/shipments{shipment_id}`\n",
 				"einride.saga.extend.book.v1beta1.ShipmentService.ReleaseShipment": " Release a shipment.\n\n The state of the shipment after releasing it is RELEASED.\n\n This is an AIP [state](https://google.aip.dev/216) transition method.\n",
 			},
 		),
@@ -115,7 +116,7 @@ func NewShipmentServiceCommand(config aipcli.Config) *cobra.Command {
 			&CancelShipmentRequest{},
 			&Shipment{},
 			map[protoreflect.FullName]string{
-				"einride.saga.extend.book.v1beta1.CancelShipmentRequest.name":     " The resource name of the shipment to cancel.\n",
+				"einride.saga.extend.book.v1beta1.CancelShipmentRequest.name":     " The resource name of the shipment to cancel.\n Format:\n `spaces/{space}/shipments{shipment_id}`\n",
 				"einride.saga.extend.book.v1beta1.ShipmentService.CancelShipment": " Cancel a shipment.\n\n The state of the shipment after cancelling it is CANCELLED.\n\n This is an AIP [state](https://google.aip.dev/216) transition method.\n",
 			},
 		),

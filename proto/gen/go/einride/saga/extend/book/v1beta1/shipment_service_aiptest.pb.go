@@ -42,6 +42,10 @@ type ShipmentTestSuiteConfig struct {
 	// Create should return a resource which is valid to create, i.e.
 	// all required fields set.
 	Create func(parent string) *Shipment
+	// IDGenerator should return a valid and unique ID to use in the Create call.
+	// If non-nil, this function will be called to set the ID on all Create calls.
+	// If the ID field is required, tests will fail if this is nil.
+	IDGenerator func() string
 	// Update should return a resource which is valid to update, i.e.
 	// all required fields set.
 	Update func(parent string) *Shipment
@@ -63,9 +67,14 @@ func (fx *ShipmentTestSuiteConfig) testCreate(t *testing.T) {
 	// Method should fail with InvalidArgument if no parent is provided.
 	t.Run("missing parent", func(t *testing.T) {
 		fx.maybeSkip(t)
+		userSetID := ""
+		if fx.IDGenerator != nil {
+			userSetID = fx.IDGenerator()
+		}
 		_, err := fx.service.CreateShipment(fx.ctx, &CreateShipmentRequest{
-			Parent:   "",
-			Shipment: fx.Create(fx.nextParent(t, false)),
+			Parent:     "",
+			Shipment:   fx.Create(fx.nextParent(t, false)),
+			ShipmentId: userSetID,
 		})
 		assert.Equal(t, codes.InvalidArgument, status.Code(err), err)
 	})
@@ -73,9 +82,14 @@ func (fx *ShipmentTestSuiteConfig) testCreate(t *testing.T) {
 	// Method should fail with InvalidArgument if provided parent is invalid.
 	t.Run("invalid parent", func(t *testing.T) {
 		fx.maybeSkip(t)
+		userSetID := ""
+		if fx.IDGenerator != nil {
+			userSetID = fx.IDGenerator()
+		}
 		_, err := fx.service.CreateShipment(fx.ctx, &CreateShipmentRequest{
-			Parent:   "invalid resource name",
-			Shipment: fx.Create(fx.nextParent(t, false)),
+			Parent:     "invalid resource name",
+			Shipment:   fx.Create(fx.nextParent(t, false)),
+			ShipmentId: userSetID,
 		})
 		assert.Equal(t, codes.InvalidArgument, status.Code(err), err)
 	})
@@ -84,9 +98,14 @@ func (fx *ShipmentTestSuiteConfig) testCreate(t *testing.T) {
 	t.Run("create time", func(t *testing.T) {
 		fx.maybeSkip(t)
 		parent := fx.nextParent(t, false)
+		userSetID := ""
+		if fx.IDGenerator != nil {
+			userSetID = fx.IDGenerator()
+		}
 		msg, err := fx.service.CreateShipment(fx.ctx, &CreateShipmentRequest{
-			Parent:   parent,
-			Shipment: fx.Create(parent),
+			Parent:     parent,
+			Shipment:   fx.Create(parent),
+			ShipmentId: userSetID,
 		})
 		assert.NilError(t, err)
 		assert.Check(t, time.Since(msg.CreateTime.AsTime()) < time.Second)
@@ -96,9 +115,14 @@ func (fx *ShipmentTestSuiteConfig) testCreate(t *testing.T) {
 	t.Run("persisted", func(t *testing.T) {
 		fx.maybeSkip(t)
 		parent := fx.nextParent(t, false)
+		userSetID := ""
+		if fx.IDGenerator != nil {
+			userSetID = fx.IDGenerator()
+		}
 		msg, err := fx.service.CreateShipment(fx.ctx, &CreateShipmentRequest{
-			Parent:   parent,
-			Shipment: fx.Create(parent),
+			Parent:     parent,
+			Shipment:   fx.Create(parent),
+			ShipmentId: userSetID,
 		})
 		assert.NilError(t, err)
 		persisted, err := fx.service.GetShipment(fx.ctx, &GetShipmentRequest{
@@ -106,6 +130,39 @@ func (fx *ShipmentTestSuiteConfig) testCreate(t *testing.T) {
 		})
 		assert.NilError(t, err)
 		assert.DeepEqual(t, msg, persisted, protocmp.Transform())
+	})
+
+	// If method support user settable IDs, when set the resource should
+	// be returned with the provided ID.
+	t.Run("user settable id", func(t *testing.T) {
+		fx.maybeSkip(t)
+		parent := fx.nextParent(t, false)
+		msg, err := fx.service.CreateShipment(fx.ctx, &CreateShipmentRequest{
+			Parent:     parent,
+			Shipment:   fx.Create(parent),
+			ShipmentId: "usersetid",
+		})
+		assert.NilError(t, err)
+		assert.Check(t, strings.HasSuffix(msg.GetName(), "usersetid"))
+	})
+
+	// If method support user settable IDs and the same ID is reused
+	// the method should return AlreadyExists.
+	t.Run("already exists", func(t *testing.T) {
+		fx.maybeSkip(t)
+		parent := fx.nextParent(t, false)
+		_, err := fx.service.CreateShipment(fx.ctx, &CreateShipmentRequest{
+			Parent:     parent,
+			Shipment:   fx.Create(parent),
+			ShipmentId: "alreadyexists",
+		})
+		assert.NilError(t, err)
+		_, err = fx.service.CreateShipment(fx.ctx, &CreateShipmentRequest{
+			Parent:     parent,
+			Shipment:   fx.Create(parent),
+			ShipmentId: "alreadyexists",
+		})
+		assert.Equal(t, codes.AlreadyExists, status.Code(err), err)
 	})
 
 	// The method should fail with InvalidArgument if the resource has any
@@ -122,9 +179,14 @@ func (fx *ShipmentTestSuiteConfig) testCreate(t *testing.T) {
 			}
 			fd := container.ProtoReflect().Descriptor().Fields().ByName("sender")
 			container.ProtoReflect().Clear(fd)
+			userSetID := ""
+			if fx.IDGenerator != nil {
+				userSetID = fx.IDGenerator()
+			}
 			_, err := fx.service.CreateShipment(fx.ctx, &CreateShipmentRequest{
-				Parent:   parent,
-				Shipment: msg,
+				Parent:     parent,
+				Shipment:   msg,
+				ShipmentId: userSetID,
 			})
 			assert.Equal(t, codes.InvalidArgument, status.Code(err), err)
 		})
@@ -138,9 +200,14 @@ func (fx *ShipmentTestSuiteConfig) testCreate(t *testing.T) {
 			}
 			fd := container.ProtoReflect().Descriptor().Fields().ByName("recipient")
 			container.ProtoReflect().Clear(fd)
+			userSetID := ""
+			if fx.IDGenerator != nil {
+				userSetID = fx.IDGenerator()
+			}
 			_, err := fx.service.CreateShipment(fx.ctx, &CreateShipmentRequest{
-				Parent:   parent,
-				Shipment: msg,
+				Parent:     parent,
+				Shipment:   msg,
+				ShipmentId: userSetID,
 			})
 			assert.Equal(t, codes.InvalidArgument, status.Code(err), err)
 		})
@@ -154,9 +221,14 @@ func (fx *ShipmentTestSuiteConfig) testCreate(t *testing.T) {
 			}
 			fd := container.ProtoReflect().Descriptor().Fields().ByName("line1")
 			container.ProtoReflect().Clear(fd)
+			userSetID := ""
+			if fx.IDGenerator != nil {
+				userSetID = fx.IDGenerator()
+			}
 			_, err := fx.service.CreateShipment(fx.ctx, &CreateShipmentRequest{
-				Parent:   parent,
-				Shipment: msg,
+				Parent:     parent,
+				Shipment:   msg,
+				ShipmentId: userSetID,
 			})
 			assert.Equal(t, codes.InvalidArgument, status.Code(err), err)
 		})
@@ -170,9 +242,14 @@ func (fx *ShipmentTestSuiteConfig) testCreate(t *testing.T) {
 			}
 			fd := container.ProtoReflect().Descriptor().Fields().ByName("postal_code")
 			container.ProtoReflect().Clear(fd)
+			userSetID := ""
+			if fx.IDGenerator != nil {
+				userSetID = fx.IDGenerator()
+			}
 			_, err := fx.service.CreateShipment(fx.ctx, &CreateShipmentRequest{
-				Parent:   parent,
-				Shipment: msg,
+				Parent:     parent,
+				Shipment:   msg,
+				ShipmentId: userSetID,
 			})
 			assert.Equal(t, codes.InvalidArgument, status.Code(err), err)
 		})
@@ -186,9 +263,14 @@ func (fx *ShipmentTestSuiteConfig) testCreate(t *testing.T) {
 			}
 			fd := container.ProtoReflect().Descriptor().Fields().ByName("city")
 			container.ProtoReflect().Clear(fd)
+			userSetID := ""
+			if fx.IDGenerator != nil {
+				userSetID = fx.IDGenerator()
+			}
 			_, err := fx.service.CreateShipment(fx.ctx, &CreateShipmentRequest{
-				Parent:   parent,
-				Shipment: msg,
+				Parent:     parent,
+				Shipment:   msg,
+				ShipmentId: userSetID,
 			})
 			assert.Equal(t, codes.InvalidArgument, status.Code(err), err)
 		})
@@ -202,9 +284,14 @@ func (fx *ShipmentTestSuiteConfig) testCreate(t *testing.T) {
 			}
 			fd := container.ProtoReflect().Descriptor().Fields().ByName("region_code")
 			container.ProtoReflect().Clear(fd)
+			userSetID := ""
+			if fx.IDGenerator != nil {
+				userSetID = fx.IDGenerator()
+			}
 			_, err := fx.service.CreateShipment(fx.ctx, &CreateShipmentRequest{
-				Parent:   parent,
-				Shipment: msg,
+				Parent:     parent,
+				Shipment:   msg,
+				ShipmentId: userSetID,
 			})
 			assert.Equal(t, codes.InvalidArgument, status.Code(err), err)
 		})
@@ -218,9 +305,14 @@ func (fx *ShipmentTestSuiteConfig) testCreate(t *testing.T) {
 			}
 			fd := container.ProtoReflect().Descriptor().Fields().ByName("delivery_address")
 			container.ProtoReflect().Clear(fd)
+			userSetID := ""
+			if fx.IDGenerator != nil {
+				userSetID = fx.IDGenerator()
+			}
 			_, err := fx.service.CreateShipment(fx.ctx, &CreateShipmentRequest{
-				Parent:   parent,
-				Shipment: msg,
+				Parent:     parent,
+				Shipment:   msg,
+				ShipmentId: userSetID,
 			})
 			assert.Equal(t, codes.InvalidArgument, status.Code(err), err)
 		})
@@ -234,9 +326,14 @@ func (fx *ShipmentTestSuiteConfig) testCreate(t *testing.T) {
 			}
 			fd := container.ProtoReflect().Descriptor().Fields().ByName("units")
 			container.ProtoReflect().Clear(fd)
+			userSetID := ""
+			if fx.IDGenerator != nil {
+				userSetID = fx.IDGenerator()
+			}
 			_, err := fx.service.CreateShipment(fx.ctx, &CreateShipmentRequest{
-				Parent:   parent,
-				Shipment: msg,
+				Parent:     parent,
+				Shipment:   msg,
+				ShipmentId: userSetID,
 			})
 			assert.Equal(t, codes.InvalidArgument, status.Code(err), err)
 		})
@@ -250,9 +347,14 @@ func (fx *ShipmentTestSuiteConfig) testCreate(t *testing.T) {
 			}
 			fd := container.ProtoReflect().Descriptor().Fields().ByName("reference_id")
 			container.ProtoReflect().Clear(fd)
+			userSetID := ""
+			if fx.IDGenerator != nil {
+				userSetID = fx.IDGenerator()
+			}
 			_, err := fx.service.CreateShipment(fx.ctx, &CreateShipmentRequest{
-				Parent:   parent,
-				Shipment: msg,
+				Parent:     parent,
+				Shipment:   msg,
+				ShipmentId: userSetID,
 			})
 			assert.Equal(t, codes.InvalidArgument, status.Code(err), err)
 		})
@@ -271,9 +373,14 @@ func (fx *ShipmentTestSuiteConfig) testCreate(t *testing.T) {
 				t.Skip("not reachable")
 			}
 			container.Sender = "invalid resource name"
+			userSetID := ""
+			if fx.IDGenerator != nil {
+				userSetID = fx.IDGenerator()
+			}
 			_, err := fx.service.CreateShipment(fx.ctx, &CreateShipmentRequest{
-				Parent:   parent,
-				Shipment: msg,
+				Parent:     parent,
+				Shipment:   msg,
+				ShipmentId: userSetID,
 			})
 			assert.Equal(t, codes.InvalidArgument, status.Code(err), err)
 		})
@@ -286,9 +393,14 @@ func (fx *ShipmentTestSuiteConfig) testCreate(t *testing.T) {
 				t.Skip("not reachable")
 			}
 			container.Tour = "invalid resource name"
+			userSetID := ""
+			if fx.IDGenerator != nil {
+				userSetID = fx.IDGenerator()
+			}
 			_, err := fx.service.CreateShipment(fx.ctx, &CreateShipmentRequest{
-				Parent:   parent,
-				Shipment: msg,
+				Parent:     parent,
+				Shipment:   msg,
+				ShipmentId: userSetID,
 			})
 			assert.Equal(t, codes.InvalidArgument, status.Code(err), err)
 		})
@@ -656,9 +768,14 @@ func (fx *ShipmentTestSuiteConfig) maybeSkip(t *testing.T) {
 
 func (fx *ShipmentTestSuiteConfig) create(t *testing.T, parent string) *Shipment {
 	t.Helper()
+	userSetID := ""
+	if fx.IDGenerator != nil {
+		userSetID = fx.IDGenerator()
+	}
 	created, err := fx.service.CreateShipment(fx.ctx, &CreateShipmentRequest{
-		Parent:   parent,
-		Shipment: fx.Create(parent),
+		Parent:     parent,
+		Shipment:   fx.Create(parent),
+		ShipmentId: userSetID,
 	})
 	assert.NilError(t, err)
 	return created
