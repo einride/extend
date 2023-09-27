@@ -127,7 +127,7 @@ service ShipmentService {
       post: "/v1beta1/{parent=spaces/*}/shipments"
       body: "shipment"
     };
-    option (google.api.method_signature) = "parent,shipment,shipment_id";
+    option (google.api.method_signature) = "parent,shipment";
     option (einride.iam.v1.method_authorization) = {
       permission: "book.shipments.create"
       before: {
@@ -213,9 +213,7 @@ service ShipmentService {
 
 // Request message for BookService.CreateShipment.
 message CreateShipmentRequest {
-  // The parent Saga Space in which to create the shipment.
-  // Format:
-  // `spaces/{space}`
+  // The parent space in which to create the shipment.
   string parent = 1 [
     (google.api.field_behavior) = REQUIRED,
     (google.api.resource_reference) = {type: "api.saga.einride.tech/Space"},
@@ -224,17 +222,6 @@ message CreateShipmentRequest {
     }
   ];
 
-  // A user specified ID for the shipment resource. This must adhere to these rules:
-  //   1. Must be unique within a space, including soft-deleted and cancelled shipments.
-  //   2. Must only contain upper-case letters, lower-case letters, numbers 0-9 and a hyphen '-'.
-  //   3. Must have a length between 4 and 63 characters.
-  //   4. Must start with a letter or a number.
-  //   5. Must end with a letter or a number.
-  // The following regular expression can be used to validate these rules:
-  //   ^[a-zA-Z0-9]([a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?$
-  // If no value is provided then an ID will be generated.
-  string shipment_id = 3 [(google.api.field_behavior) = OPTIONAL];
-
   // The shipment to create.
   Shipment shipment = 2 [(google.api.field_behavior) = REQUIRED];
 }
@@ -242,8 +229,6 @@ message CreateShipmentRequest {
 // Request message for BookService.GetShipment.
 message GetShipmentRequest {
   // The resource name of the shipment to retrieve.
-  // Format:
-  // `spaces/{space}/shipments{shipment_id}`
   string name = 1 [
     (google.api.field_behavior) = REQUIRED,
     (google.api.resource_reference) = {type: "api.saga.einride.tech/Shipment"},
@@ -256,8 +241,6 @@ message GetShipmentRequest {
 // Request message for BookService.ReleaseShipment.
 message ReleaseShipmentRequest {
   // The resource name of the shipment to release.
-  // Format:
-  // `spaces/{space}/shipments{shipment_id}`
   string name = 1 [
     (google.api.field_behavior) = REQUIRED,
     (google.api.resource_reference) = {type: "api.saga.einride.tech/Shipment"},
@@ -270,8 +253,6 @@ message ReleaseShipmentRequest {
 // Request message for BookService.CancelShipment.
 message CancelShipmentRequest {
   // The resource name of the shipment to cancel.
-  // Format:
-  // `spaces/{space}/shipments{shipment_id}`
   string name = 1 [
     (google.api.field_behavior) = REQUIRED,
     (google.api.resource_reference) = {type: "api.saga.einride.tech/Shipment"},
