@@ -256,10 +256,7 @@ paths:
             $ref: '#/definitions/rpcStatus'
       parameters:
         - name: shipment
-          description: |-
-            The resource name of the shipment to retrieve.
-            Format:
-            `spaces/{space}/shipments{shipment_id}`
+          description: The resource name of the shipment to retrieve.
           in: path
           required: true
           type: string
@@ -316,10 +313,7 @@ paths:
             $ref: '#/definitions/rpcStatus'
       parameters:
         - name: shipment
-          description: |-
-            The resource name of the shipment to cancel.
-            Format:
-            `spaces/{space}/shipments{shipment_id}`
+          description: The resource name of the shipment to cancel.
           in: path
           required: true
           type: string
@@ -351,10 +345,7 @@ paths:
             $ref: '#/definitions/rpcStatus'
       parameters:
         - name: shipment
-          description: |-
-            The resource name of the shipment to release.
-            Format:
-            `spaces/{space}/shipments{shipment_id}`
+          description: The resource name of the shipment to release.
           in: path
           required: true
           type: string
@@ -408,10 +399,7 @@ paths:
             $ref: '#/definitions/rpcStatus'
       parameters:
         - name: space
-          description: |-
-            The parent Saga Space in which to create the shipment.
-            Format:
-            `spaces/{space}`
+          description: The parent space in which to create the shipment.
           in: path
           required: true
           type: string
@@ -424,20 +412,6 @@ paths:
             $ref: '#/definitions/v1beta1Shipment'
             required:
               - shipment
-        - name: shipmentId
-          description: |-
-            A user specified ID for the shipment resource. This must adhere to these rules:
-              1. Must be unique within a space, including soft-deleted and cancelled shipments.
-              2. Must only contain upper-case letters, lower-case letters, numbers 0-9 and a hyphen '-'.
-              3. Must have a length between 4 and 63 characters.
-              4. Must start with a letter or a number.
-              5. Must end with a letter or a number.
-            The following regular expression can be used to validate these rules:
-              ^[a-zA-Z0-9]([a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?$
-            If no value is provided then an ID will be generated.
-          in: query
-          required: false
-          type: string
       tags:
         - ShipmentService
   /v1beta1/{space}/tours:
@@ -456,10 +430,7 @@ paths:
             $ref: '#/definitions/rpcStatus'
       parameters:
         - name: space
-          description: |-
-            The parent space in which to create the tour.
-            Format:
-            `spaces/{space}`
+          description: The parent space in which to create the tour.
           in: path
           required: true
           type: string
@@ -594,10 +565,7 @@ paths:
             $ref: '#/definitions/rpcStatus'
       parameters:
         - name: tour
-          description: |-
-            The resource name of the tour to retrieve.
-            Format:
-            `spaces/{space}/tours/{tour_id}`
+          description: The resource name of the tour to retrieve.
           in: path
           required: true
           type: string
@@ -622,10 +590,7 @@ paths:
             $ref: '#/definitions/rpcStatus'
       parameters:
         - name: tour
-          description: |-
-            The resource name of the tour to confirm.
-            Format:
-            `spaces/{space}/tours/{tour_id}`
+          description: The resource name of the tour to confirm.
           in: path
           required: true
           type: string

@@ -31,8 +31,6 @@ type CreateTourRequest struct {
 	unknownFields protoimpl.UnknownFields
 
 	// The parent space in which to create the tour.
-	// Format:
-	// `spaces/{space}`
 	Parent string `protobuf:"bytes,1,opt,name=parent,proto3" json:"parent,omitempty"`
 	// The tour to create.
 	Tour *Tour `protobuf:"bytes,2,opt,name=tour,proto3" json:"tour,omitempty"`
@@ -91,8 +89,6 @@ type GetTourRequest struct {
 	unknownFields protoimpl.UnknownFields
 
 	// The resource name of the tour to retrieve.
-	// Format:
-	// `spaces/{space}/tours/{tour_id}`
 	Name string `protobuf:"bytes,1,opt,name=name,proto3" json:"name,omitempty"`
 }
 
@@ -142,8 +138,6 @@ type ConfirmTourRequest struct {
 	unknownFields protoimpl.UnknownFields
 
 	// The resource name of the tour to confirm.
-	// Format:
-	// `spaces/{space}/tours/{tour_id}`
 	Name string `protobuf:"bytes,1,opt,name=name,proto3" json:"name,omitempty"`
 }
 

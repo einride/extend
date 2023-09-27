@@ -35,7 +35,7 @@ func NewBookingServiceCommand(config aipcli.Config) *cobra.Command {
 				"einride.saga.extend.book.v1beta1.Address.region_code":                             " Region code (Unicode CLDR region code)\n https://cldr.unicode.org/\n",
 				"einride.saga.extend.book.v1beta1.Address.state_code":                              " State code\n",
 				"einride.saga.extend.book.v1beta1.BookingService.CreateTour":                       " Create a truck tour booking in a space.\n\n This is an AIP standard [Create](https://google.aip.dev/133) method.\n",
-				"einride.saga.extend.book.v1beta1.CreateTourRequest.parent":                        " The parent space in which to create the tour.\n Format:\n `spaces/{space}`\n",
+				"einride.saga.extend.book.v1beta1.CreateTourRequest.parent":                        " The parent space in which to create the tour.\n",
 				"einride.saga.extend.book.v1beta1.CreateTourRequest.tour":                          " The tour to create.\n",
 				"einride.saga.extend.book.v1beta1.Shipment.AnnotationsEntry.key":                   "",
 				"einride.saga.extend.book.v1beta1.Shipment.AnnotationsEntry.value":                 "",
@@ -123,7 +123,7 @@ func NewBookingServiceCommand(config aipcli.Config) *cobra.Command {
 			&Tour{},
 			map[protoreflect.FullName]string{
 				"einride.saga.extend.book.v1beta1.BookingService.GetTour": " Get an existing truck tour booking.\n\n This is an AIP standard [Get](https://google.aip.dev/131) method.\n",
-				"einride.saga.extend.book.v1beta1.GetTourRequest.name":    " The resource name of the tour to retrieve.\n Format:\n `spaces/{space}/tours/{tour_id}`\n",
+				"einride.saga.extend.book.v1beta1.GetTourRequest.name":    " The resource name of the tour to retrieve.\n",
 			},
 		),
 		aipcli.NewMethodCommand(
@@ -134,7 +134,7 @@ func NewBookingServiceCommand(config aipcli.Config) *cobra.Command {
 			&Tour{},
 			map[protoreflect.FullName]string{
 				"einride.saga.extend.book.v1beta1.BookingService.ConfirmTour": " Confirm a Provisional tour.\n\n Reconfirming a tour that is already confirmed will return an InvalidArgument Error.\n When a tour has been accepted by Saga and confirmed by the user, Shipments will be created.\n",
-				"einride.saga.extend.book.v1beta1.ConfirmTourRequest.name":    " The resource name of the tour to confirm.\n Format:\n `spaces/{space}/tours/{tour_id}`\n",
+				"einride.saga.extend.book.v1beta1.ConfirmTourRequest.name":    " The resource name of the tour to confirm.\n",
 			},
 		),
 		aipcli.NewMethodCommand(
