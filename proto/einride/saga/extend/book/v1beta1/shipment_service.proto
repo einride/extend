@@ -152,6 +152,21 @@ service ShipmentService {
     };
   }
 
+  // List shipments in a space.
+  //
+  // This is an AIP standard [List](https://google.aip.dev/132) method.
+  rpc ListShipments(ListShipmentsRequest) returns (ListShipmentsResponse) {
+    option (google.api.http) = {get: "/v1beta1/{parent=spaces/*}/shipments"};
+    option (google.api.method_signature) = "parent";
+    option (einride.iam.v1.method_authorization) = {
+      permission: "book.shipments.list"
+      before: {
+        expression: "test(caller, request.parent)"
+        description: "The caller must have permission to list all shipments in the parent space."
+      }
+    };
+  }
+
   // Release a shipment.
   //
   // The state of the shipment after releasing it is RELEASED.
@@ -236,6 +251,52 @@ message GetShipmentRequest {
       field_configuration: {path_param_name: "shipment"}
     }
   ];
+}
+
+// Request message for ShipmentService.ListShipments.
+message ListShipmentsRequest {
+  // The resource name of the parent, which owns this collection of shipments.
+  // Format: spaces/{space}
+  string parent = 1 [
+    (google.api.field_behavior) = REQUIRED,
+    (google.api.resource_reference) = {type: "api.saga.einride.tech/Space"}
+  ];
+
+  // Requested page size. Server may return fewer shipments than requested.
+  // If unspecified, server will pick an appropriate default.
+  int32 page_size = 2 [(google.api.field_behavior) = OPTIONAL];
+
+  // A token identifying a page of results the server should return.
+  // Typically, this is the value of ListShipmentsResponse.page_token
+  // returned from the previous call to `ListShipments` method.
+  string page_token = 3 [(google.api.field_behavior) = OPTIONAL];
+
+  // How the results should be sorted. Presently, the only permitted values are:
+  //
+  // - `"create_time desc"` (default if no order_by is specified)
+  // - `"create_time asc"`
+  // Example:
+  // ```
+  // order_by = "create_time desc"
+  // ``
+  string order_by = 4 [(google.api.field_behavior) = OPTIONAL];
+
+  // Controls whether deleted shipments should be returned. Defaults to false.
+  bool show_deleted = 5 [(google.api.field_behavior) = OPTIONAL];
+
+  // Allows to skip results.
+  int32 skip = 6 [(google.api.field_behavior) = OPTIONAL];
+}
+
+// Response message for ShipmentService.ListShipments.
+message ListShipmentsResponse {
+  // The list of shipments.
+  repeated Shipment shipments = 1;
+  // A token to retrieve next page of results.  Pass this value in the ListShipmentsRequest.page_token field in the
+  // subsequent call to `ListShipments` method to retrieve the next page of results.
+  string next_page_token = 2;
+  // The total size of shipments found in a space.
+  int32 total_size = 3;
 }
 
 // Request message for BookService.ReleaseShipment.
