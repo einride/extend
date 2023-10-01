@@ -19,7 +19,7 @@ message Tour {
     singular: "tour"
   };
   // The resource name of the tour.
-  string name = 1 [(google.api.field_behavior) = OUTPUT_ONLY];
+  string name = 1 [(google.api.field_behavior) = IDENTIFIER];
   // Resource name of the space that owns the tour.
   string space = 2 [
     (google.api.field_behavior) = OUTPUT_ONLY,

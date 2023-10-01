@@ -5,23 +5,29 @@ deps:
     owner: einride
     repository: googleapis
     commit: 4b867c1ec59445ff95009ca2a3e6cb4c
+    digest: shake256:990ad0a798947422022682870c6abc55b51000e44d606b92331e6b4e6e56a5500b32cd3bbc0a9a0699f9eba020d1d78b3a2df76d3effe204a53a93b14d9ec5c9
   - remote: buf.build
     owner: einride
     repository: grpc-service-config
     commit: f9bc1b4483044934863ba651a406f5a6
+    digest: shake256:b41bd448876dc9ddc2fb0465cb002cbfc453c20b19bfe413a9fb7fcd84c41afb16a3e03e4f1da2648cb7aea541d4931bef8fa9a911de4a513b04e4589b46975a
   - remote: buf.build
     owner: einride
     repository: iam
     commit: c9c6613b427541958e0ad8f7d1dc29f3
+    digest: shake256:6bc2274aa0359ae7c35d393170479f7ab134dcf3004dffd92e48524a189dad0ec657a4b5c253cce91caeffcf1fd1f4fdeced9d4ea8f91034f62872f20e9e0e01
   - remote: buf.build
     owner: einride
     repository: sensitive
-    commit: b8a5a6a1de784653a48717e97a8f651f
+    commit: e3507ebe4ebc4c8daea3f4f08e1e98af
+    digest: shake256:db3e78954f5bf216d05f574d838001fdd71e1af4da9c32d885a2cf45f7409d1f021a814acb833ff655eb0a099fdc72441970e5377b97b67800d027aba153704c
   - remote: buf.build
     owner: googleapis
     repository: googleapis
-    commit: 783e4b5374fa488ab068d08af9658438
+    commit: 28151c0d0a1641bf938a7672c500e01d
+    digest: shake256:49215edf8ef57f7863004539deff8834cfb2195113f0b890dd1f67815d9353e28e668019165b9d872395871eeafcbab3ccfdb2b5f11734d3cca95be9e8d139de
   - remote: buf.build
     owner: grpc-ecosystem
     repository: grpc-gateway
-    commit: b96615cde70c403f8075c48e56178f88
+    commit: 048ae6ff94ca4476b3225904b1078fad
+    digest: shake256:e5250bf2d999516c02206d757502b902e406f35c099d0e869dc3e4f923f6870fe0805a9974c27df0695462937eae90cd4d9db90bb9a03489412560baa74a87b6

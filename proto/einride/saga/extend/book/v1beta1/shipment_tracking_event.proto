@@ -18,7 +18,7 @@ message ShipmentTrackingEvent {
   };
 
   // The resource name of the ShipmentTrackingEvent.
-  string name = 1 [(google.api.field_behavior) = OUTPUT_ONLY];
+  string name = 1 [(google.api.field_behavior) = IDENTIFIER];
 
   // Resource name of the shipment that owns the ShipmentTrackingEvent.
   string shipment = 2 [

@@ -4,3 +4,5 @@
     - core::0133::request-id-field # allow system generated IDs
     # There is a bug on the shipment_service and booking_service files where this is triggered on nothing.
     - core::0203::field-behavior-required
+    # Disabling this as for easier use we need to embed some resources.
+    - core::0122::embedded-resource

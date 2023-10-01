@@ -129,6 +129,22 @@ func NewBookingServiceCommand(config aipcli.Config) *cobra.Command {
 		aipcli.NewMethodCommand(
 			config,
 			File_einride_saga_extend_book_v1beta1_booking_service_proto.
+				Services().ByName("BookingService").Methods().ByName("ListTours"),
+			&ListToursRequest{},
+			&ListToursResponse{},
+			map[protoreflect.FullName]string{
+				"einride.saga.extend.book.v1beta1.BookingService.ListTours":      " List existing truck tours.\n\n This is an AIP standard [List](https://google.aip.dev/132) method.\n",
+				"einride.saga.extend.book.v1beta1.ListToursRequest.order_by":     " How the results should be sorted. Presently, the only permitted values are:\n\n - `\"create_time desc\"` (default if no order_by is specified)\n - `\"create_time asc\"`\n Example:\n ```\n order_by = \"create_time desc\"\n ``\n",
+				"einride.saga.extend.book.v1beta1.ListToursRequest.page_size":    " Requested page size. Server may return fewer tours than requested.\n If unspecified, server will pick an appropriate default.\n",
+				"einride.saga.extend.book.v1beta1.ListToursRequest.page_token":   " A token identifying a page of results the server should return.\n Typically, this is the value of ListToursResponse.page_token returned from the previous call to `ListTours` method.\n",
+				"einride.saga.extend.book.v1beta1.ListToursRequest.parent":       " The resource name of the parent, which owns this collection of tours.\n Format: spaces/{space}\n",
+				"einride.saga.extend.book.v1beta1.ListToursRequest.show_deleted": " Controls whether deleted tours should be returned. Defaults to false.\n",
+				"einride.saga.extend.book.v1beta1.ListToursRequest.skip":         " Allows to skip results.\n",
+			},
+		),
+		aipcli.NewMethodCommand(
+			config,
+			File_einride_saga_extend_book_v1beta1_booking_service_proto.
 				Services().ByName("BookingService").Methods().ByName("ConfirmTour"),
 			&ConfirmTourRequest{},
 			&Tour{},
