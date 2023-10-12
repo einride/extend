@@ -48,6 +48,21 @@ service BookingService {
     };
   }
 
+  // List existing truck tours.
+  //
+  // This is an AIP standard [List](https://google.aip.dev/132) method.
+  rpc ListTours(ListToursRequest) returns (ListToursResponse) {
+    option (google.api.http) = {get: "/v1beta1/{parent=spaces/*}/tours"};
+    option (google.api.method_signature) = "parent";
+    option (einride.iam.v1.method_authorization) = {
+      permission: "book.tours.list"
+      before: {
+        expression: "test(caller, request.parent)"
+        description: "The caller must have permission to list all tours in the parent space."
+      }
+    };
+  }
+
   // Confirm a Provisional tour.
   //
   // Reconfirming a tour that is already confirmed will return an InvalidArgument Error.
@@ -108,6 +123,51 @@ message GetTourRequest {
       field_configuration: {path_param_name: "tour"}
     }
   ];
+}
+
+// Request message for TourService.ListTours.
+message ListToursRequest {
+  // The resource name of the parent, which owns this collection of tours.
+  // Format: spaces/{space}
+  string parent = 1 [
+    (google.api.field_behavior) = REQUIRED,
+    (google.api.resource_reference) = {type: "api.saga.einride.tech/Space"}
+  ];
+
+  // Requested page size. Server may return fewer tours than requested.
+  // If unspecified, server will pick an appropriate default.
+  int32 page_size = 2 [(google.api.field_behavior) = OPTIONAL];
+
+  // A token identifying a page of results the server should return.
+  // Typically, this is the value of ListToursResponse.page_token returned from the previous call to `ListTours` method.
+  string page_token = 3 [(google.api.field_behavior) = OPTIONAL];
+
+  // How the results should be sorted. Presently, the only permitted values are:
+  //
+  // - `"create_time desc"` (default if no order_by is specified)
+  // - `"create_time asc"`
+  // Example:
+  // ```
+  // order_by = "create_time desc"
+  // ``
+  string order_by = 4 [(google.api.field_behavior) = OPTIONAL];
+
+  // Controls whether deleted tours should be returned. Defaults to false.
+  bool show_deleted = 5 [(google.api.field_behavior) = OPTIONAL];
+
+  // Allows to skip results.
+  int32 skip = 6 [(google.api.field_behavior) = OPTIONAL];
+}
+
+// Response message for TourService.ListTours.
+message ListToursResponse {
+  // The list of tours. If there are none in the current page then this will be empty.
+  repeated Tour tours = 1 [(google.api.field_behavior) = OPTIONAL];
+  // A token to retrieve next page of results.  Pass this value in the ListToursRequest.page_token field in the
+  // subsequent call to `ListTours` method to retrieve the next page of results.
+  string next_page_token = 2 [(google.api.field_behavior) = OPTIONAL];
+  // The total size of tours found in a space.
+  int32 total_size = 3 [(google.api.field_behavior) = OPTIONAL];
 }
 
 // The request message to confirm a tour.
