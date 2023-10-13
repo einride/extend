@@ -103,7 +103,10 @@ func GenerateApiDoc(ctx context.Context) error {
 }
 
 func installRapiPdfCli(ctx context.Context) error {
-	cmd := sg.Command(ctx, "yarn", "add", "@kingjan1999/rapipdf-cli")
+	if err := sg.Command(ctx, "yarn", "global", "add", "node-gyp").Run(); err != nil {
+		return err
+	}
+	cmd := sg.Command(ctx, "yarn", "global", "add", "@kingjan1999/rapipdf-cli")
 	return cmd.Run()
 }
 
@@ -151,7 +154,6 @@ func generatePdfFromSwagger(ctx context.Context, name, configPath string) error 
 func generatePdf(ctx context.Context, configPath, outputFilename, openApiFileName string) error {
 	cmd := sg.Command(
 		ctx,
-		"yarn",
 		"rapipdf",
 		"--configFile="+configPath,
 		"--outputFile="+outputFilename,
