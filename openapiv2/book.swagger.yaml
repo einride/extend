@@ -369,6 +369,31 @@ paths:
               - units
       tags:
         - ShipmentService
+  /v1beta1/{shipmentTrackingEvent}:
+    get:
+      summary: Get a shipment tracking event.
+      description: This is an AIP standard [Get](https://google.aip.dev/131) method.
+      operationId: ShipmentTrackingEventService_GetShipmentTrackingEvent
+      responses:
+        "200":
+          description: A successful response.
+          schema:
+            $ref: '#/definitions/v1beta1ShipmentTrackingEvent'
+        default:
+          description: An unexpected error response.
+          schema:
+            $ref: '#/definitions/rpcStatus'
+      parameters:
+        - name: shipmentTrackingEvent
+          description: |-
+            The resource name of the shipment tracking event to retrieve.
+            Format: spaces/{space}/shipments/{shipment}/trackingEvents/{shipmentTrackingEvent}
+          in: path
+          required: true
+          type: string
+          pattern: spaces/[^/]+/shipments/[^/]+/trackingEvents/[^/]+
+      tags:
+        - ShipmentTrackingEventService
   /v1beta1/{shipment}:
     get:
       summary: Get a shipment.
@@ -487,31 +512,6 @@ paths:
             description: Request message for BookService.ReleaseShipment.
       tags:
         - ShipmentService
-  /v1beta1/{shipmentTrackingEvent}:
-    get:
-      summary: Get a shipment tracking event.
-      description: This is an AIP standard [Get](https://google.aip.dev/131) method.
-      operationId: ShipmentTrackingEventService_GetShipmentTrackingEvent
-      responses:
-        "200":
-          description: A successful response.
-          schema:
-            $ref: '#/definitions/v1beta1ShipmentTrackingEvent'
-        default:
-          description: An unexpected error response.
-          schema:
-            $ref: '#/definitions/rpcStatus'
-      parameters:
-        - name: shipmentTrackingEvent
-          description: |-
-            The resource name of the shipment tracking event to retrieve.
-            Format: spaces/{space}/shipments/{shipment}/trackingEvents/{shipmentTrackingEvent}
-          in: path
-          required: true
-          type: string
-          pattern: spaces/[^/]+/shipments/[^/]+/trackingEvents/[^/]+
-      tags:
-        - ShipmentTrackingEventService
   /v1beta1/{space}/shipments:
     post:
       summary: Create a shipment in a space.
