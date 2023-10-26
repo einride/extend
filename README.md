@@ -1,7 +1,6 @@
 <img src="docs/img/header.png" />
 
-Einride Extend
-==============
+# Einride Extend
 
 Open APIs and developer tools for building extensions and integrations to [Saga](https://einride.tech/saga), Einride's freight mobility platform.
 
@@ -11,8 +10,7 @@ The full documentation for Saga developers is available at [extend.saga.einride.
 
 <a href="https://forms.gle/Sn3CYSgUgJbJE78X9"><img src="docs/img/button.svg" /></a>
 
-APIs
-----
+## APIs
 
 Saga's APIs are resource-oriented and work like standard [REST](https://en.wikipedia.org/wiki/Representational_state_transfer) APIs.
 
@@ -20,8 +18,7 @@ gRPC and HTTP protocols are supported.
 
 *[Read more ≫](./docs/apis.md)*
 
-CLI
----
+## CLI
 
 The [saga](./cmd/saga) CLI tool enables you to call the Extend APIs from the command line of your local development machine.
 
@@ -29,8 +26,7 @@ Get the latest version of the CLI from the [Releases](https://github.com/einride
 
 *[Read more ≫](./docs/cli.md)*
 
-SDKs
-----
+## SDKs
 
 SDKs for developing with Saga are available for [Go](https://github.com/einride/extend-go) and [TypeScript](https://github.com/einride/extend-typescript).
 
@@ -38,14 +34,12 @@ Support for more languages are on the roadmap.
 
 *[Read more ≫](./docs/sdks.md)*
 
-UI
---
+## UI
 
 A UI component framework for developing Saga apps is available for [React](https://github.com/einride/ui).
 
 *[Read more ≫](https://github.com/einride/ui)*
 
-License
--------
+## License
 
 [MIT](LICENSE)

@@ -1,20 +1,16 @@
-Einride Extend APIs
-===================
+# Einride Extend APIs
 
 Based on REST principles, with support for gRPC, the Einride Extend APIs enable integrations and extensions to Einride's Saga platform.
 
-API design
-----------
+## API design
 
 The Extend APIs are designed using the [AIP](https://aip.dev) design framework, which means that they are resource-oriented and work like standard [REST](https://en.wikipedia.org/wiki/Representational_state_transfer) APIs.
 
-API specification
------------------
+## API specification
 
 The APIs are specified and documented using the [Protocol Buffer](https://developers.google.com/protocol-buffers/docs/proto3) interface definition language.
 
-Protocols
----------
+## Protocols
 
 Saga's APIs support both gRPC and HTTP protocols.
 
