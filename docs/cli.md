@@ -1,5 +1,4 @@
-Saga CLI
-========
+# Saga CLI
 
 The [saga](./cmd/saga) CLI tool enables you to call the Saga APIs from the command line of your local development machine.
 
