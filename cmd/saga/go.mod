@@ -10,9 +10,9 @@ require (
 	go.einride.tech/grpc-service-config v0.10.0
 	go.einride.tech/iam v0.50.0
 	go.einride.tech/protobuf-sensitive v0.5.0
-	google.golang.org/genproto v0.0.0-20230803162519-f966b187b2e5
+	google.golang.org/genproto v0.0.0-20230822172742-b8732ec3820d
 	google.golang.org/genproto/googleapis/api v0.0.0-20230822172742-b8732ec3820d
-	google.golang.org/grpc v1.58.3
+	google.golang.org/grpc v1.59.0
 	google.golang.org/protobuf v1.31.0
 	gotest.tools/v3 v3.5.1
 )
@@ -22,7 +22,7 @@ require (
 	cloud.google.com/go/compute/metadata v0.2.3 // indirect
 	cloud.google.com/go/iam v1.1.2 // indirect
 	github.com/antlr/antlr4/runtime/Go/antlr/v4 v4.0.0-20230305170008-8188dc5388df // indirect
-	github.com/golang/glog v1.1.0 // indirect
+	github.com/golang/glog v1.1.2 // indirect
 	github.com/golang/protobuf v1.5.3 // indirect
 	github.com/google/cel-go v0.18.1 // indirect
 	github.com/google/go-cmp v0.5.9 // indirect
