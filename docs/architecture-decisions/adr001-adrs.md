@@ -10,7 +10,8 @@ ______________________________________________________________________
 
 Users of the Extend APIs expect a stable and reliable API.
 
-Large changes to the API should be communicated openly, with context available for users to understand why the change is needed and how it might affect them.
+Large changes to the API should be communicated openly, with context available
+for users to understand why the change is needed and how it might affect them.
 
 ## Decision
 
