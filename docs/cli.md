@@ -1,14 +1,18 @@
 # Saga CLI
 
-The [saga](./cmd/saga) CLI tool enables you to call the Saga APIs from the command line of your local development machine.
+The [saga](./cmd/saga) CLI tool enables you to call the Saga APIs from the
+command line of your local development machine.
 
-This cli is installed on running `make`. You can set a default user by using credentials of an Api connection from your organization:
+This cli is installed on running `make`. You can set a default user by using
+credentials of an Api connection from your organization:
 
 ```shell
 saga auth login --client-id <CLIENT_ID> --client-secret <CLIENT_SECRET>
 ```
 
-This will store a file with the credentials locally. On every request the cli will fetch a fresh auth token, based on these credentials. After this you can use the cli to query saga, like:
+This will store a file with the credentials locally. On every request the cli
+will fetch a fresh auth token, based on these credentials. After this you can
+use the cli to query saga, like:
 
 ```shell
 saga shipment get-shipment --name spaces/123/shipments/234 --us-prod
