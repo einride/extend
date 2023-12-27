@@ -127,7 +127,7 @@ message ExchangeSecretRequest {
 message ExchangeSecretResponse {
   // Access token to pass as a Bearer token in the authorization header
   // on subsequent API calls.
-  string access_token = 1;
+  string access_token = 1 [(einride.sensitive.v1.sensitive) = true];
 
   // Expire time of the access token.
   google.protobuf.Timestamp expire_time = 2 [(google.api.field_behavior) = OUTPUT_ONLY];
