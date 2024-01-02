@@ -103,10 +103,9 @@ func GenerateApiDoc(ctx context.Context) error {
 }
 
 func installRapiPdfCli(ctx context.Context) error {
-	if err := sg.Command(ctx, "yarn", "global", "add", "node-gyp").Run(); err != nil {
-		return err
-	}
-	cmd := sg.Command(ctx, "yarn", "global", "add", "@kingjan1999/rapipdf-cli")
+	// Using npm rather than yarn as yarn1 struggles with the dependency "string-width"
+	// and breaks the CI. https://github.com/einride/extend/pull/221
+	cmd := sg.Command(ctx, "npm", "--global", "install", "@kingjan1999/rapipdf-cli")
 	return cmd.Run()
 }
 
