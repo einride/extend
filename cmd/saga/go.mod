@@ -4,14 +4,14 @@ go 1.19
 
 require (
 	github.com/adrg/xdg v0.4.0
-	github.com/grpc-ecosystem/grpc-gateway/v2 v2.18.1
+	github.com/grpc-ecosystem/grpc-gateway/v2 v2.19.1
 	github.com/spf13/cobra v1.8.0
 	go.einride.tech/aip-cli v0.25.0
 	go.einride.tech/grpc-service-config v0.10.0
 	go.einride.tech/iam v0.52.0
 	go.einride.tech/protobuf-sensitive v0.5.0
-	google.golang.org/genproto v0.0.0-20231106174013-bbf56f31fb17
-	google.golang.org/genproto/googleapis/api v0.0.0-20231106174013-bbf56f31fb17
+	google.golang.org/genproto v0.0.0-20240116215550-a9fa1716bcac
+	google.golang.org/genproto/googleapis/api v0.0.0-20240125205218-1f4bbc51befe
 	google.golang.org/grpc v1.61.0
 	google.golang.org/protobuf v1.32.0
 	gotest.tools/v3 v3.5.1
@@ -32,11 +32,11 @@ require (
 	github.com/stoewer/go-strcase v1.3.0 // indirect
 	go.einride.tech/aip v0.63.0 // indirect
 	golang.org/x/exp v0.0.0-20220722155223-a9213eeb770e // indirect
-	golang.org/x/net v0.18.0 // indirect
-	golang.org/x/oauth2 v0.14.0 // indirect
-	golang.org/x/sys v0.14.0 // indirect
+	golang.org/x/net v0.20.0 // indirect
+	golang.org/x/oauth2 v0.16.0 // indirect
+	golang.org/x/sys v0.16.0 // indirect
 	golang.org/x/text v0.14.0 // indirect
 	google.golang.org/appengine v1.6.8 // indirect
-	google.golang.org/genproto/googleapis/rpc v0.0.0-20231106174013-bbf56f31fb17 // indirect
+	google.golang.org/genproto/googleapis/rpc v0.0.0-20240125205218-1f4bbc51befe // indirect
 	gopkg.in/yaml.v3 v3.0.1 // indirect
 )
