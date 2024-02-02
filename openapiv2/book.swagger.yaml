@@ -342,11 +342,10 @@ paths:
                 description: Resource name of the truck tour booking this shipment relates to.
               state:
                 $ref: '#/definitions/v1beta1ShipmentState'
-                title: |-
+                description: |-
                   Shipment state
                   Can be set to ACTIVE (default) or RELEASED when creating a shipment.
                   Disabled as existing API allows setting.
-                  (-- api-linter: core::0216::state-field-output-only=disabled --)
               deliveryState:
                 $ref: '#/definitions/ShipmentDeliveryState'
                 title: Shipment delivery state
@@ -476,8 +475,7 @@ paths:
           in: body
           required: true
           schema:
-            type: object
-            description: Request message for BookService.CancelShipment.
+            $ref: '#/definitions/ShipmentServiceCancelShipmentBody'
       tags:
         - ShipmentService
   /v1beta1/{shipment}:release:
@@ -508,8 +506,7 @@ paths:
           in: body
           required: true
           schema:
-            type: object
-            description: Request message for BookService.ReleaseShipment.
+            $ref: '#/definitions/ShipmentServiceReleaseShipmentBody'
       tags:
         - ShipmentService
   /v1beta1/{space}/shipments:
@@ -749,6 +746,12 @@ definitions:
        - FTL: Full truck load
        - DRAYAGE: Drayage is the transport of goods over a short distance also known as the "The first mile."
     title: Shipment service type
+  ShipmentServiceCancelShipmentBody:
+    type: object
+    description: Request message for BookService.CancelShipment.
+  ShipmentServiceReleaseShipmentBody:
+    type: object
+    description: Request message for BookService.ReleaseShipment.
   ShipmentTrackingEventEventCode:
     type: string
     enum:
@@ -1198,11 +1201,10 @@ definitions:
         description: Resource name of the truck tour booking this shipment relates to.
       state:
         $ref: '#/definitions/v1beta1ShipmentState'
-        title: |-
+        description: |-
           Shipment state
           Can be set to ACTIVE (default) or RELEASED when creating a shipment.
           Disabled as existing API allows setting.
-          (-- api-linter: core::0216::state-field-output-only=disabled --)
       deliveryState:
         $ref: '#/definitions/ShipmentDeliveryState'
         title: Shipment delivery state
