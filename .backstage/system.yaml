@@ -7,5 +7,5 @@ metadata:
   annotations:
     einride.tech/security-level: "1"
 spec:
-  owner: team-transportation
+  owner: transportation-platform
   domain: transportation-platform
