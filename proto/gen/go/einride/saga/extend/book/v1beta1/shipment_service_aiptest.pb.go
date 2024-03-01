@@ -86,12 +86,15 @@ func (fx *ShipmentTestSuiteConfig) testCreate(t *testing.T) {
 	t.Run("create time", func(t *testing.T) {
 		fx.maybeSkip(t)
 		parent := fx.nextParent(t, false)
+		beforeCreate := time.Now()
 		msg, err := fx.service.CreateShipment(fx.ctx, &CreateShipmentRequest{
 			Parent:   parent,
 			Shipment: fx.Create(parent),
 		})
 		assert.NilError(t, err)
-		assert.Check(t, time.Since(msg.CreateTime.AsTime()) < time.Second)
+		assert.Check(t, msg.CreateTime != nil)
+		assert.Check(t, !msg.CreateTime.AsTime().IsZero())
+		assert.Check(t, msg.CreateTime.AsTime().After(beforeCreate), "msg.CreateTime (%v) is not after beforeCreate (%v)", msg.CreateTime.AsTime(), beforeCreate)
 	})
 
 	// The created resource should be persisted and reachable with Get.
