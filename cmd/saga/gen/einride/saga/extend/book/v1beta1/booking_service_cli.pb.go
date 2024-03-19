@@ -145,6 +145,23 @@ func NewBookingServiceCommand(config aipcli.Config) *cobra.Command {
 		aipcli.NewMethodCommand(
 			config,
 			File_einride_saga_extend_book_v1beta1_booking_service_proto.
+				Services().ByName("BookingService").Methods().ByName("SearchTours"),
+			&SearchToursRequest{},
+			&SearchToursResponse{},
+			map[protoreflect.FullName]string{
+				"einride.saga.extend.book.v1beta1.BookingService.SearchTours":      " Search tours.\n\n Search for Tours in a space.\n - You can search for Tours by external_reference_id\n",
+				"einride.saga.extend.book.v1beta1.SearchToursRequest.order_by":     " How the results should be sorted. Presently, the only permitted values are:\n\n - `\"create_time asc\"` (default if no order_by is specified)\n - `\"create_time desc\"`\n Example:\n ```\n order_by = \"create_time desc\"\n ```\n",
+				"einride.saga.extend.book.v1beta1.SearchToursRequest.page_size":    " Requested page size. Server may return fewer tours than requested.\n If unspecified, server will pick an appropriate default.\n",
+				"einride.saga.extend.book.v1beta1.SearchToursRequest.page_token":   " A token identifying a page of results the server should return.\n Typically, this is the value of\n [SearchToursResponse.page_token][einride.saga.book.v1.SearchToursResponse.page_token]\n returned from the previous call to `SearchTours` method.\n",
+				"einride.saga.extend.book.v1beta1.SearchToursRequest.parent":       " The resource name of the parent, which owns this collection of tours.\n Format: spaces/{space}\n",
+				"einride.saga.extend.book.v1beta1.SearchToursRequest.query":        " Filters\n Multiple filters will be combined with the logical operator AND.\n\n Returned tours contain the query string in ANY of the fields:\n tour_id, external_reference_id\n",
+				"einride.saga.extend.book.v1beta1.SearchToursRequest.show_deleted": " Includes deleted tours in result\n",
+				"einride.saga.extend.book.v1beta1.SearchToursRequest.skip":         " Allows for skipping result\n",
+			},
+		),
+		aipcli.NewMethodCommand(
+			config,
+			File_einride_saga_extend_book_v1beta1_booking_service_proto.
 				Services().ByName("BookingService").Methods().ByName("ConfirmTour"),
 			&ConfirmTourRequest{},
 			&Tour{},
