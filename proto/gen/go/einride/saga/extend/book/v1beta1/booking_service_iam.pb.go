@@ -20,6 +20,7 @@ type BookingServiceIAMDescriptor struct {
 	CreateTourAuthorization  *v1.MethodAuthorizationOptions
 	GetTourAuthorization     *v1.MethodAuthorizationOptions
 	ListToursAuthorization   *v1.MethodAuthorizationOptions
+	SearchToursAuthorization *v1.MethodAuthorizationOptions
 	ConfirmTourAuthorization *v1.MethodAuthorizationOptions
 	UpdateTourAuthorization  *v1.MethodAuthorizationOptions
 }
@@ -30,6 +31,7 @@ func NewBookingServiceIAMDescriptor() (*BookingServiceIAMDescriptor, error) {
 		CreateTourAuthorization:  &v1.MethodAuthorizationOptions{},
 		GetTourAuthorization:     &v1.MethodAuthorizationOptions{},
 		ListToursAuthorization:   &v1.MethodAuthorizationOptions{},
+		SearchToursAuthorization: &v1.MethodAuthorizationOptions{},
 		ConfirmTourAuthorization: &v1.MethodAuthorizationOptions{},
 		UpdateTourAuthorization:  &v1.MethodAuthorizationOptions{},
 	}
@@ -50,6 +52,12 @@ func NewBookingServiceIAMDescriptor() (*BookingServiceIAMDescriptor, error) {
 		result.ListToursAuthorization,
 	); err != nil {
 		return nil, fmt.Errorf("new BookingService IAM descriptor: unmarshal ListTours method authorization: %w", err)
+	}
+	if err := proto.Unmarshal(
+		[]byte{0xa, 0x11, 0x62, 0x6f, 0x6f, 0x6b, 0x2e, 0x74, 0x6f, 0x75, 0x72, 0x73, 0x2e, 0x73, 0x65, 0x61, 0x72, 0x63, 0x68, 0x1a, 0x66, 0xa, 0x1c, 0x74, 0x65, 0x73, 0x74, 0x28, 0x63, 0x61, 0x6c, 0x6c, 0x65, 0x72, 0x2c, 0x20, 0x72, 0x65, 0x71, 0x75, 0x65, 0x73, 0x74, 0x2e, 0x70, 0x61, 0x72, 0x65, 0x6e, 0x74, 0x29, 0x1a, 0x46, 0x54, 0x68, 0x65, 0x20, 0x63, 0x61, 0x6c, 0x6c, 0x65, 0x72, 0x20, 0x6d, 0x75, 0x73, 0x74, 0x20, 0x68, 0x61, 0x76, 0x65, 0x20, 0x70, 0x65, 0x72, 0x6d, 0x69, 0x73, 0x73, 0x69, 0x6f, 0x6e, 0x20, 0x74, 0x6f, 0x20, 0x6c, 0x69, 0x73, 0x74, 0x20, 0x61, 0x6c, 0x6c, 0x20, 0x74, 0x6f, 0x75, 0x72, 0x73, 0x20, 0x69, 0x6e, 0x20, 0x74, 0x68, 0x65, 0x20, 0x70, 0x61, 0x72, 0x65, 0x6e, 0x74, 0x20, 0x73, 0x70, 0x61, 0x63, 0x65, 0x2e},
+		result.SearchToursAuthorization,
+	); err != nil {
+		return nil, fmt.Errorf("new BookingService IAM descriptor: unmarshal SearchTours method authorization: %w", err)
 	}
 	if err := proto.Unmarshal(
 		[]byte{0xa, 0x12, 0x62, 0x6f, 0x6f, 0x6b, 0x2e, 0x74, 0x6f, 0x75, 0x72, 0x73, 0x2e, 0x63, 0x6f, 0x6e, 0x66, 0x69, 0x72, 0x6d, 0x1a, 0x51, 0xa, 0x1a, 0x74, 0x65, 0x73, 0x74, 0x28, 0x63, 0x61, 0x6c, 0x6c, 0x65, 0x72, 0x2c, 0x20, 0x72, 0x65, 0x71, 0x75, 0x65, 0x73, 0x74, 0x2e, 0x6e, 0x61, 0x6d, 0x65, 0x29, 0x1a, 0x33, 0x54, 0x68, 0x65, 0x20, 0x63, 0x61, 0x6c, 0x6c, 0x65, 0x72, 0x20, 0x6d, 0x75, 0x73, 0x74, 0x20, 0x68, 0x61, 0x76, 0x65, 0x20, 0x70, 0x65, 0x72, 0x6d, 0x69, 0x73, 0x73, 0x69, 0x6f, 0x6e, 0x20, 0x74, 0x6f, 0x20, 0x63, 0x6f, 0x6e, 0x66, 0x69, 0x72, 0x6d, 0x20, 0x74, 0x68, 0x65, 0x20, 0x74, 0x6f, 0x75, 0x72},
@@ -133,6 +141,24 @@ func NewBookingServiceAuthorization(
 		return nil, fmt.Errorf("new BookingService authorization: %w", err)
 	}
 	result.beforeListTours = beforeListTours
+	descriptorSearchTours, err := protoregistry.GlobalFiles.FindDescriptorByName("einride.saga.extend.book.v1beta1.BookingService.SearchTours")
+	if err != nil {
+		return nil, fmt.Errorf("new BookingService authorization: failed to find descriptor for SearchTours")
+	}
+	methodSearchTours, ok := descriptorSearchTours.(protoreflect.MethodDescriptor)
+	if !ok {
+		return nil, fmt.Errorf("new BookingService authorization: got non-method descriptor for SearchTours")
+	}
+	beforeSearchTours, err := iamauthz.NewBeforeMethodAuthorization(
+		methodSearchTours,
+		descriptor.SearchToursAuthorization,
+		permissionTester,
+		callerResolver,
+	)
+	if err != nil {
+		return nil, fmt.Errorf("new BookingService authorization: %w", err)
+	}
+	result.beforeSearchTours = beforeSearchTours
 	descriptorConfirmTour, err := protoregistry.GlobalFiles.FindDescriptorByName("einride.saga.extend.book.v1beta1.BookingService.ConfirmTour")
 	if err != nil {
 		return nil, fmt.Errorf("new BookingService authorization: failed to find descriptor for ConfirmTour")
@@ -177,6 +203,7 @@ type BookingServiceAuthorization struct {
 	beforeCreateTour  *iamauthz.BeforeMethodAuthorization
 	beforeGetTour     *iamauthz.BeforeMethodAuthorization
 	beforeListTours   *iamauthz.BeforeMethodAuthorization
+	beforeSearchTours *iamauthz.BeforeMethodAuthorization
 	beforeConfirmTour *iamauthz.BeforeMethodAuthorization
 	beforeUpdateTour  *iamauthz.BeforeMethodAuthorization
 }
@@ -212,6 +239,17 @@ func (a *BookingServiceAuthorization) ListTours(
 		return nil, err
 	}
 	return a.next.ListTours(ctx, request)
+}
+
+func (a *BookingServiceAuthorization) SearchTours(
+	ctx context.Context,
+	request *SearchToursRequest,
+) (*SearchToursResponse, error) {
+	ctx, err := a.beforeSearchTours.AuthorizeRequest(ctx, request)
+	if err != nil {
+		return nil, err
+	}
+	return a.next.SearchTours(ctx, request)
 }
 
 func (a *BookingServiceAuthorization) ConfirmTour(

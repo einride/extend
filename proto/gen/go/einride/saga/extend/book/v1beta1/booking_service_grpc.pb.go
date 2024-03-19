@@ -34,6 +34,11 @@ type BookingServiceClient interface {
 	//
 	// This is an AIP standard [List](https://google.aip.dev/132) method.
 	ListTours(ctx context.Context, in *ListToursRequest, opts ...grpc.CallOption) (*ListToursResponse, error)
+	// Search tours.
+	//
+	// Search for Tours in a space.
+	// - You can search for Tours by external_reference_id
+	SearchTours(ctx context.Context, in *SearchToursRequest, opts ...grpc.CallOption) (*SearchToursResponse, error)
 	// Confirm a Provisional tour.
 	//
 	// Reconfirming a tour that is already confirmed will return an InvalidArgument Error.
@@ -80,6 +85,15 @@ func (c *bookingServiceClient) ListTours(ctx context.Context, in *ListToursReque
 	return out, nil
 }
 
+func (c *bookingServiceClient) SearchTours(ctx context.Context, in *SearchToursRequest, opts ...grpc.CallOption) (*SearchToursResponse, error) {
+	out := new(SearchToursResponse)
+	err := c.cc.Invoke(ctx, "/einride.saga.extend.book.v1beta1.BookingService/SearchTours", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 func (c *bookingServiceClient) ConfirmTour(ctx context.Context, in *ConfirmTourRequest, opts ...grpc.CallOption) (*Tour, error) {
 	out := new(Tour)
 	err := c.cc.Invoke(ctx, "/einride.saga.extend.book.v1beta1.BookingService/ConfirmTour", in, out, opts...)
@@ -114,6 +128,11 @@ type BookingServiceServer interface {
 	//
 	// This is an AIP standard [List](https://google.aip.dev/132) method.
 	ListTours(context.Context, *ListToursRequest) (*ListToursResponse, error)
+	// Search tours.
+	//
+	// Search for Tours in a space.
+	// - You can search for Tours by external_reference_id
+	SearchTours(context.Context, *SearchToursRequest) (*SearchToursResponse, error)
 	// Confirm a Provisional tour.
 	//
 	// Reconfirming a tour that is already confirmed will return an InvalidArgument Error.
@@ -137,6 +156,9 @@ func (UnimplementedBookingServiceServer) GetTour(context.Context, *GetTourReques
 }
 func (UnimplementedBookingServiceServer) ListTours(context.Context, *ListToursRequest) (*ListToursResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method ListTours not implemented")
+}
+func (UnimplementedBookingServiceServer) SearchTours(context.Context, *SearchToursRequest) (*SearchToursResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method SearchTours not implemented")
 }
 func (UnimplementedBookingServiceServer) ConfirmTour(context.Context, *ConfirmTourRequest) (*Tour, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method ConfirmTour not implemented")
@@ -210,6 +232,24 @@ func _BookingService_ListTours_Handler(srv interface{}, ctx context.Context, dec
 	return interceptor(ctx, in, info, handler)
 }
 
+func _BookingService_SearchTours_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(SearchToursRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(BookingServiceServer).SearchTours(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/einride.saga.extend.book.v1beta1.BookingService/SearchTours",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(BookingServiceServer).SearchTours(ctx, req.(*SearchToursRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
 func _BookingService_ConfirmTour_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
 	in := new(ConfirmTourRequest)
 	if err := dec(in); err != nil {
@@ -264,6 +304,10 @@ var BookingService_ServiceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "ListTours",
 			Handler:    _BookingService_ListTours_Handler,
+		},
+		{
+			MethodName: "SearchTours",
+			Handler:    _BookingService_SearchTours_Handler,
 		},
 		{
 			MethodName: "ConfirmTour",

@@ -58,6 +58,7 @@ func (fx *TourTestSuiteConfig) test(t *testing.T) {
 	t.Run("Get", fx.testGet)
 	t.Run("Update", fx.testUpdate)
 	t.Run("List", fx.testList)
+	t.Run("Search", fx.testSearch)
 }
 
 func (fx *TourTestSuiteConfig) testCreate(t *testing.T) {
@@ -532,6 +533,120 @@ func (fx *TourTestSuiteConfig) testList(t *testing.T) {
 		var nextPageToken string
 		for {
 			response, err := fx.service.ListTours(fx.ctx, &ListToursRequest{
+				Parent:    parent,
+				PageSize:  1,
+				PageToken: nextPageToken,
+			})
+			assert.NilError(t, err)
+			assert.Equal(t, 1, len(response.Tours))
+			msgs = append(msgs, response.Tours...)
+			nextPageToken = response.NextPageToken
+			if nextPageToken == "" {
+				break
+			}
+		}
+		assert.DeepEqual(
+			t,
+			parentMsgs,
+			msgs,
+			cmpopts.SortSlices(func(a, b *Tour) bool {
+				return a.Name < b.Name
+			}),
+			protocmp.Transform(),
+		)
+	})
+
+}
+
+func (fx *TourTestSuiteConfig) testSearch(t *testing.T) {
+	fx.maybeSkip(t)
+	// Method should fail with InvalidArgument if provided parent is invalid.
+	t.Run("invalid parent", func(t *testing.T) {
+		fx.maybeSkip(t)
+		_, err := fx.service.SearchTours(fx.ctx, &SearchToursRequest{
+			Parent: "invalid resource name",
+		})
+		assert.Equal(t, codes.InvalidArgument, status.Code(err), err)
+	})
+
+	// Method should fail with InvalidArgument is provided page token is not valid.
+	t.Run("invalid page token", func(t *testing.T) {
+		fx.maybeSkip(t)
+		parent := fx.nextParent(t, false)
+		_, err := fx.service.SearchTours(fx.ctx, &SearchToursRequest{
+			Parent:    parent,
+			PageToken: "invalid page token",
+		})
+		assert.Equal(t, codes.InvalidArgument, status.Code(err), err)
+	})
+
+	// Method should fail with InvalidArgument is provided page size is negative.
+	t.Run("negative page size", func(t *testing.T) {
+		fx.maybeSkip(t)
+		parent := fx.nextParent(t, false)
+		_, err := fx.service.SearchTours(fx.ctx, &SearchToursRequest{
+			Parent:   parent,
+			PageSize: -10,
+		})
+		assert.Equal(t, codes.InvalidArgument, status.Code(err), err)
+	})
+
+	const resourcesCount = 15
+	parent := fx.nextParent(t, true)
+	parentMsgs := make([]*Tour, resourcesCount)
+	for i := 0; i < resourcesCount; i++ {
+		parentMsgs[i] = fx.create(t, parent)
+	}
+
+	// If parent is provided the method must only return resources
+	// under that parent.
+	t.Run("isolation", func(t *testing.T) {
+		fx.maybeSkip(t)
+		response, err := fx.service.SearchTours(fx.ctx, &SearchToursRequest{
+			Parent:   parent,
+			PageSize: 999,
+		})
+		assert.NilError(t, err)
+		assert.DeepEqual(
+			t,
+			parentMsgs,
+			response.Tours,
+			cmpopts.SortSlices(func(a, b *Tour) bool {
+				return a.Name < b.Name
+			}),
+			protocmp.Transform(),
+		)
+	})
+
+	// If there are no more resources, next_page_token should not be set.
+	t.Run("last page", func(t *testing.T) {
+		fx.maybeSkip(t)
+		response, err := fx.service.SearchTours(fx.ctx, &SearchToursRequest{
+			Parent:   parent,
+			PageSize: resourcesCount,
+		})
+		assert.NilError(t, err)
+		assert.Equal(t, "", response.NextPageToken)
+	})
+
+	// If there are more resources, next_page_token should be set.
+	t.Run("more pages", func(t *testing.T) {
+		fx.maybeSkip(t)
+		response, err := fx.service.SearchTours(fx.ctx, &SearchToursRequest{
+			Parent:   parent,
+			PageSize: resourcesCount - 1,
+		})
+		assert.NilError(t, err)
+		assert.Check(t, response.NextPageToken != "")
+	})
+
+	// Searching resource one by one should eventually return all resources.
+	t.Run("one by one", func(t *testing.T) {
+		fx.maybeSkip(t)
+		msgs := make([]*Tour, 0, resourcesCount)
+		var nextPageToken string
+		for {
+			response, err := fx.service.SearchTours(fx.ctx, &SearchToursRequest{
 				Parent:    parent,
 				PageSize:  1,
 				PageToken: nextPageToken,
