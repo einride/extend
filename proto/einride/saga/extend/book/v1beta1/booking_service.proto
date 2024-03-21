@@ -68,7 +68,7 @@ service BookingService {
   // Search for Tours in a space.
   // - You can search for Tours by external_reference_id
   rpc SearchTours(SearchToursRequest) returns (SearchToursResponse) {
-    option (google.api.http) = {get: "/v1/tours:search"};
+    option (google.api.http) = {get: "/v1beta1/{parent=spaces/*}/tours:search"};
     option (einride.iam.v1.method_authorization) = {
       permission: "book.tours.search"
       before: {

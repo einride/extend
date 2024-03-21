@@ -71,83 +71,6 @@ consumes:
 produces:
   - application/json
 paths:
-  /v1/tours:search:
-    get:
-      summary: Search tours.
-      description: |-
-        Search for Tours in a space.
-        - You can search for Tours by external_reference_id
-      operationId: BookingService_SearchTours
-      responses:
-        "200":
-          description: A successful response.
-          schema:
-            $ref: '#/definitions/v1beta1SearchToursResponse'
-        default:
-          description: An unexpected error response.
-          schema:
-            $ref: '#/definitions/rpcStatus'
-      parameters:
-        - name: parent
-          description: |-
-            The resource name of the parent, which owns this collection of tours.
-            Format: spaces/{space}
-          in: query
-          required: true
-          type: string
-        - name: pageSize
-          description: |-
-            Requested page size. Server may return fewer tours than requested.
-            If unspecified, server will pick an appropriate default.
-          in: query
-          required: false
-          type: integer
-          format: int32
-        - name: pageToken
-          description: |-
-            A token identifying a page of results the server should return.
-            Typically, this is the value of
-            [SearchToursResponse.page_token][einride.saga.book.v1.SearchToursResponse.page_token]
-            returned from the previous call to `SearchTours` method.
-          in: query
-          required: false
-          type: string
-        - name: skip
-          description: Allows for skipping result
-          in: query
-          required: false
-          type: integer
-          format: int32
-        - name: query
-          description: |-
-            Filters
-            Multiple filters will be combined with the logical operator AND.
-
-            Returned tours contain the query string in ANY of the fields:
-            tour_id, external_reference_id
-          in: query
-          required: false
-          type: string
-        - name: showDeleted
-          description: Includes deleted tours in result
-          in: query
-          required: false
-          type: boolean
-        - name: orderBy
-          description: |-
-            How the results should be sorted. Presently, the only permitted values are:
-
-            - `"create_time asc"` (default if no order_by is specified)
-            - `"create_time desc"`
-            Example:
-            ```
-            order_by = "create_time desc"
-            ```
-          in: query
-          required: false
-          type: string
-      tags:
-        - BookingService
   /v1beta1/{parent}/shipments:
     get:
       summary: List shipments in a space.
@@ -275,6 +198,84 @@ paths:
           required: false
           type: integer
           format: int32
+      tags:
+        - BookingService
+  /v1beta1/{parent}/tours:search:
+    get:
+      summary: Search tours.
+      description: |-
+        Search for Tours in a space.
+        - You can search for Tours by external_reference_id
+      operationId: BookingService_SearchTours
+      responses:
+        "200":
+          description: A successful response.
+          schema:
+            $ref: '#/definitions/v1beta1SearchToursResponse'
+        default:
+          description: An unexpected error response.
+          schema:
+            $ref: '#/definitions/rpcStatus'
+      parameters:
+        - name: parent
+          description: |-
+            The resource name of the parent, which owns this collection of tours.
+            Format: spaces/{space}
+          in: path
+          required: true
+          type: string
+          pattern: spaces/[^/]+
+        - name: pageSize
+          description: |-
+            Requested page size. Server may return fewer tours than requested.
+            If unspecified, server will pick an appropriate default.
+          in: query
+          required: false
+          type: integer
+          format: int32
+        - name: pageToken
+          description: |-
+            A token identifying a page of results the server should return.
+            Typically, this is the value of
+            [SearchToursResponse.page_token][einride.saga.book.v1.SearchToursResponse.page_token]
+            returned from the previous call to `SearchTours` method.
+          in: query
+          required: false
+          type: string
+        - name: skip
+          description: Allows for skipping result
+          in: query
+          required: false
+          type: integer
+          format: int32
+        - name: query
+          description: |-
+            Filters
+            Multiple filters will be combined with the logical operator AND.
+
+            Returned tours contain the query string in ANY of the fields:
+            tour_id, external_reference_id
+          in: query
+          required: false
+          type: string
+        - name: showDeleted
+          description: Includes deleted tours in result
+          in: query
+          required: false
+          type: boolean
+        - name: orderBy
+          description: |-
+            How the results should be sorted. Presently, the only permitted values are:
+
+            - `"create_time asc"` (default if no order_by is specified)
+            - `"create_time desc"`
+            Example:
+            ```
+            order_by = "create_time desc"
+            ```
+          in: query
+          required: false
+          type: string
       tags:
         - BookingService
   /v1beta1/{parent}/trackingEvents:
