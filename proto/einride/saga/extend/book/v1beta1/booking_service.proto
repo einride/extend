@@ -191,7 +191,7 @@ message SearchToursRequest {
   // Format: spaces/{space}
   string parent = 1 [
     (google.api.field_behavior) = REQUIRED,
-    (google.api.resource_reference) = {type: "account.saga.einride.tech/Space"}
+    (google.api.resource_reference) = {type: "api.saga.einride.tech/Space"}
   ];
 
   // Requested page size. Server may return fewer tours than requested.
