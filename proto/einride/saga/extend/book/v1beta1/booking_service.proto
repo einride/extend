@@ -111,6 +111,19 @@ service BookingService {
       }
     };
   }
+
+  // Cancel a tour.
+  rpc CancelTour(CancelTourRequest) returns (Tour) {
+    option (google.api.http) = {get: "/v1beta1/{name=spaces/*/tours/*}:cancel"};
+    option (google.api.method_signature) = "name";
+    option (einride.iam.v1.method_authorization) = {
+      permission: "book.tours.cancel"
+      before: {
+        expression: "test(caller, request.name)"
+        description: "The caller must have permission to cancel the tour"
+      }
+    };
+  }
 }
 
 // The request message to create a tour.
@@ -260,4 +273,16 @@ message UpdateTourRequest {
   // For the `FieldMask` definition, see:
   // https://developers.google.com/protocol-buffers/docs/reference/google.protobuf#fieldmask
   google.protobuf.FieldMask update_mask = 2 [(google.api.field_behavior) = OPTIONAL];
+}
+
+// The request message to cancel a tour.
+message CancelTourRequest {
+  // The resource name of the tour to cancel.
+  string name = 1 [
+    (google.api.field_behavior) = REQUIRED,
+    (google.api.resource_reference) = {type: "api.saga.einride.tech/Tour"},
+    (grpc.gateway.protoc_gen_openapiv2.options.openapiv2_field) = {
+      field_configuration: {path_param_name: "tour"}
+    }
+  ];
 }
