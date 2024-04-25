@@ -81,6 +81,8 @@ message Tour {
     ACCEPTED = 2;
     // The tour is rejected.
     REJECTED = 3;
+    // The tour is cancelled.
+    CANCELLED = 4;
   }
 
   // The service type of the tour.

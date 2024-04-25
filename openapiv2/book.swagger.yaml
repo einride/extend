@@ -776,6 +776,28 @@ paths:
           pattern: spaces/[^/]+/tours/[^/]+
       tags:
         - BookingService
+  /v1beta1/{tour}:cancel:
+    get:
+      summary: Cancel a tour.
+      operationId: BookingService_CancelTour
+      responses:
+        "200":
+          description: A successful response.
+          schema:
+            $ref: '#/definitions/v1beta1Tour'
+        default:
+          description: An unexpected error response.
+          schema:
+            $ref: '#/definitions/rpcStatus'
+      parameters:
+        - name: tour
+          description: The resource name of the tour to cancel.
+          in: path
+          required: true
+          type: string
+          pattern: spaces/[^/]+/tours/[^/]+
+      tags:
+        - BookingService
   /v1beta1/{tour}:confirm:
     get:
       summary: Confirm a Provisional tour.
@@ -1469,12 +1491,14 @@ definitions:
       - PENDING
       - ACCEPTED
       - REJECTED
+      - CANCELLED
     description: |-
       The state of the tour.
 
        - PENDING: The tour is received. Awaiting accept/reject.
        - ACCEPTED: The tour is accepted.
        - REJECTED: The tour is rejected.
+       - CANCELLED: The tour is cancelled.
   v1beta1Vehicle:
     type: object
     properties:

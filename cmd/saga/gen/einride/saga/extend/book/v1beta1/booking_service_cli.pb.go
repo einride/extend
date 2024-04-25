@@ -271,5 +271,16 @@ func NewBookingServiceCommand(config aipcli.Config) *cobra.Command {
 				"google.type.LatLng.longitude":                                                     " The longitude in degrees. It must be in the range [-180.0, +180.0].\n",
 			},
 		),
+		aipcli.NewMethodCommand(
+			config,
+			File_einride_saga_extend_book_v1beta1_booking_service_proto.
+				Services().ByName("BookingService").Methods().ByName("CancelTour"),
+			&CancelTourRequest{},
+			&Tour{},
+			map[protoreflect.FullName]string{
+				"einride.saga.extend.book.v1beta1.BookingService.CancelTour": " Cancel a tour.\n",
+				"einride.saga.extend.book.v1beta1.CancelTourRequest.name":    " The resource name of the tour to cancel.\n",
+			},
+		),
 	)
 }

@@ -48,6 +48,8 @@ type BookingServiceClient interface {
 	//
 	// See: https://google.aip.dev/134 (Standard methods: Update).
 	UpdateTour(ctx context.Context, in *UpdateTourRequest, opts ...grpc.CallOption) (*Tour, error)
+	// Cancel a tour.
+	CancelTour(ctx context.Context, in *CancelTourRequest, opts ...grpc.CallOption) (*Tour, error)
 }
 
 type bookingServiceClient struct {
@@ -112,6 +114,15 @@ func (c *bookingServiceClient) UpdateTour(ctx context.Context, in *UpdateTourReq
 	return out, nil
 }
 
+func (c *bookingServiceClient) CancelTour(ctx context.Context, in *CancelTourRequest, opts ...grpc.CallOption) (*Tour, error) {
+	out := new(Tour)
+	err := c.cc.Invoke(ctx, "/einride.saga.extend.book.v1beta1.BookingService/CancelTour", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 // BookingServiceServer is the server API for BookingService service.
 // All implementations should embed UnimplementedBookingServiceServer
 // for forward compatibility
@@ -142,6 +153,8 @@ type BookingServiceServer interface {
 	//
 	// See: https://google.aip.dev/134 (Standard methods: Update).
 	UpdateTour(context.Context, *UpdateTourRequest) (*Tour, error)
+	// Cancel a tour.
+	CancelTour(context.Context, *CancelTourRequest) (*Tour, error)
 }
 
 // UnimplementedBookingServiceServer should be embedded to have forward compatible implementations.
@@ -165,6 +178,9 @@ func (UnimplementedBookingServiceServer) ConfirmTour(context.Context, *ConfirmTo
 }
 func (UnimplementedBookingServiceServer) UpdateTour(context.Context, *UpdateTourRequest) (*Tour, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method UpdateTour not implemented")
+}
+func (UnimplementedBookingServiceServer) CancelTour(context.Context, *CancelTourRequest) (*Tour, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method CancelTour not implemented")
 }
 
 // UnsafeBookingServiceServer may be embedded to opt out of forward compatibility for this service.
@@ -286,6 +302,24 @@ func _BookingService_UpdateTour_Handler(srv interface{}, ctx context.Context, de
 	return interceptor(ctx, in, info, handler)
 }
 
+func _BookingService_CancelTour_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(CancelTourRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(BookingServiceServer).CancelTour(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/einride.saga.extend.book.v1beta1.BookingService/CancelTour",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(BookingServiceServer).CancelTour(ctx, req.(*CancelTourRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
 // BookingService_ServiceDesc is the grpc.ServiceDesc for BookingService service.
 // It's only intended for direct use with grpc.RegisterService,
 // and not to be introspected or modified (even as a copy)
@@ -316,6 +350,10 @@ var BookingService_ServiceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "UpdateTour",
 			Handler:    _BookingService_UpdateTour_Handler,
+		},
+		{
+			MethodName: "CancelTour",
+			Handler:    _BookingService_CancelTour_Handler,
 		},
 	},
 	Streams:  []grpc.StreamDesc{},
