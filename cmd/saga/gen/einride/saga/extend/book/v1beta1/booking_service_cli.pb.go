@@ -189,7 +189,7 @@ func NewBookingServiceCommand(config aipcli.Config) *cobra.Command {
 				"einride.saga.extend.book.v1beta1.Address.recipient":                               " Recipient\n",
 				"einride.saga.extend.book.v1beta1.Address.region_code":                             " Region code (Unicode CLDR region code)\n https://cldr.unicode.org/\n",
 				"einride.saga.extend.book.v1beta1.Address.state_code":                              " State code\n",
-				"einride.saga.extend.book.v1beta1.BookingService.UpdateTour":                       " Update a tour.\n\n See: https://google.aip.dev/134 (Standard methods: Update).\n",
+				"einride.saga.extend.book.v1beta1.BookingService.UpdateTour":                       " Update a tour.\n\n See: https://google.aip.dev/134 (Standard methods: Update).\n If the tour has been confirmed, only a selection of fields can be updated: Stops.RequestedStartTime, Stops.RequestedEndTime, Annotations, PreliminaryShipments.Annotations.\n",
 				"einride.saga.extend.book.v1beta1.Shipment.AnnotationsEntry.key":                   "",
 				"einride.saga.extend.book.v1beta1.Shipment.AnnotationsEntry.value":                 "",
 				"einride.saga.extend.book.v1beta1.Shipment.annotations":                            " Annotations for the shipment\n",

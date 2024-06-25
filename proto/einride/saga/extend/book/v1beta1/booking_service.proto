@@ -97,6 +97,7 @@ service BookingService {
   // Update a tour.
   //
   // See: https://google.aip.dev/134 (Standard methods: Update).
+  // If the tour has been confirmed, only a selection of fields can be updated: Stops.RequestedStartTime, Stops.RequestedEndTime, Annotations, PreliminaryShipments.Annotations.
   rpc UpdateTour(UpdateTourRequest) returns (Tour) {
     option (google.api.http) = {
       patch: "/v1beta1/{tour.name=spaces/*/tours/*}"

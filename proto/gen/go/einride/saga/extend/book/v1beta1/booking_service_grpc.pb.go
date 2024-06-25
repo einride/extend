@@ -57,6 +57,7 @@ type BookingServiceClient interface {
 	// Update a tour.
 	//
 	// See: https://google.aip.dev/134 (Standard methods: Update).
+	// If the tour has been confirmed, only a selection of fields can be updated: Stops.RequestedStartTime, Stops.RequestedEndTime, Annotations, PreliminaryShipments.Annotations.
 	UpdateTour(ctx context.Context, in *UpdateTourRequest, opts ...grpc.CallOption) (*Tour, error)
 	// Cancel a tour.
 	CancelTour(ctx context.Context, in *CancelTourRequest, opts ...grpc.CallOption) (*Tour, error)
@@ -162,6 +163,7 @@ type BookingServiceServer interface {
 	// Update a tour.
 	//
 	// See: https://google.aip.dev/134 (Standard methods: Update).
+	// If the tour has been confirmed, only a selection of fields can be updated: Stops.RequestedStartTime, Stops.RequestedEndTime, Annotations, PreliminaryShipments.Annotations.
 	UpdateTour(context.Context, *UpdateTourRequest) (*Tour, error)
 	// Cancel a tour.
 	CancelTour(context.Context, *CancelTourRequest) (*Tour, error)

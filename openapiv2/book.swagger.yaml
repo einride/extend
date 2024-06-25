@@ -652,7 +652,9 @@ paths:
   /v1beta1/{tour.name}:
     patch:
       summary: Update a tour.
-      description: 'See: https://google.aip.dev/134 (Standard methods: Update).'
+      description: |-
+        See: https://google.aip.dev/134 (Standard methods: Update).
+        If the tour has been confirmed, only a selection of fields can be updated: Stops.RequestedStartTime, Stops.RequestedEndTime, Annotations, PreliminaryShipments.Annotations.
       operationId: BookingService_UpdateTour
       responses:
         "200":
