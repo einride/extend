@@ -1,8 +1,6 @@
 module github.com/einride/saga/cmd/saga
 
-go 1.22.1
-
-toolchain go1.22.2
+go 1.22.4
 
 require (
 	github.com/adrg/xdg v0.4.0

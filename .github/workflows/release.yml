@@ -18,7 +18,7 @@ jobs:
       - name: Setup Sage
         uses: einride/sage/actions/setup@master
         with:
-          go-version: '^1.21'
+          go-version: '1.22'
           check-latest: true
           fetch-depth: 1 // only get latest commit
 
@@ -50,7 +50,7 @@ jobs:
       - name: Setup Sage
         uses: einride/sage/actions/setup@master
         with:
-          go-version: '^1.21'
+          go-version: '1.22'
           check-latest: true
           fetch-depth: 1 // only get latest commit
 
