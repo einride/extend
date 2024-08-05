@@ -22,7 +22,7 @@ type BookingServiceTestSuite struct {
 	Server BookingServiceServer
 }
 
-func (fx BookingServiceTestSuite) TestTour(ctx context.Context, options TourTestSuiteConfig) {
+func (fx BookingServiceTestSuite) TestTour(ctx context.Context, options BookingServiceTourTestSuiteConfig) {
 	fx.T.Run("Tour", func(t *testing.T) {
 		options.ctx = ctx
 		options.service = fx.Server
@@ -30,7 +30,7 @@ func (fx BookingServiceTestSuite) TestTour(ctx context.Context, options TourTest
 	})
 }
 
-type TourTestSuiteConfig struct {
+type BookingServiceTourTestSuiteConfig struct {
 	ctx        context.Context
 	service    BookingServiceServer
 	currParent int
@@ -53,7 +53,7 @@ type TourTestSuiteConfig struct {
 	Skip []string
 }
 
-func (fx *TourTestSuiteConfig) test(t *testing.T) {
+func (fx *BookingServiceTourTestSuiteConfig) test(t *testing.T) {
 	t.Run("Create", fx.testCreate)
 	t.Run("Get", fx.testGet)
 	t.Run("Update", fx.testUpdate)
@@ -61,7 +61,7 @@ func (fx *TourTestSuiteConfig) test(t *testing.T) {
 	t.Run("Search", fx.testSearch)
 }
 
-func (fx *TourTestSuiteConfig) testCreate(t *testing.T) {
+func (fx *BookingServiceTourTestSuiteConfig) testCreate(t *testing.T) {
 	fx.maybeSkip(t)
 	// Method should fail with InvalidArgument if no parent is provided.
 	t.Run("missing parent", func(t *testing.T) {
@@ -207,7 +207,7 @@ func (fx *TourTestSuiteConfig) testCreate(t *testing.T) {
 
 }
 
-func (fx *TourTestSuiteConfig) testGet(t *testing.T) {
+func (fx *BookingServiceTourTestSuiteConfig) testGet(t *testing.T) {
 	fx.maybeSkip(t)
 	// Method should fail with InvalidArgument if no name is provided.
 	t.Run("missing name", func(t *testing.T) {
@@ -261,7 +261,7 @@ func (fx *TourTestSuiteConfig) testGet(t *testing.T) {
 
 }
 
-func (fx *TourTestSuiteConfig) testUpdate(t *testing.T) {
+func (fx *BookingServiceTourTestSuiteConfig) testUpdate(t *testing.T) {
 	fx.maybeSkip(t)
 	// Method should fail with InvalidArgument if no name is provided.
 	t.Run("missing name", func(t *testing.T) {
@@ -444,7 +444,7 @@ func (fx *TourTestSuiteConfig) testUpdate(t *testing.T) {
 
 }
 
-func (fx *TourTestSuiteConfig) testList(t *testing.T) {
+func (fx *BookingServiceTourTestSuiteConfig) testList(t *testing.T) {
 	fx.maybeSkip(t)
 	// Method should fail with InvalidArgument if provided parent is invalid.
 	t.Run("invalid parent", func(t *testing.T) {
@@ -558,7 +558,7 @@ func (fx *TourTestSuiteConfig) testList(t *testing.T) {
 
 }
 
-func (fx *TourTestSuiteConfig) testSearch(t *testing.T) {
+func (fx *BookingServiceTourTestSuiteConfig) testSearch(t *testing.T) {
 	fx.maybeSkip(t)
 	// Method should fail with InvalidArgument if provided parent is invalid.
 	t.Run("invalid parent", func(t *testing.T) {
@@ -672,7 +672,7 @@ func (fx *TourTestSuiteConfig) testSearch(t *testing.T) {
 
 }
 
-func (fx *TourTestSuiteConfig) nextParent(t *testing.T, pristine bool) string {
+func (fx *BookingServiceTourTestSuiteConfig) nextParent(t *testing.T, pristine bool) string {
 	if pristine {
 		fx.currParent++
 	}
@@ -682,7 +682,7 @@ func (fx *TourTestSuiteConfig) nextParent(t *testing.T, pristine bool) string {
 	return fx.Parents[fx.currParent]
 }
 
-func (fx *TourTestSuiteConfig) peekNextParent(t *testing.T) string {
+func (fx *BookingServiceTourTestSuiteConfig) peekNextParent(t *testing.T) string {
 	next := fx.currParent + 1
 	if next >= len(fx.Parents) {
 		t.Fatal("need at least", next+1, "parents")
@@ -690,7 +690,7 @@ func (fx *TourTestSuiteConfig) peekNextParent(t *testing.T) string {
 	return fx.Parents[next]
 }
 
-func (fx *TourTestSuiteConfig) maybeSkip(t *testing.T) {
+func (fx *BookingServiceTourTestSuiteConfig) maybeSkip(t *testing.T) {
 	for _, skip := range fx.Skip {
 		if strings.Contains(t.Name(), skip) {
 			t.Skip("skipped because of .Skip")
@@ -698,7 +698,7 @@ func (fx *TourTestSuiteConfig) maybeSkip(t *testing.T) {
 	}
 }
 
-func (fx *TourTestSuiteConfig) create(t *testing.T, parent string) *Tour {
+func (fx *BookingServiceTourTestSuiteConfig) create(t *testing.T, parent string) *Tour {
 	t.Helper()
 	created, err := fx.service.CreateTour(fx.ctx, &CreateTourRequest{
 		Parent: parent,

@@ -9,7 +9,6 @@ require (
 	go.einride.tech/aip-cli v0.29.0
 	go.einride.tech/grpc-service-config v0.11.0
 	go.einride.tech/iam v0.54.0
-	go.einride.tech/protobuf-sensitive v0.6.0
 	google.golang.org/genproto v0.0.0-20240521202816-d264139d666e
 	google.golang.org/genproto/googleapis/api v0.0.0-20240521202816-d264139d666e
 	google.golang.org/grpc v1.64.1

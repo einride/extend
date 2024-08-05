@@ -4,7 +4,6 @@ name: buf.build/einride/extend
 
 deps:
   - buf.build/einride/iam
-  - buf.build/einride/sensitive
   - buf.build/googleapis/googleapis
   - buf.build/grpc-ecosystem/grpc-gateway
   - buf.build/einride/grpc-service-config

@@ -46,11 +46,15 @@ func (n SpaceResourceName) MarshalString() (string, error) {
 }
 
 func (n *SpaceResourceName) UnmarshalString(name string) error {
-	return resourcename.Sscan(
+	err := resourcename.Sscan(
 		name,
 		"spaces/{space}",
 		&n.Space,
 	)
+	if err != nil {
+		return err
+	}
+	return n.Validate()
 }
 
 type OrganizationResourceName struct {
@@ -86,11 +90,15 @@ func (n OrganizationResourceName) MarshalString() (string, error) {
 }
 
 func (n *OrganizationResourceName) UnmarshalString(name string) error {
-	return resourcename.Sscan(
+	err := resourcename.Sscan(
 		name,
 		"organizations/{organization}",
 		&n.Organization,
 	)
+	if err != nil {
+		return err
+	}
+	return n.Validate()
 }
 
 type UserResourceName struct {
@@ -126,11 +134,15 @@ func (n UserResourceName) MarshalString() (string, error) {
 }
 
 func (n *UserResourceName) UnmarshalString(name string) error {
-	return resourcename.Sscan(
+	err := resourcename.Sscan(
 		name,
 		"organizations/{user}",
 		&n.User,
 	)
+	if err != nil {
+		return err
+	}
+	return n.Validate()
 }
 
 type SenderResourceName struct {
@@ -183,12 +195,16 @@ func (n SenderResourceName) MarshalString() (string, error) {
 }
 
 func (n *SenderResourceName) UnmarshalString(name string) error {
-	return resourcename.Sscan(
+	err := resourcename.Sscan(
 		name,
 		"spaces/{space}/senders/{sender}",
 		&n.Space,
 		&n.Sender,
 	)
+	if err != nil {
+		return err
+	}
+	return n.Validate()
 }
 
 func (n SenderResourceName) SpaceResourceName() SpaceResourceName {

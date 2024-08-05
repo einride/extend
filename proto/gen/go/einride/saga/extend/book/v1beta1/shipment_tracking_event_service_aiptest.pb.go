@@ -20,7 +20,7 @@ type ShipmentTrackingEventServiceTestSuite struct {
 	Server ShipmentTrackingEventServiceServer
 }
 
-func (fx ShipmentTrackingEventServiceTestSuite) TestShipmentTrackingEvent(ctx context.Context, options ShipmentTrackingEventTestSuiteConfig) {
+func (fx ShipmentTrackingEventServiceTestSuite) TestShipmentTrackingEvent(ctx context.Context, options ShipmentTrackingEventServiceShipmentTrackingEventTestSuiteConfig) {
 	fx.T.Run("ShipmentTrackingEvent", func(t *testing.T) {
 		options.ctx = ctx
 		options.service = fx.Server
@@ -28,7 +28,7 @@ func (fx ShipmentTrackingEventServiceTestSuite) TestShipmentTrackingEvent(ctx co
 	})
 }
 
-type ShipmentTrackingEventTestSuiteConfig struct {
+type ShipmentTrackingEventServiceShipmentTrackingEventTestSuiteConfig struct {
 	ctx        context.Context
 	service    ShipmentTrackingEventServiceServer
 	currParent int
@@ -48,13 +48,13 @@ type ShipmentTrackingEventTestSuiteConfig struct {
 	Skip []string
 }
 
-func (fx *ShipmentTrackingEventTestSuiteConfig) test(t *testing.T) {
+func (fx *ShipmentTrackingEventServiceShipmentTrackingEventTestSuiteConfig) test(t *testing.T) {
 	t.Run("Create", fx.testCreate)
 	t.Run("Get", fx.testGet)
 	t.Run("List", fx.testList)
 }
 
-func (fx *ShipmentTrackingEventTestSuiteConfig) testCreate(t *testing.T) {
+func (fx *ShipmentTrackingEventServiceShipmentTrackingEventTestSuiteConfig) testCreate(t *testing.T) {
 	fx.maybeSkip(t)
 	// Method should fail with InvalidArgument if no parent is provided.
 	t.Run("missing parent", func(t *testing.T) {
@@ -243,7 +243,7 @@ func (fx *ShipmentTrackingEventTestSuiteConfig) testCreate(t *testing.T) {
 
 }
 
-func (fx *ShipmentTrackingEventTestSuiteConfig) testGet(t *testing.T) {
+func (fx *ShipmentTrackingEventServiceShipmentTrackingEventTestSuiteConfig) testGet(t *testing.T) {
 	fx.maybeSkip(t)
 	// Method should fail with InvalidArgument if no name is provided.
 	t.Run("missing name", func(t *testing.T) {
@@ -297,7 +297,7 @@ func (fx *ShipmentTrackingEventTestSuiteConfig) testGet(t *testing.T) {
 
 }
 
-func (fx *ShipmentTrackingEventTestSuiteConfig) testList(t *testing.T) {
+func (fx *ShipmentTrackingEventServiceShipmentTrackingEventTestSuiteConfig) testList(t *testing.T) {
 	fx.maybeSkip(t)
 	// Method should fail with InvalidArgument if provided parent is invalid.
 	t.Run("invalid parent", func(t *testing.T) {
@@ -411,7 +411,7 @@ func (fx *ShipmentTrackingEventTestSuiteConfig) testList(t *testing.T) {
 
 }
 
-func (fx *ShipmentTrackingEventTestSuiteConfig) nextParent(t *testing.T, pristine bool) string {
+func (fx *ShipmentTrackingEventServiceShipmentTrackingEventTestSuiteConfig) nextParent(t *testing.T, pristine bool) string {
 	if pristine {
 		fx.currParent++
 	}
@@ -421,7 +421,7 @@ func (fx *ShipmentTrackingEventTestSuiteConfig) nextParent(t *testing.T, pristin
 	return fx.Parents[fx.currParent]
 }
 
-func (fx *ShipmentTrackingEventTestSuiteConfig) peekNextParent(t *testing.T) string {
+func (fx *ShipmentTrackingEventServiceShipmentTrackingEventTestSuiteConfig) peekNextParent(t *testing.T) string {
 	next := fx.currParent + 1
 	if next >= len(fx.Parents) {
 		t.Fatal("need at least", next+1, "parents")
@@ -429,7 +429,7 @@ func (fx *ShipmentTrackingEventTestSuiteConfig) peekNextParent(t *testing.T) str
 	return fx.Parents[next]
 }
 
-func (fx *ShipmentTrackingEventTestSuiteConfig) maybeSkip(t *testing.T) {
+func (fx *ShipmentTrackingEventServiceShipmentTrackingEventTestSuiteConfig) maybeSkip(t *testing.T) {
 	for _, skip := range fx.Skip {
 		if strings.Contains(t.Name(), skip) {
 			t.Skip("skipped because of .Skip")
@@ -437,7 +437,7 @@ func (fx *ShipmentTrackingEventTestSuiteConfig) maybeSkip(t *testing.T) {
 	}
 }
 
-func (fx *ShipmentTrackingEventTestSuiteConfig) create(t *testing.T, parent string) *ShipmentTrackingEvent {
+func (fx *ShipmentTrackingEventServiceShipmentTrackingEventTestSuiteConfig) create(t *testing.T, parent string) *ShipmentTrackingEvent {
 	t.Helper()
 	created, err := fx.service.CreateShipmentTrackingEvent(fx.ctx, &CreateShipmentTrackingEventRequest{
 		Parent:                parent,
