@@ -63,12 +63,16 @@ func (n TourResourceName) MarshalString() (string, error) {
 }
 
 func (n *TourResourceName) UnmarshalString(name string) error {
-	return resourcename.Sscan(
+	err := resourcename.Sscan(
 		name,
 		"spaces/{space}/tours/{tour}",
 		&n.Space,
 		&n.Tour,
 	)
+	if err != nil {
+		return err
+	}
+	return n.Validate()
 }
 
 func (n TourResourceName) SpaceResourceName() SpaceResourceName {

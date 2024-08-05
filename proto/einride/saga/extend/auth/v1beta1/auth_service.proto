@@ -3,7 +3,6 @@ syntax = "proto3";
 package einride.saga.extend.auth.v1beta1;
 
 import "einride/iam/v1/annotations.proto";
-import "einride/sensitive/v1/annotations.proto";
 import "google/api/annotations.proto";
 import "google/api/client.proto";
 import "google/api/field_behavior.proto";
@@ -12,8 +11,8 @@ import "protoc-gen-openapiv2/options/annotations.proto";
 
 option (grpc.gateway.protoc_gen_openapiv2.options.openapiv2_swagger) = {
   info: {
-    title: "Einride Extend: Authentication API";
-    version: "v1beta1";
+    title: "Einride Extend: Authentication API"
+    version: "v1beta1"
     description:
       "Based on REST principles, with optional support for gRPC, the Einride Extend API enables modern API-based integration to Einride Saga.\n"
       "\n"
@@ -78,10 +77,10 @@ option (grpc.gateway.protoc_gen_openapiv2.options.openapiv2_swagger) = {
       "The Einride Extend API is available via the following root address:\n"
       "\n"
       "https://api.saga.einride.tech\n"
-  };
-  schemes: HTTPS;
-  consumes: "application/json";
-  produces: "application/json";
+  }
+  schemes: HTTPS
+  consumes: "application/json"
+  produces: "application/json"
 };
 
 // Authentication service.
@@ -106,18 +105,18 @@ message ExchangeSecretRequest {
   string client_id = 1 [
     (google.api.field_behavior) = REQUIRED,
     (grpc.gateway.protoc_gen_openapiv2.options.openapiv2_field) = {
-      description: "The client ID.",
-      format: "string",
+      description: "The client ID."
+      format: "string"
     }
   ];
 
   // The client secret.
   string client_secret = 2 [
     (google.api.field_behavior) = REQUIRED,
-    (einride.sensitive.v1.sensitive) = true,
+    debug_redact = true,
     (grpc.gateway.protoc_gen_openapiv2.options.openapiv2_field) = {
-      description: "The client secret.",
-      format: "password",
+      description: "The client secret."
+      format: "password"
       field_configuration: {path_param_name: "secret"}
     }
   ];
@@ -127,7 +126,7 @@ message ExchangeSecretRequest {
 message ExchangeSecretResponse {
   // Access token to pass as a Bearer token in the authorization header
   // on subsequent API calls.
-  string access_token = 1 [(einride.sensitive.v1.sensitive) = true];
+  string access_token = 1 [debug_redact = true];
 
   // Expire time of the access token.
   google.protobuf.Timestamp expire_time = 2 [(google.api.field_behavior) = OUTPUT_ONLY];

@@ -9,7 +9,6 @@ managed:
     override:
       buf.build/einride/iam: go.einride.tech/iam/proto/gen
       buf.build/einride/grpc-service-config: go.einride.tech/grpc-service-config/gen
-      buf.build/einride/sensitive: go.einride.tech/protobuf-sensitive/gen
       buf.build/grpc-ecosystem/grpc-gateway: github.com/grpc-ecosystem/grpc-gateway/v2
 
 plugins:

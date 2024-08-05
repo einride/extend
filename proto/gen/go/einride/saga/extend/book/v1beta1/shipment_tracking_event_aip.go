@@ -83,13 +83,17 @@ func (n ShipmentTrackingEventResourceName) MarshalString() (string, error) {
 }
 
 func (n *ShipmentTrackingEventResourceName) UnmarshalString(name string) error {
-	return resourcename.Sscan(
+	err := resourcename.Sscan(
 		name,
 		"spaces/{space}/shipments/{shipment}/trackingEvents/{tracking_event}",
 		&n.Space,
 		&n.Shipment,
 		&n.TrackingEvent,
 	)
+	if err != nil {
+		return err
+	}
+	return n.Validate()
 }
 
 func (n ShipmentTrackingEventResourceName) SpaceResourceName() SpaceResourceName {
