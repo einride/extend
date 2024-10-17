@@ -1,31 +1,33 @@
-version: v1
-
+version: v2
 managed:
   enabled: true
-  go_package_prefix:
-    default: github.com/einride/saga/cmd/saga/gen
-    except:
-      - buf.build/googleapis/googleapis
-      - buf.build/grpc-ecosystem/grpc-gateway
-    override:
-      buf.build/einride/grpc-service-config: go.einride.tech/grpc-service-config/gen
-      buf.build/einride/iam: go.einride.tech/iam/proto/gen
-
+  disable:
+    - file_option: go_package
+      module: buf.build/googleapis/googleapis
+    - file_option: go_package
+      module: buf.build/grpc-ecosystem/grpc-gateway
+  override:
+    - file_option: go_package_prefix
+      value: github.com/einride/saga/cmd/saga/gen
+    - file_option: go_package_prefix
+      module: buf.build/einride/grpc-service-config
+      value: go.einride.tech/grpc-service-config/gen
+    - file_option: go_package_prefix
+      module: buf.build/einride/iam
+      value: go.einride.tech/iam/proto/gen
 plugins:
-  - name: go
+  - local: protoc-gen-go
     out: cmd/saga/gen
     opt: module=github.com/einride/saga/cmd/saga/gen
-
-  - name: go-aip-cli
+  - local: protoc-gen-go-aip-cli
     out: cmd/saga/gen
-    strategy: all
     opt:
       - module=github.com/einride/saga/cmd/saga/gen
       - root=saga
       - hosts=eu-prod=eu.api.saga.einride.tech
       - hosts=us-prod=us.api.saga.einride.tech
-
-  - name: go-grpc
+    strategy: all
+  - local: protoc-gen-go-grpc
     out: cmd/saga/gen
     opt:
       - module=github.com/einride/saga/cmd/saga/gen
