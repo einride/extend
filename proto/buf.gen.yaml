@@ -1,44 +1,40 @@
-version: v1
-
+version: v2
 managed:
   enabled: true
-  go_package_prefix:
-    default: github.com/einride/extend/proto/gen/go
-    except:
-      - buf.build/googleapis/googleapis
-    override:
-      buf.build/einride/iam: go.einride.tech/iam/proto/gen
-      buf.build/einride/grpc-service-config: go.einride.tech/grpc-service-config/gen
-      buf.build/grpc-ecosystem/grpc-gateway: github.com/grpc-ecosystem/grpc-gateway/v2
-
+  disable:
+    - file_option: go_package
+      module: buf.build/googleapis/googleapis
+  override:
+    - file_option: go_package_prefix
+      value: github.com/einride/extend/proto/gen/go
+    - file_option: go_package_prefix
+      module: buf.build/einride/grpc-service-config
+      value: go.einride.tech/grpc-service-config/gen
+    - file_option: go_package_prefix
+      module: buf.build/einride/iam
+      value: go.einride.tech/iam/proto/gen
+    - file_option: go_package_prefix
+      module: buf.build/grpc-ecosystem/grpc-gateway
+      value: github.com/grpc-ecosystem/grpc-gateway/v2
 plugins:
-  - name: go
+  - local: protoc-gen-go
     out: proto/gen/go
-    opt:
-      - module=github.com/einride/extend/proto/gen/go
-
-  - name: go-iam
+    opt: module=github.com/einride/extend/proto/gen/go
+  - local: protoc-gen-go-iam
     out: proto/gen/go
-    opt:
-      - module=github.com/einride/extend/proto/gen/go
-
-  - name: go-aip
+    opt: module=github.com/einride/extend/proto/gen/go
+  - local: protoc-gen-go-aip
     out: proto/gen/go
-    opt:
-      - module=github.com/einride/extend/proto/gen/go
-
-  - name: go-aip-test
+    opt: module=github.com/einride/extend/proto/gen/go
+  - local: protoc-gen-go-aip-test
     out: proto/gen/go
-    opt:
-      - module=github.com/einride/extend/proto/gen/go
-
-  - name: go-grpc
+    opt: module=github.com/einride/extend/proto/gen/go
+  - local: protoc-gen-go-grpc
     out: proto/gen/go
     opt:
       - module=github.com/einride/extend/proto/gen/go
       - require_unimplemented_servers=false
-
-  - name: go-grpc-service-config
+  - local: protoc-gen-go-grpc-service-config
     out: proto/gen/go
     opt:
       - module=github.com/einride/extend/proto/gen/go
