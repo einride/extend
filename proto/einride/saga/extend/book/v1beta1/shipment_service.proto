@@ -348,5 +348,7 @@ message UpdateShipmentRequest {
   // This applies also for empty update mask partial update
   // For the `FieldMask` definition, see:
   // https://developers.google.com/protocol-buffers/docs/reference/google.protobuf#fieldmask
+  // Disable false positives for required update mask, keep as is.
+  // (-- api-linter: core::0134::update-mask-optional-behavior=disabled --)
   google.protobuf.FieldMask update_mask = 2 [(google.api.field_behavior) = REQUIRED];
 }

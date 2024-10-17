@@ -16,6 +16,34 @@ import (
 	time "time"
 )
 
+// ShipmentServiceTestSuiteConfigProvider is the interface to implement to decide which resources
+// that should be tested and how it's configured.
+type ShipmentServiceTestSuiteConfigProvider interface {
+	// ShipmentServiceShipment should return a config, or nil, which means that the tests will be skipped.
+	ShipmentServiceShipment(t *testing.T) *ShipmentServiceShipmentTestSuiteConfig
+}
+
+// testShipmentService is the main entrypoint for starting the AIP tests.
+func testShipmentService(t *testing.T, s ShipmentServiceTestSuiteConfigProvider) {
+	testShipmentServiceShipment(t, s)
+}
+
+func testShipmentServiceShipment(t *testing.T, s ShipmentServiceTestSuiteConfigProvider) {
+	t.Run("Shipment", func(t *testing.T) {
+		config := s.ShipmentServiceShipment(t)
+		if config == nil {
+			t.Skip("Method ShipmentServiceShipment not implemented")
+		}
+		if config.Service == nil {
+			t.Skip("Method ShipmentServiceShipment.Service() not implemented")
+		}
+		if config.Context == nil {
+			config.Context = func() context.Context { return context.Background() }
+		}
+		config.test(t)
+	})
+}
+
 type ShipmentServiceTestSuite struct {
 	T *testing.T
 	// Server to test.
@@ -24,17 +52,21 @@ type ShipmentServiceTestSuite struct {
 
 func (fx ShipmentServiceTestSuite) TestShipment(ctx context.Context, options ShipmentServiceShipmentTestSuiteConfig) {
 	fx.T.Run("Shipment", func(t *testing.T) {
-		options.ctx = ctx
-		options.service = fx.Server
+		options.Context = func() context.Context { return ctx }
+		options.Service = func() ShipmentServiceServer { return fx.Server }
 		options.test(t)
 	})
 }
 
 type ShipmentServiceShipmentTestSuiteConfig struct {
-	ctx        context.Context
-	service    ShipmentServiceServer
 	currParent int
 
+	// Service should return the service that should be tested.
+	// The service will be used for several tests.
+	Service func() ShipmentServiceServer
+	// Context should return a new context.
+	// The context will be used for several tests.
+	Context func() context.Context
 	// The parents to use when creating resources.
 	// At least one parent needs to be set. Depending on methods available on the resource,
 	// more may be required. If insufficient number of parents are
@@ -65,7 +97,7 @@ func (fx *ShipmentServiceShipmentTestSuiteConfig) testCreate(t *testing.T) {
 	// Method should fail with InvalidArgument if no parent is provided.
 	t.Run("missing parent", func(t *testing.T) {
 		fx.maybeSkip(t)
-		_, err := fx.service.CreateShipment(fx.ctx, &CreateShipmentRequest{
+		_, err := fx.Service().CreateShipment(fx.Context(), &CreateShipmentRequest{
 			Parent:   "",
 			Shipment: fx.Create(fx.nextParent(t, false)),
 		})
@@ -75,7 +107,7 @@ func (fx *ShipmentServiceShipmentTestSuiteConfig) testCreate(t *testing.T) {
 	// Method should fail with InvalidArgument if provided parent is invalid.
 	t.Run("invalid parent", func(t *testing.T) {
 		fx.maybeSkip(t)
-		_, err := fx.service.CreateShipment(fx.ctx, &CreateShipmentRequest{
+		_, err := fx.Service().CreateShipment(fx.Context(), &CreateShipmentRequest{
 			Parent:   "invalid resource name",
 			Shipment: fx.Create(fx.nextParent(t, false)),
 		})
@@ -87,7 +119,7 @@ func (fx *ShipmentServiceShipmentTestSuiteConfig) testCreate(t *testing.T) {
 		fx.maybeSkip(t)
 		parent := fx.nextParent(t, false)
 		beforeCreate := time.Now()
-		msg, err := fx.service.CreateShipment(fx.ctx, &CreateShipmentRequest{
+		msg, err := fx.Service().CreateShipment(fx.Context(), &CreateShipmentRequest{
 			Parent:   parent,
 			Shipment: fx.Create(parent),
 		})
@@ -101,12 +133,12 @@ func (fx *ShipmentServiceShipmentTestSuiteConfig) testCreate(t *testing.T) {
 	t.Run("persisted", func(t *testing.T) {
 		fx.maybeSkip(t)
 		parent := fx.nextParent(t, false)
-		msg, err := fx.service.CreateShipment(fx.ctx, &CreateShipmentRequest{
+		msg, err := fx.Service().CreateShipment(fx.Context(), &CreateShipmentRequest{
 			Parent:   parent,
 			Shipment: fx.Create(parent),
 		})
 		assert.NilError(t, err)
-		persisted, err := fx.service.GetShipment(fx.ctx, &GetShipmentRequest{
+		persisted, err := fx.Service().GetShipment(fx.Context(), &GetShipmentRequest{
 			Name: msg.Name,
 		})
 		assert.NilError(t, err)
@@ -127,7 +159,7 @@ func (fx *ShipmentServiceShipmentTestSuiteConfig) testCreate(t *testing.T) {
 			}
 			fd := container.ProtoReflect().Descriptor().Fields().ByName("sender")
 			container.ProtoReflect().Clear(fd)
-			_, err := fx.service.CreateShipment(fx.ctx, &CreateShipmentRequest{
+			_, err := fx.Service().CreateShipment(fx.Context(), &CreateShipmentRequest{
 				Parent:   parent,
 				Shipment: msg,
 			})
@@ -143,7 +175,7 @@ func (fx *ShipmentServiceShipmentTestSuiteConfig) testCreate(t *testing.T) {
 			}
 			fd := container.ProtoReflect().Descriptor().Fields().ByName("recipient")
 			container.ProtoReflect().Clear(fd)
-			_, err := fx.service.CreateShipment(fx.ctx, &CreateShipmentRequest{
+			_, err := fx.Service().CreateShipment(fx.Context(), &CreateShipmentRequest{
 				Parent:   parent,
 				Shipment: msg,
 			})
@@ -159,7 +191,7 @@ func (fx *ShipmentServiceShipmentTestSuiteConfig) testCreate(t *testing.T) {
 			}
 			fd := container.ProtoReflect().Descriptor().Fields().ByName("line1")
 			container.ProtoReflect().Clear(fd)
-			_, err := fx.service.CreateShipment(fx.ctx, &CreateShipmentRequest{
+			_, err := fx.Service().CreateShipment(fx.Context(), &CreateShipmentRequest{
 				Parent:   parent,
 				Shipment: msg,
 			})
@@ -175,7 +207,7 @@ func (fx *ShipmentServiceShipmentTestSuiteConfig) testCreate(t *testing.T) {
 			}
 			fd := container.ProtoReflect().Descriptor().Fields().ByName("postal_code")
 			container.ProtoReflect().Clear(fd)
-			_, err := fx.service.CreateShipment(fx.ctx, &CreateShipmentRequest{
+			_, err := fx.Service().CreateShipment(fx.Context(), &CreateShipmentRequest{
 				Parent:   parent,
 				Shipment: msg,
 			})
@@ -191,7 +223,7 @@ func (fx *ShipmentServiceShipmentTestSuiteConfig) testCreate(t *testing.T) {
 			}
 			fd := container.ProtoReflect().Descriptor().Fields().ByName("city")
 			container.ProtoReflect().Clear(fd)
-			_, err := fx.service.CreateShipment(fx.ctx, &CreateShipmentRequest{
+			_, err := fx.Service().CreateShipment(fx.Context(), &CreateShipmentRequest{
 				Parent:   parent,
 				Shipment: msg,
 			})
@@ -207,7 +239,7 @@ func (fx *ShipmentServiceShipmentTestSuiteConfig) testCreate(t *testing.T) {
 			}
 			fd := container.ProtoReflect().Descriptor().Fields().ByName("region_code")
 			container.ProtoReflect().Clear(fd)
-			_, err := fx.service.CreateShipment(fx.ctx, &CreateShipmentRequest{
+			_, err := fx.Service().CreateShipment(fx.Context(), &CreateShipmentRequest{
 				Parent:   parent,
 				Shipment: msg,
 			})
@@ -223,7 +255,7 @@ func (fx *ShipmentServiceShipmentTestSuiteConfig) testCreate(t *testing.T) {
 			}
 			fd := container.ProtoReflect().Descriptor().Fields().ByName("delivery_address")
 			container.ProtoReflect().Clear(fd)
-			_, err := fx.service.CreateShipment(fx.ctx, &CreateShipmentRequest{
+			_, err := fx.Service().CreateShipment(fx.Context(), &CreateShipmentRequest{
 				Parent:   parent,
 				Shipment: msg,
 			})
@@ -239,7 +271,7 @@ func (fx *ShipmentServiceShipmentTestSuiteConfig) testCreate(t *testing.T) {
 			}
 			fd := container.ProtoReflect().Descriptor().Fields().ByName("units")
 			container.ProtoReflect().Clear(fd)
-			_, err := fx.service.CreateShipment(fx.ctx, &CreateShipmentRequest{
+			_, err := fx.Service().CreateShipment(fx.Context(), &CreateShipmentRequest{
 				Parent:   parent,
 				Shipment: msg,
 			})
@@ -255,7 +287,7 @@ func (fx *ShipmentServiceShipmentTestSuiteConfig) testCreate(t *testing.T) {
 			}
 			fd := container.ProtoReflect().Descriptor().Fields().ByName("reference_id")
 			container.ProtoReflect().Clear(fd)
-			_, err := fx.service.CreateShipment(fx.ctx, &CreateShipmentRequest{
+			_, err := fx.Service().CreateShipment(fx.Context(), &CreateShipmentRequest{
 				Parent:   parent,
 				Shipment: msg,
 			})
@@ -276,7 +308,7 @@ func (fx *ShipmentServiceShipmentTestSuiteConfig) testCreate(t *testing.T) {
 				t.Skip("not reachable")
 			}
 			container.Sender = "invalid resource name"
-			_, err := fx.service.CreateShipment(fx.ctx, &CreateShipmentRequest{
+			_, err := fx.Service().CreateShipment(fx.Context(), &CreateShipmentRequest{
 				Parent:   parent,
 				Shipment: msg,
 			})
@@ -291,7 +323,7 @@ func (fx *ShipmentServiceShipmentTestSuiteConfig) testCreate(t *testing.T) {
 				t.Skip("not reachable")
 			}
 			container.Tour = "invalid resource name"
-			_, err := fx.service.CreateShipment(fx.ctx, &CreateShipmentRequest{
+			_, err := fx.Service().CreateShipment(fx.Context(), &CreateShipmentRequest{
 				Parent:   parent,
 				Shipment: msg,
 			})
@@ -306,7 +338,7 @@ func (fx *ShipmentServiceShipmentTestSuiteConfig) testGet(t *testing.T) {
 	// Method should fail with InvalidArgument if no name is provided.
 	t.Run("missing name", func(t *testing.T) {
 		fx.maybeSkip(t)
-		_, err := fx.service.GetShipment(fx.ctx, &GetShipmentRequest{
+		_, err := fx.Service().GetShipment(fx.Context(), &GetShipmentRequest{
 			Name: "",
 		})
 		assert.Equal(t, codes.InvalidArgument, status.Code(err), err)
@@ -315,7 +347,7 @@ func (fx *ShipmentServiceShipmentTestSuiteConfig) testGet(t *testing.T) {
 	// Method should fail with InvalidArgument if the provided name is not valid.
 	t.Run("invalid name", func(t *testing.T) {
 		fx.maybeSkip(t)
-		_, err := fx.service.GetShipment(fx.ctx, &GetShipmentRequest{
+		_, err := fx.Service().GetShipment(fx.Context(), &GetShipmentRequest{
 			Name: "invalid resource name",
 		})
 		assert.Equal(t, codes.InvalidArgument, status.Code(err), err)
@@ -326,7 +358,7 @@ func (fx *ShipmentServiceShipmentTestSuiteConfig) testGet(t *testing.T) {
 		fx.maybeSkip(t)
 		parent := fx.nextParent(t, false)
 		created := fx.create(t, parent)
-		msg, err := fx.service.GetShipment(fx.ctx, &GetShipmentRequest{
+		msg, err := fx.Service().GetShipment(fx.Context(), &GetShipmentRequest{
 			Name: created.Name,
 		})
 		assert.NilError(t, err)
@@ -338,7 +370,7 @@ func (fx *ShipmentServiceShipmentTestSuiteConfig) testGet(t *testing.T) {
 		fx.maybeSkip(t)
 		parent := fx.nextParent(t, false)
 		created := fx.create(t, parent)
-		_, err := fx.service.GetShipment(fx.ctx, &GetShipmentRequest{
+		_, err := fx.Service().GetShipment(fx.Context(), &GetShipmentRequest{
 			Name: created.Name + "notfound",
 		})
 		assert.Equal(t, codes.NotFound, status.Code(err), err)
@@ -347,7 +379,7 @@ func (fx *ShipmentServiceShipmentTestSuiteConfig) testGet(t *testing.T) {
 	// Method should fail with InvalidArgument if the provided name only contains wildcards ('-')
 	t.Run("only wildcards", func(t *testing.T) {
 		fx.maybeSkip(t)
-		_, err := fx.service.GetShipment(fx.ctx, &GetShipmentRequest{
+		_, err := fx.Service().GetShipment(fx.Context(), &GetShipmentRequest{
 			Name: "spaces/-/shipments/-",
 		})
 		assert.Equal(t, codes.InvalidArgument, status.Code(err), err)
@@ -363,7 +395,7 @@ func (fx *ShipmentServiceShipmentTestSuiteConfig) testUpdate(t *testing.T) {
 		parent := fx.nextParent(t, false)
 		msg := fx.Update(parent)
 		msg.Name = ""
-		_, err := fx.service.UpdateShipment(fx.ctx, &UpdateShipmentRequest{
+		_, err := fx.Service().UpdateShipment(fx.Context(), &UpdateShipmentRequest{
 			Shipment: msg,
 		})
 		assert.Equal(t, codes.InvalidArgument, status.Code(err), err)
@@ -375,7 +407,7 @@ func (fx *ShipmentServiceShipmentTestSuiteConfig) testUpdate(t *testing.T) {
 		parent := fx.nextParent(t, false)
 		msg := fx.Update(parent)
 		msg.Name = "invalid resource name"
-		_, err := fx.service.UpdateShipment(fx.ctx, &UpdateShipmentRequest{
+		_, err := fx.Service().UpdateShipment(fx.Context(), &UpdateShipmentRequest{
 			Shipment: msg,
 		})
 		assert.Equal(t, codes.InvalidArgument, status.Code(err), err)
@@ -386,7 +418,7 @@ func (fx *ShipmentServiceShipmentTestSuiteConfig) testUpdate(t *testing.T) {
 		fx.maybeSkip(t)
 		parent := fx.nextParent(t, false)
 		created := fx.create(t, parent)
-		updated, err := fx.service.UpdateShipment(fx.ctx, &UpdateShipmentRequest{
+		updated, err := fx.Service().UpdateShipment(fx.Context(), &UpdateShipmentRequest{
 			Shipment: created,
 		})
 		assert.NilError(t, err)
@@ -398,11 +430,11 @@ func (fx *ShipmentServiceShipmentTestSuiteConfig) testUpdate(t *testing.T) {
 		fx.maybeSkip(t)
 		parent := fx.nextParent(t, false)
 		created := fx.create(t, parent)
-		updated, err := fx.service.UpdateShipment(fx.ctx, &UpdateShipmentRequest{
+		updated, err := fx.Service().UpdateShipment(fx.Context(), &UpdateShipmentRequest{
 			Shipment: created,
 		})
 		assert.NilError(t, err)
-		persisted, err := fx.service.GetShipment(fx.ctx, &GetShipmentRequest{
+		persisted, err := fx.Service().GetShipment(fx.Context(), &GetShipmentRequest{
 			Name: updated.Name,
 		})
 		assert.NilError(t, err)
@@ -415,7 +447,7 @@ func (fx *ShipmentServiceShipmentTestSuiteConfig) testUpdate(t *testing.T) {
 		parent := fx.nextParent(t, false)
 		created := fx.create(t, parent)
 		originalCreateTime := created.CreateTime
-		updated, err := fx.service.UpdateShipment(fx.ctx, &UpdateShipmentRequest{
+		updated, err := fx.Service().UpdateShipment(fx.Context(), &UpdateShipmentRequest{
 			Shipment: created,
 			UpdateMask: &fieldmaskpb.FieldMask{
 				Paths: []string{
@@ -434,7 +466,7 @@ func (fx *ShipmentServiceShipmentTestSuiteConfig) testUpdate(t *testing.T) {
 		fx.maybeSkip(t)
 		msg := fx.Update(parent)
 		msg.Name = created.Name + "notfound"
-		_, err := fx.service.UpdateShipment(fx.ctx, &UpdateShipmentRequest{
+		_, err := fx.Service().UpdateShipment(fx.Context(), &UpdateShipmentRequest{
 			Shipment: msg,
 		})
 		assert.Equal(t, codes.NotFound, status.Code(err), err)
@@ -443,7 +475,7 @@ func (fx *ShipmentServiceShipmentTestSuiteConfig) testUpdate(t *testing.T) {
 	// The method should fail with InvalidArgument if the update_mask is invalid.
 	t.Run("invalid update mask", func(t *testing.T) {
 		fx.maybeSkip(t)
-		_, err := fx.service.UpdateShipment(fx.ctx, &UpdateShipmentRequest{
+		_, err := fx.Service().UpdateShipment(fx.Context(), &UpdateShipmentRequest{
 			Shipment: created,
 			UpdateMask: &fieldmaskpb.FieldMask{
 				Paths: []string{
@@ -467,7 +499,7 @@ func (fx *ShipmentServiceShipmentTestSuiteConfig) testUpdate(t *testing.T) {
 			}
 			fd := container.ProtoReflect().Descriptor().Fields().ByName("sender")
 			container.ProtoReflect().Clear(fd)
-			_, err := fx.service.UpdateShipment(fx.ctx, &UpdateShipmentRequest{
+			_, err := fx.Service().UpdateShipment(fx.Context(), &UpdateShipmentRequest{
 				Shipment: msg,
 				UpdateMask: &fieldmaskpb.FieldMask{
 					Paths: []string{
@@ -486,7 +518,7 @@ func (fx *ShipmentServiceShipmentTestSuiteConfig) testUpdate(t *testing.T) {
 			}
 			fd := container.ProtoReflect().Descriptor().Fields().ByName("recipient")
 			container.ProtoReflect().Clear(fd)
-			_, err := fx.service.UpdateShipment(fx.ctx, &UpdateShipmentRequest{
+			_, err := fx.Service().UpdateShipment(fx.Context(), &UpdateShipmentRequest{
 				Shipment: msg,
 				UpdateMask: &fieldmaskpb.FieldMask{
 					Paths: []string{
@@ -505,7 +537,7 @@ func (fx *ShipmentServiceShipmentTestSuiteConfig) testUpdate(t *testing.T) {
 			}
 			fd := container.ProtoReflect().Descriptor().Fields().ByName("line1")
 			container.ProtoReflect().Clear(fd)
-			_, err := fx.service.UpdateShipment(fx.ctx, &UpdateShipmentRequest{
+			_, err := fx.Service().UpdateShipment(fx.Context(), &UpdateShipmentRequest{
 				Shipment: msg,
 				UpdateMask: &fieldmaskpb.FieldMask{
 					Paths: []string{
@@ -524,7 +556,7 @@ func (fx *ShipmentServiceShipmentTestSuiteConfig) testUpdate(t *testing.T) {
 			}
 			fd := container.ProtoReflect().Descriptor().Fields().ByName("postal_code")
 			container.ProtoReflect().Clear(fd)
-			_, err := fx.service.UpdateShipment(fx.ctx, &UpdateShipmentRequest{
+			_, err := fx.Service().UpdateShipment(fx.Context(), &UpdateShipmentRequest{
 				Shipment: msg,
 				UpdateMask: &fieldmaskpb.FieldMask{
 					Paths: []string{
@@ -543,7 +575,7 @@ func (fx *ShipmentServiceShipmentTestSuiteConfig) testUpdate(t *testing.T) {
 			}
 			fd := container.ProtoReflect().Descriptor().Fields().ByName("city")
 			container.ProtoReflect().Clear(fd)
-			_, err := fx.service.UpdateShipment(fx.ctx, &UpdateShipmentRequest{
+			_, err := fx.Service().UpdateShipment(fx.Context(), &UpdateShipmentRequest{
 				Shipment: msg,
 				UpdateMask: &fieldmaskpb.FieldMask{
 					Paths: []string{
@@ -562,7 +594,7 @@ func (fx *ShipmentServiceShipmentTestSuiteConfig) testUpdate(t *testing.T) {
 			}
 			fd := container.ProtoReflect().Descriptor().Fields().ByName("region_code")
 			container.ProtoReflect().Clear(fd)
-			_, err := fx.service.UpdateShipment(fx.ctx, &UpdateShipmentRequest{
+			_, err := fx.Service().UpdateShipment(fx.Context(), &UpdateShipmentRequest{
 				Shipment: msg,
 				UpdateMask: &fieldmaskpb.FieldMask{
 					Paths: []string{
@@ -581,7 +613,7 @@ func (fx *ShipmentServiceShipmentTestSuiteConfig) testUpdate(t *testing.T) {
 			}
 			fd := container.ProtoReflect().Descriptor().Fields().ByName("delivery_address")
 			container.ProtoReflect().Clear(fd)
-			_, err := fx.service.UpdateShipment(fx.ctx, &UpdateShipmentRequest{
+			_, err := fx.Service().UpdateShipment(fx.Context(), &UpdateShipmentRequest{
 				Shipment: msg,
 				UpdateMask: &fieldmaskpb.FieldMask{
 					Paths: []string{
@@ -600,7 +632,7 @@ func (fx *ShipmentServiceShipmentTestSuiteConfig) testUpdate(t *testing.T) {
 			}
 			fd := container.ProtoReflect().Descriptor().Fields().ByName("units")
 			container.ProtoReflect().Clear(fd)
-			_, err := fx.service.UpdateShipment(fx.ctx, &UpdateShipmentRequest{
+			_, err := fx.Service().UpdateShipment(fx.Context(), &UpdateShipmentRequest{
 				Shipment: msg,
 				UpdateMask: &fieldmaskpb.FieldMask{
 					Paths: []string{
@@ -619,7 +651,7 @@ func (fx *ShipmentServiceShipmentTestSuiteConfig) testUpdate(t *testing.T) {
 			}
 			fd := container.ProtoReflect().Descriptor().Fields().ByName("reference_id")
 			container.ProtoReflect().Clear(fd)
-			_, err := fx.service.UpdateShipment(fx.ctx, &UpdateShipmentRequest{
+			_, err := fx.Service().UpdateShipment(fx.Context(), &UpdateShipmentRequest{
 				Shipment: msg,
 				UpdateMask: &fieldmaskpb.FieldMask{
 					Paths: []string{
@@ -638,7 +670,7 @@ func (fx *ShipmentServiceShipmentTestSuiteConfig) testList(t *testing.T) {
 	// Method should fail with InvalidArgument if provided parent is invalid.
 	t.Run("invalid parent", func(t *testing.T) {
 		fx.maybeSkip(t)
-		_, err := fx.service.ListShipments(fx.ctx, &ListShipmentsRequest{
+		_, err := fx.Service().ListShipments(fx.Context(), &ListShipmentsRequest{
 			Parent: "invalid resource name",
 		})
 		assert.Equal(t, codes.InvalidArgument, status.Code(err), err)
@@ -648,7 +680,7 @@ func (fx *ShipmentServiceShipmentTestSuiteConfig) testList(t *testing.T) {
 	t.Run("invalid page token", func(t *testing.T) {
 		fx.maybeSkip(t)
 		parent := fx.nextParent(t, false)
-		_, err := fx.service.ListShipments(fx.ctx, &ListShipmentsRequest{
+		_, err := fx.Service().ListShipments(fx.Context(), &ListShipmentsRequest{
 			Parent:    parent,
 			PageToken: "invalid page token",
 		})
@@ -659,7 +691,7 @@ func (fx *ShipmentServiceShipmentTestSuiteConfig) testList(t *testing.T) {
 	t.Run("negative page size", func(t *testing.T) {
 		fx.maybeSkip(t)
 		parent := fx.nextParent(t, false)
-		_, err := fx.service.ListShipments(fx.ctx, &ListShipmentsRequest{
+		_, err := fx.Service().ListShipments(fx.Context(), &ListShipmentsRequest{
 			Parent:   parent,
 			PageSize: -10,
 		})
@@ -677,7 +709,7 @@ func (fx *ShipmentServiceShipmentTestSuiteConfig) testList(t *testing.T) {
 	// under that parent.
 	t.Run("isolation", func(t *testing.T) {
 		fx.maybeSkip(t)
-		response, err := fx.service.ListShipments(fx.ctx, &ListShipmentsRequest{
+		response, err := fx.Service().ListShipments(fx.Context(), &ListShipmentsRequest{
 			Parent:   parent,
 			PageSize: 999,
 		})
@@ -696,7 +728,7 @@ func (fx *ShipmentServiceShipmentTestSuiteConfig) testList(t *testing.T) {
 	// If there are no more resources, next_page_token should not be set.
 	t.Run("last page", func(t *testing.T) {
 		fx.maybeSkip(t)
-		response, err := fx.service.ListShipments(fx.ctx, &ListShipmentsRequest{
+		response, err := fx.Service().ListShipments(fx.Context(), &ListShipmentsRequest{
 			Parent:   parent,
 			PageSize: resourcesCount,
 		})
@@ -707,7 +739,7 @@ func (fx *ShipmentServiceShipmentTestSuiteConfig) testList(t *testing.T) {
 	// If there are more resources, next_page_token should be set.
 	t.Run("more pages", func(t *testing.T) {
 		fx.maybeSkip(t)
-		response, err := fx.service.ListShipments(fx.ctx, &ListShipmentsRequest{
+		response, err := fx.Service().ListShipments(fx.Context(), &ListShipmentsRequest{
 			Parent:   parent,
 			PageSize: resourcesCount - 1,
 		})
@@ -721,7 +753,7 @@ func (fx *ShipmentServiceShipmentTestSuiteConfig) testList(t *testing.T) {
 		msgs := make([]*Shipment, 0, resourcesCount)
 		var nextPageToken string
 		for {
-			response, err := fx.service.ListShipments(fx.ctx, &ListShipmentsRequest{
+			response, err := fx.Service().ListShipments(fx.Context(), &ListShipmentsRequest{
 				Parent:    parent,
 				PageSize:  1,
 				PageToken: nextPageToken,
@@ -775,7 +807,7 @@ func (fx *ShipmentServiceShipmentTestSuiteConfig) maybeSkip(t *testing.T) {
 
 func (fx *ShipmentServiceShipmentTestSuiteConfig) create(t *testing.T, parent string) *Shipment {
 	t.Helper()
-	created, err := fx.service.CreateShipment(fx.ctx, &CreateShipmentRequest{
+	created, err := fx.Service().CreateShipment(fx.Context(), &CreateShipmentRequest{
 		Parent:   parent,
 		Shipment: fx.Create(parent),
 	})

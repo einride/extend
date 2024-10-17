@@ -14,6 +14,34 @@ import (
 	time "time"
 )
 
+// ShipmentTrackingEventServiceTestSuiteConfigProvider is the interface to implement to decide which resources
+// that should be tested and how it's configured.
+type ShipmentTrackingEventServiceTestSuiteConfigProvider interface {
+	// ShipmentTrackingEventServiceShipmentTrackingEvent should return a config, or nil, which means that the tests will be skipped.
+	ShipmentTrackingEventServiceShipmentTrackingEvent(t *testing.T) *ShipmentTrackingEventServiceShipmentTrackingEventTestSuiteConfig
+}
+
+// testShipmentTrackingEventService is the main entrypoint for starting the AIP tests.
+func testShipmentTrackingEventService(t *testing.T, s ShipmentTrackingEventServiceTestSuiteConfigProvider) {
+	testShipmentTrackingEventServiceShipmentTrackingEvent(t, s)
+}
+
+func testShipmentTrackingEventServiceShipmentTrackingEvent(t *testing.T, s ShipmentTrackingEventServiceTestSuiteConfigProvider) {
+	t.Run("ShipmentTrackingEvent", func(t *testing.T) {
+		config := s.ShipmentTrackingEventServiceShipmentTrackingEvent(t)
+		if config == nil {
+			t.Skip("Method ShipmentTrackingEventServiceShipmentTrackingEvent not implemented")
+		}
+		if config.Service == nil {
+			t.Skip("Method ShipmentTrackingEventServiceShipmentTrackingEvent.Service() not implemented")
+		}
+		if config.Context == nil {
+			config.Context = func() context.Context { return context.Background() }
+		}
+		config.test(t)
+	})
+}
+
 type ShipmentTrackingEventServiceTestSuite struct {
 	T *testing.T
 	// Server to test.
@@ -22,17 +50,21 @@ type ShipmentTrackingEventServiceTestSuite struct {
 
 func (fx ShipmentTrackingEventServiceTestSuite) TestShipmentTrackingEvent(ctx context.Context, options ShipmentTrackingEventServiceShipmentTrackingEventTestSuiteConfig) {
 	fx.T.Run("ShipmentTrackingEvent", func(t *testing.T) {
-		options.ctx = ctx
-		options.service = fx.Server
+		options.Context = func() context.Context { return ctx }
+		options.Service = func() ShipmentTrackingEventServiceServer { return fx.Server }
 		options.test(t)
 	})
 }
 
 type ShipmentTrackingEventServiceShipmentTrackingEventTestSuiteConfig struct {
-	ctx        context.Context
-	service    ShipmentTrackingEventServiceServer
 	currParent int
 
+	// Service should return the service that should be tested.
+	// The service will be used for several tests.
+	Service func() ShipmentTrackingEventServiceServer
+	// Context should return a new context.
+	// The context will be used for several tests.
+	Context func() context.Context
 	// The parents to use when creating resources.
 	// At least one parent needs to be set. Depending on methods available on the resource,
 	// more may be required. If insufficient number of parents are
@@ -59,7 +91,7 @@ func (fx *ShipmentTrackingEventServiceShipmentTrackingEventTestSuiteConfig) test
 	// Method should fail with InvalidArgument if no parent is provided.
 	t.Run("missing parent", func(t *testing.T) {
 		fx.maybeSkip(t)
-		_, err := fx.service.CreateShipmentTrackingEvent(fx.ctx, &CreateShipmentTrackingEventRequest{
+		_, err := fx.Service().CreateShipmentTrackingEvent(fx.Context(), &CreateShipmentTrackingEventRequest{
 			Parent:                "",
 			ShipmentTrackingEvent: fx.Create(fx.nextParent(t, false)),
 		})
@@ -69,7 +101,7 @@ func (fx *ShipmentTrackingEventServiceShipmentTrackingEventTestSuiteConfig) test
 	// Method should fail with InvalidArgument if provided parent is invalid.
 	t.Run("invalid parent", func(t *testing.T) {
 		fx.maybeSkip(t)
-		_, err := fx.service.CreateShipmentTrackingEvent(fx.ctx, &CreateShipmentTrackingEventRequest{
+		_, err := fx.Service().CreateShipmentTrackingEvent(fx.Context(), &CreateShipmentTrackingEventRequest{
 			Parent:                "invalid resource name",
 			ShipmentTrackingEvent: fx.Create(fx.nextParent(t, false)),
 		})
@@ -81,7 +113,7 @@ func (fx *ShipmentTrackingEventServiceShipmentTrackingEventTestSuiteConfig) test
 		fx.maybeSkip(t)
 		parent := fx.nextParent(t, false)
 		beforeCreate := time.Now()
-		msg, err := fx.service.CreateShipmentTrackingEvent(fx.ctx, &CreateShipmentTrackingEventRequest{
+		msg, err := fx.Service().CreateShipmentTrackingEvent(fx.Context(), &CreateShipmentTrackingEventRequest{
 			Parent:                parent,
 			ShipmentTrackingEvent: fx.Create(parent),
 		})
@@ -95,12 +127,12 @@ func (fx *ShipmentTrackingEventServiceShipmentTrackingEventTestSuiteConfig) test
 	t.Run("persisted", func(t *testing.T) {
 		fx.maybeSkip(t)
 		parent := fx.nextParent(t, false)
-		msg, err := fx.service.CreateShipmentTrackingEvent(fx.ctx, &CreateShipmentTrackingEventRequest{
+		msg, err := fx.Service().CreateShipmentTrackingEvent(fx.Context(), &CreateShipmentTrackingEventRequest{
 			Parent:                parent,
 			ShipmentTrackingEvent: fx.Create(parent),
 		})
 		assert.NilError(t, err)
-		persisted, err := fx.service.GetShipmentTrackingEvent(fx.ctx, &GetShipmentTrackingEventRequest{
+		persisted, err := fx.Service().GetShipmentTrackingEvent(fx.Context(), &GetShipmentTrackingEventRequest{
 			Name: msg.Name,
 		})
 		assert.NilError(t, err)
@@ -121,7 +153,7 @@ func (fx *ShipmentTrackingEventServiceShipmentTrackingEventTestSuiteConfig) test
 			}
 			fd := container.ProtoReflect().Descriptor().Fields().ByName("code")
 			container.ProtoReflect().Clear(fd)
-			_, err := fx.service.CreateShipmentTrackingEvent(fx.ctx, &CreateShipmentTrackingEventRequest{
+			_, err := fx.Service().CreateShipmentTrackingEvent(fx.Context(), &CreateShipmentTrackingEventRequest{
 				Parent:                parent,
 				ShipmentTrackingEvent: msg,
 			})
@@ -137,7 +169,7 @@ func (fx *ShipmentTrackingEventServiceShipmentTrackingEventTestSuiteConfig) test
 			}
 			fd := container.ProtoReflect().Descriptor().Fields().ByName("occurred_time")
 			container.ProtoReflect().Clear(fd)
-			_, err := fx.service.CreateShipmentTrackingEvent(fx.ctx, &CreateShipmentTrackingEventRequest{
+			_, err := fx.Service().CreateShipmentTrackingEvent(fx.Context(), &CreateShipmentTrackingEventRequest{
 				Parent:                parent,
 				ShipmentTrackingEvent: msg,
 			})
@@ -153,7 +185,7 @@ func (fx *ShipmentTrackingEventServiceShipmentTrackingEventTestSuiteConfig) test
 			}
 			fd := container.ProtoReflect().Descriptor().Fields().ByName("recipient")
 			container.ProtoReflect().Clear(fd)
-			_, err := fx.service.CreateShipmentTrackingEvent(fx.ctx, &CreateShipmentTrackingEventRequest{
+			_, err := fx.Service().CreateShipmentTrackingEvent(fx.Context(), &CreateShipmentTrackingEventRequest{
 				Parent:                parent,
 				ShipmentTrackingEvent: msg,
 			})
@@ -169,7 +201,7 @@ func (fx *ShipmentTrackingEventServiceShipmentTrackingEventTestSuiteConfig) test
 			}
 			fd := container.ProtoReflect().Descriptor().Fields().ByName("line1")
 			container.ProtoReflect().Clear(fd)
-			_, err := fx.service.CreateShipmentTrackingEvent(fx.ctx, &CreateShipmentTrackingEventRequest{
+			_, err := fx.Service().CreateShipmentTrackingEvent(fx.Context(), &CreateShipmentTrackingEventRequest{
 				Parent:                parent,
 				ShipmentTrackingEvent: msg,
 			})
@@ -185,7 +217,7 @@ func (fx *ShipmentTrackingEventServiceShipmentTrackingEventTestSuiteConfig) test
 			}
 			fd := container.ProtoReflect().Descriptor().Fields().ByName("postal_code")
 			container.ProtoReflect().Clear(fd)
-			_, err := fx.service.CreateShipmentTrackingEvent(fx.ctx, &CreateShipmentTrackingEventRequest{
+			_, err := fx.Service().CreateShipmentTrackingEvent(fx.Context(), &CreateShipmentTrackingEventRequest{
 				Parent:                parent,
 				ShipmentTrackingEvent: msg,
 			})
@@ -201,7 +233,7 @@ func (fx *ShipmentTrackingEventServiceShipmentTrackingEventTestSuiteConfig) test
 			}
 			fd := container.ProtoReflect().Descriptor().Fields().ByName("city")
 			container.ProtoReflect().Clear(fd)
-			_, err := fx.service.CreateShipmentTrackingEvent(fx.ctx, &CreateShipmentTrackingEventRequest{
+			_, err := fx.Service().CreateShipmentTrackingEvent(fx.Context(), &CreateShipmentTrackingEventRequest{
 				Parent:                parent,
 				ShipmentTrackingEvent: msg,
 			})
@@ -217,7 +249,7 @@ func (fx *ShipmentTrackingEventServiceShipmentTrackingEventTestSuiteConfig) test
 			}
 			fd := container.ProtoReflect().Descriptor().Fields().ByName("region_code")
 			container.ProtoReflect().Clear(fd)
-			_, err := fx.service.CreateShipmentTrackingEvent(fx.ctx, &CreateShipmentTrackingEventRequest{
+			_, err := fx.Service().CreateShipmentTrackingEvent(fx.Context(), &CreateShipmentTrackingEventRequest{
 				Parent:                parent,
 				ShipmentTrackingEvent: msg,
 			})
@@ -233,7 +265,7 @@ func (fx *ShipmentTrackingEventServiceShipmentTrackingEventTestSuiteConfig) test
 			}
 			fd := container.ProtoReflect().Descriptor().Fields().ByName("reference_id")
 			container.ProtoReflect().Clear(fd)
-			_, err := fx.service.CreateShipmentTrackingEvent(fx.ctx, &CreateShipmentTrackingEventRequest{
+			_, err := fx.Service().CreateShipmentTrackingEvent(fx.Context(), &CreateShipmentTrackingEventRequest{
 				Parent:                parent,
 				ShipmentTrackingEvent: msg,
 			})
@@ -248,7 +280,7 @@ func (fx *ShipmentTrackingEventServiceShipmentTrackingEventTestSuiteConfig) test
 	// Method should fail with InvalidArgument if no name is provided.
 	t.Run("missing name", func(t *testing.T) {
 		fx.maybeSkip(t)
-		_, err := fx.service.GetShipmentTrackingEvent(fx.ctx, &GetShipmentTrackingEventRequest{
+		_, err := fx.Service().GetShipmentTrackingEvent(fx.Context(), &GetShipmentTrackingEventRequest{
 			Name: "",
 		})
 		assert.Equal(t, codes.InvalidArgument, status.Code(err), err)
@@ -257,7 +289,7 @@ func (fx *ShipmentTrackingEventServiceShipmentTrackingEventTestSuiteConfig) test
 	// Method should fail with InvalidArgument if the provided name is not valid.
 	t.Run("invalid name", func(t *testing.T) {
 		fx.maybeSkip(t)
-		_, err := fx.service.GetShipmentTrackingEvent(fx.ctx, &GetShipmentTrackingEventRequest{
+		_, err := fx.Service().GetShipmentTrackingEvent(fx.Context(), &GetShipmentTrackingEventRequest{
 			Name: "invalid resource name",
 		})
 		assert.Equal(t, codes.InvalidArgument, status.Code(err), err)
@@ -268,7 +300,7 @@ func (fx *ShipmentTrackingEventServiceShipmentTrackingEventTestSuiteConfig) test
 		fx.maybeSkip(t)
 		parent := fx.nextParent(t, false)
 		created := fx.create(t, parent)
-		msg, err := fx.service.GetShipmentTrackingEvent(fx.ctx, &GetShipmentTrackingEventRequest{
+		msg, err := fx.Service().GetShipmentTrackingEvent(fx.Context(), &GetShipmentTrackingEventRequest{
 			Name: created.Name,
 		})
 		assert.NilError(t, err)
@@ -280,7 +312,7 @@ func (fx *ShipmentTrackingEventServiceShipmentTrackingEventTestSuiteConfig) test
 		fx.maybeSkip(t)
 		parent := fx.nextParent(t, false)
 		created := fx.create(t, parent)
-		_, err := fx.service.GetShipmentTrackingEvent(fx.ctx, &GetShipmentTrackingEventRequest{
+		_, err := fx.Service().GetShipmentTrackingEvent(fx.Context(), &GetShipmentTrackingEventRequest{
 			Name: created.Name + "notfound",
 		})
 		assert.Equal(t, codes.NotFound, status.Code(err), err)
@@ -289,7 +321,7 @@ func (fx *ShipmentTrackingEventServiceShipmentTrackingEventTestSuiteConfig) test
 	// Method should fail with InvalidArgument if the provided name only contains wildcards ('-')
 	t.Run("only wildcards", func(t *testing.T) {
 		fx.maybeSkip(t)
-		_, err := fx.service.GetShipmentTrackingEvent(fx.ctx, &GetShipmentTrackingEventRequest{
+		_, err := fx.Service().GetShipmentTrackingEvent(fx.Context(), &GetShipmentTrackingEventRequest{
 			Name: "spaces/-/shipments/-/trackingEvents/-",
 		})
 		assert.Equal(t, codes.InvalidArgument, status.Code(err), err)
@@ -302,7 +334,7 @@ func (fx *ShipmentTrackingEventServiceShipmentTrackingEventTestSuiteConfig) test
 	// Method should fail with InvalidArgument if provided parent is invalid.
 	t.Run("invalid parent", func(t *testing.T) {
 		fx.maybeSkip(t)
-		_, err := fx.service.ListShipmentTrackingEvents(fx.ctx, &ListShipmentTrackingEventsRequest{
+		_, err := fx.Service().ListShipmentTrackingEvents(fx.Context(), &ListShipmentTrackingEventsRequest{
 			Parent: "invalid resource name",
 		})
 		assert.Equal(t, codes.InvalidArgument, status.Code(err), err)
@@ -312,7 +344,7 @@ func (fx *ShipmentTrackingEventServiceShipmentTrackingEventTestSuiteConfig) test
 	t.Run("invalid page token", func(t *testing.T) {
 		fx.maybeSkip(t)
 		parent := fx.nextParent(t, false)
-		_, err := fx.service.ListShipmentTrackingEvents(fx.ctx, &ListShipmentTrackingEventsRequest{
+		_, err := fx.Service().ListShipmentTrackingEvents(fx.Context(), &ListShipmentTrackingEventsRequest{
 			Parent:    parent,
 			PageToken: "invalid page token",
 		})
@@ -323,7 +355,7 @@ func (fx *ShipmentTrackingEventServiceShipmentTrackingEventTestSuiteConfig) test
 	t.Run("negative page size", func(t *testing.T) {
 		fx.maybeSkip(t)
 		parent := fx.nextParent(t, false)
-		_, err := fx.service.ListShipmentTrackingEvents(fx.ctx, &ListShipmentTrackingEventsRequest{
+		_, err := fx.Service().ListShipmentTrackingEvents(fx.Context(), &ListShipmentTrackingEventsRequest{
 			Parent:   parent,
 			PageSize: -10,
 		})
@@ -341,7 +373,7 @@ func (fx *ShipmentTrackingEventServiceShipmentTrackingEventTestSuiteConfig) test
 	// under that parent.
 	t.Run("isolation", func(t *testing.T) {
 		fx.maybeSkip(t)
-		response, err := fx.service.ListShipmentTrackingEvents(fx.ctx, &ListShipmentTrackingEventsRequest{
+		response, err := fx.Service().ListShipmentTrackingEvents(fx.Context(), &ListShipmentTrackingEventsRequest{
 			Parent:   parent,
 			PageSize: 999,
 		})
@@ -360,7 +392,7 @@ func (fx *ShipmentTrackingEventServiceShipmentTrackingEventTestSuiteConfig) test
 	// If there are no more resources, next_page_token should not be set.
 	t.Run("last page", func(t *testing.T) {
 		fx.maybeSkip(t)
-		response, err := fx.service.ListShipmentTrackingEvents(fx.ctx, &ListShipmentTrackingEventsRequest{
+		response, err := fx.Service().ListShipmentTrackingEvents(fx.Context(), &ListShipmentTrackingEventsRequest{
 			Parent:   parent,
 			PageSize: resourcesCount,
 		})
@@ -371,7 +403,7 @@ func (fx *ShipmentTrackingEventServiceShipmentTrackingEventTestSuiteConfig) test
 	// If there are more resources, next_page_token should be set.
 	t.Run("more pages", func(t *testing.T) {
 		fx.maybeSkip(t)
-		response, err := fx.service.ListShipmentTrackingEvents(fx.ctx, &ListShipmentTrackingEventsRequest{
+		response, err := fx.Service().ListShipmentTrackingEvents(fx.Context(), &ListShipmentTrackingEventsRequest{
 			Parent:   parent,
 			PageSize: resourcesCount - 1,
 		})
@@ -385,7 +417,7 @@ func (fx *ShipmentTrackingEventServiceShipmentTrackingEventTestSuiteConfig) test
 		msgs := make([]*ShipmentTrackingEvent, 0, resourcesCount)
 		var nextPageToken string
 		for {
-			response, err := fx.service.ListShipmentTrackingEvents(fx.ctx, &ListShipmentTrackingEventsRequest{
+			response, err := fx.Service().ListShipmentTrackingEvents(fx.Context(), &ListShipmentTrackingEventsRequest{
 				Parent:    parent,
 				PageSize:  1,
 				PageToken: nextPageToken,
@@ -439,7 +471,7 @@ func (fx *ShipmentTrackingEventServiceShipmentTrackingEventTestSuiteConfig) mayb
 
 func (fx *ShipmentTrackingEventServiceShipmentTrackingEventTestSuiteConfig) create(t *testing.T, parent string) *ShipmentTrackingEvent {
 	t.Helper()
-	created, err := fx.service.CreateShipmentTrackingEvent(fx.ctx, &CreateShipmentTrackingEventRequest{
+	created, err := fx.Service().CreateShipmentTrackingEvent(fx.Context(), &CreateShipmentTrackingEventRequest{
 		Parent:                parent,
 		ShipmentTrackingEvent: fx.Create(parent),
 	})
