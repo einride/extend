@@ -16,6 +16,34 @@ import (
 	time "time"
 )
 
+// BookingServiceTestSuiteConfigProvider is the interface to implement to decide which resources
+// that should be tested and how it's configured.
+type BookingServiceTestSuiteConfigProvider interface {
+	// BookingServiceTour should return a config, or nil, which means that the tests will be skipped.
+	BookingServiceTour(t *testing.T) *BookingServiceTourTestSuiteConfig
+}
+
+// testBookingService is the main entrypoint for starting the AIP tests.
+func testBookingService(t *testing.T, s BookingServiceTestSuiteConfigProvider) {
+	testBookingServiceTour(t, s)
+}
+
+func testBookingServiceTour(t *testing.T, s BookingServiceTestSuiteConfigProvider) {
+	t.Run("Tour", func(t *testing.T) {
+		config := s.BookingServiceTour(t)
+		if config == nil {
+			t.Skip("Method BookingServiceTour not implemented")
+		}
+		if config.Service == nil {
+			t.Skip("Method BookingServiceTour.Service() not implemented")
+		}
+		if config.Context == nil {
+			config.Context = func() context.Context { return context.Background() }
+		}
+		config.test(t)
+	})
+}
+
 type BookingServiceTestSuite struct {
 	T *testing.T
 	// Server to test.
@@ -24,17 +52,21 @@ type BookingServiceTestSuite struct {
 
 func (fx BookingServiceTestSuite) TestTour(ctx context.Context, options BookingServiceTourTestSuiteConfig) {
 	fx.T.Run("Tour", func(t *testing.T) {
-		options.ctx = ctx
-		options.service = fx.Server
+		options.Context = func() context.Context { return ctx }
+		options.Service = func() BookingServiceServer { return fx.Server }
 		options.test(t)
 	})
 }
 
 type BookingServiceTourTestSuiteConfig struct {
-	ctx        context.Context
-	service    BookingServiceServer
 	currParent int
 
+	// Service should return the service that should be tested.
+	// The service will be used for several tests.
+	Service func() BookingServiceServer
+	// Context should return a new context.
+	// The context will be used for several tests.
+	Context func() context.Context
 	// The parents to use when creating resources.
 	// At least one parent needs to be set. Depending on methods available on the resource,
 	// more may be required. If insufficient number of parents are
@@ -66,7 +98,7 @@ func (fx *BookingServiceTourTestSuiteConfig) testCreate(t *testing.T) {
 	// Method should fail with InvalidArgument if no parent is provided.
 	t.Run("missing parent", func(t *testing.T) {
 		fx.maybeSkip(t)
-		_, err := fx.service.CreateTour(fx.ctx, &CreateTourRequest{
+		_, err := fx.Service().CreateTour(fx.Context(), &CreateTourRequest{
 			Parent: "",
 			Tour:   fx.Create(fx.nextParent(t, false)),
 		})
@@ -76,7 +108,7 @@ func (fx *BookingServiceTourTestSuiteConfig) testCreate(t *testing.T) {
 	// Method should fail with InvalidArgument if provided parent is invalid.
 	t.Run("invalid parent", func(t *testing.T) {
 		fx.maybeSkip(t)
-		_, err := fx.service.CreateTour(fx.ctx, &CreateTourRequest{
+		_, err := fx.Service().CreateTour(fx.Context(), &CreateTourRequest{
 			Parent: "invalid resource name",
 			Tour:   fx.Create(fx.nextParent(t, false)),
 		})
@@ -88,7 +120,7 @@ func (fx *BookingServiceTourTestSuiteConfig) testCreate(t *testing.T) {
 		fx.maybeSkip(t)
 		parent := fx.nextParent(t, false)
 		beforeCreate := time.Now()
-		msg, err := fx.service.CreateTour(fx.ctx, &CreateTourRequest{
+		msg, err := fx.Service().CreateTour(fx.Context(), &CreateTourRequest{
 			Parent: parent,
 			Tour:   fx.Create(parent),
 		})
@@ -102,12 +134,12 @@ func (fx *BookingServiceTourTestSuiteConfig) testCreate(t *testing.T) {
 	t.Run("persisted", func(t *testing.T) {
 		fx.maybeSkip(t)
 		parent := fx.nextParent(t, false)
-		msg, err := fx.service.CreateTour(fx.ctx, &CreateTourRequest{
+		msg, err := fx.Service().CreateTour(fx.Context(), &CreateTourRequest{
 			Parent: parent,
 			Tour:   fx.Create(parent),
 		})
 		assert.NilError(t, err)
-		persisted, err := fx.service.GetTour(fx.ctx, &GetTourRequest{
+		persisted, err := fx.Service().GetTour(fx.Context(), &GetTourRequest{
 			Name: msg.Name,
 		})
 		assert.NilError(t, err)
@@ -128,7 +160,7 @@ func (fx *BookingServiceTourTestSuiteConfig) testCreate(t *testing.T) {
 			}
 			fd := container.ProtoReflect().Descriptor().Fields().ByName("sender")
 			container.ProtoReflect().Clear(fd)
-			_, err := fx.service.CreateTour(fx.ctx, &CreateTourRequest{
+			_, err := fx.Service().CreateTour(fx.Context(), &CreateTourRequest{
 				Parent: parent,
 				Tour:   msg,
 			})
@@ -144,7 +176,7 @@ func (fx *BookingServiceTourTestSuiteConfig) testCreate(t *testing.T) {
 			}
 			fd := container.ProtoReflect().Descriptor().Fields().ByName("service_type")
 			container.ProtoReflect().Clear(fd)
-			_, err := fx.service.CreateTour(fx.ctx, &CreateTourRequest{
+			_, err := fx.Service().CreateTour(fx.Context(), &CreateTourRequest{
 				Parent: parent,
 				Tour:   msg,
 			})
@@ -160,7 +192,7 @@ func (fx *BookingServiceTourTestSuiteConfig) testCreate(t *testing.T) {
 			}
 			fd := container.ProtoReflect().Descriptor().Fields().ByName("preliminary_shipments")
 			container.ProtoReflect().Clear(fd)
-			_, err := fx.service.CreateTour(fx.ctx, &CreateTourRequest{
+			_, err := fx.Service().CreateTour(fx.Context(), &CreateTourRequest{
 				Parent: parent,
 				Tour:   msg,
 			})
@@ -176,7 +208,7 @@ func (fx *BookingServiceTourTestSuiteConfig) testCreate(t *testing.T) {
 			}
 			fd := container.ProtoReflect().Descriptor().Fields().ByName("stops")
 			container.ProtoReflect().Clear(fd)
-			_, err := fx.service.CreateTour(fx.ctx, &CreateTourRequest{
+			_, err := fx.Service().CreateTour(fx.Context(), &CreateTourRequest{
 				Parent: parent,
 				Tour:   msg,
 			})
@@ -197,7 +229,7 @@ func (fx *BookingServiceTourTestSuiteConfig) testCreate(t *testing.T) {
 				t.Skip("not reachable")
 			}
 			container.Sender = "invalid resource name"
-			_, err := fx.service.CreateTour(fx.ctx, &CreateTourRequest{
+			_, err := fx.Service().CreateTour(fx.Context(), &CreateTourRequest{
 				Parent: parent,
 				Tour:   msg,
 			})
@@ -212,7 +244,7 @@ func (fx *BookingServiceTourTestSuiteConfig) testGet(t *testing.T) {
 	// Method should fail with InvalidArgument if no name is provided.
 	t.Run("missing name", func(t *testing.T) {
 		fx.maybeSkip(t)
-		_, err := fx.service.GetTour(fx.ctx, &GetTourRequest{
+		_, err := fx.Service().GetTour(fx.Context(), &GetTourRequest{
 			Name: "",
 		})
 		assert.Equal(t, codes.InvalidArgument, status.Code(err), err)
@@ -221,7 +253,7 @@ func (fx *BookingServiceTourTestSuiteConfig) testGet(t *testing.T) {
 	// Method should fail with InvalidArgument if the provided name is not valid.
 	t.Run("invalid name", func(t *testing.T) {
 		fx.maybeSkip(t)
-		_, err := fx.service.GetTour(fx.ctx, &GetTourRequest{
+		_, err := fx.Service().GetTour(fx.Context(), &GetTourRequest{
 			Name: "invalid resource name",
 		})
 		assert.Equal(t, codes.InvalidArgument, status.Code(err), err)
@@ -232,7 +264,7 @@ func (fx *BookingServiceTourTestSuiteConfig) testGet(t *testing.T) {
 		fx.maybeSkip(t)
 		parent := fx.nextParent(t, false)
 		created := fx.create(t, parent)
-		msg, err := fx.service.GetTour(fx.ctx, &GetTourRequest{
+		msg, err := fx.Service().GetTour(fx.Context(), &GetTourRequest{
 			Name: created.Name,
 		})
 		assert.NilError(t, err)
@@ -244,7 +276,7 @@ func (fx *BookingServiceTourTestSuiteConfig) testGet(t *testing.T) {
 		fx.maybeSkip(t)
 		parent := fx.nextParent(t, false)
 		created := fx.create(t, parent)
-		_, err := fx.service.GetTour(fx.ctx, &GetTourRequest{
+		_, err := fx.Service().GetTour(fx.Context(), &GetTourRequest{
 			Name: created.Name + "notfound",
 		})
 		assert.Equal(t, codes.NotFound, status.Code(err), err)
@@ -253,7 +285,7 @@ func (fx *BookingServiceTourTestSuiteConfig) testGet(t *testing.T) {
 	// Method should fail with InvalidArgument if the provided name only contains wildcards ('-')
 	t.Run("only wildcards", func(t *testing.T) {
 		fx.maybeSkip(t)
-		_, err := fx.service.GetTour(fx.ctx, &GetTourRequest{
+		_, err := fx.Service().GetTour(fx.Context(), &GetTourRequest{
 			Name: "spaces/-/tours/-",
 		})
 		assert.Equal(t, codes.InvalidArgument, status.Code(err), err)
@@ -269,7 +301,7 @@ func (fx *BookingServiceTourTestSuiteConfig) testUpdate(t *testing.T) {
 		parent := fx.nextParent(t, false)
 		msg := fx.Update(parent)
 		msg.Name = ""
-		_, err := fx.service.UpdateTour(fx.ctx, &UpdateTourRequest{
+		_, err := fx.Service().UpdateTour(fx.Context(), &UpdateTourRequest{
 			Tour: msg,
 		})
 		assert.Equal(t, codes.InvalidArgument, status.Code(err), err)
@@ -281,7 +313,7 @@ func (fx *BookingServiceTourTestSuiteConfig) testUpdate(t *testing.T) {
 		parent := fx.nextParent(t, false)
 		msg := fx.Update(parent)
 		msg.Name = "invalid resource name"
-		_, err := fx.service.UpdateTour(fx.ctx, &UpdateTourRequest{
+		_, err := fx.Service().UpdateTour(fx.Context(), &UpdateTourRequest{
 			Tour: msg,
 		})
 		assert.Equal(t, codes.InvalidArgument, status.Code(err), err)
@@ -292,7 +324,7 @@ func (fx *BookingServiceTourTestSuiteConfig) testUpdate(t *testing.T) {
 		fx.maybeSkip(t)
 		parent := fx.nextParent(t, false)
 		created := fx.create(t, parent)
-		updated, err := fx.service.UpdateTour(fx.ctx, &UpdateTourRequest{
+		updated, err := fx.Service().UpdateTour(fx.Context(), &UpdateTourRequest{
 			Tour: created,
 		})
 		assert.NilError(t, err)
@@ -304,11 +336,11 @@ func (fx *BookingServiceTourTestSuiteConfig) testUpdate(t *testing.T) {
 		fx.maybeSkip(t)
 		parent := fx.nextParent(t, false)
 		created := fx.create(t, parent)
-		updated, err := fx.service.UpdateTour(fx.ctx, &UpdateTourRequest{
+		updated, err := fx.Service().UpdateTour(fx.Context(), &UpdateTourRequest{
 			Tour: created,
 		})
 		assert.NilError(t, err)
-		persisted, err := fx.service.GetTour(fx.ctx, &GetTourRequest{
+		persisted, err := fx.Service().GetTour(fx.Context(), &GetTourRequest{
 			Name: updated.Name,
 		})
 		assert.NilError(t, err)
@@ -321,7 +353,7 @@ func (fx *BookingServiceTourTestSuiteConfig) testUpdate(t *testing.T) {
 		parent := fx.nextParent(t, false)
 		created := fx.create(t, parent)
 		originalCreateTime := created.CreateTime
-		updated, err := fx.service.UpdateTour(fx.ctx, &UpdateTourRequest{
+		updated, err := fx.Service().UpdateTour(fx.Context(), &UpdateTourRequest{
 			Tour: created,
 			UpdateMask: &fieldmaskpb.FieldMask{
 				Paths: []string{
@@ -340,7 +372,7 @@ func (fx *BookingServiceTourTestSuiteConfig) testUpdate(t *testing.T) {
 		fx.maybeSkip(t)
 		msg := fx.Update(parent)
 		msg.Name = created.Name + "notfound"
-		_, err := fx.service.UpdateTour(fx.ctx, &UpdateTourRequest{
+		_, err := fx.Service().UpdateTour(fx.Context(), &UpdateTourRequest{
 			Tour: msg,
 		})
 		assert.Equal(t, codes.NotFound, status.Code(err), err)
@@ -349,7 +381,7 @@ func (fx *BookingServiceTourTestSuiteConfig) testUpdate(t *testing.T) {
 	// The method should fail with InvalidArgument if the update_mask is invalid.
 	t.Run("invalid update mask", func(t *testing.T) {
 		fx.maybeSkip(t)
-		_, err := fx.service.UpdateTour(fx.ctx, &UpdateTourRequest{
+		_, err := fx.Service().UpdateTour(fx.Context(), &UpdateTourRequest{
 			Tour: created,
 			UpdateMask: &fieldmaskpb.FieldMask{
 				Paths: []string{
@@ -373,7 +405,7 @@ func (fx *BookingServiceTourTestSuiteConfig) testUpdate(t *testing.T) {
 			}
 			fd := container.ProtoReflect().Descriptor().Fields().ByName("sender")
 			container.ProtoReflect().Clear(fd)
-			_, err := fx.service.UpdateTour(fx.ctx, &UpdateTourRequest{
+			_, err := fx.Service().UpdateTour(fx.Context(), &UpdateTourRequest{
 				Tour: msg,
 				UpdateMask: &fieldmaskpb.FieldMask{
 					Paths: []string{
@@ -392,7 +424,7 @@ func (fx *BookingServiceTourTestSuiteConfig) testUpdate(t *testing.T) {
 			}
 			fd := container.ProtoReflect().Descriptor().Fields().ByName("service_type")
 			container.ProtoReflect().Clear(fd)
-			_, err := fx.service.UpdateTour(fx.ctx, &UpdateTourRequest{
+			_, err := fx.Service().UpdateTour(fx.Context(), &UpdateTourRequest{
 				Tour: msg,
 				UpdateMask: &fieldmaskpb.FieldMask{
 					Paths: []string{
@@ -411,7 +443,7 @@ func (fx *BookingServiceTourTestSuiteConfig) testUpdate(t *testing.T) {
 			}
 			fd := container.ProtoReflect().Descriptor().Fields().ByName("preliminary_shipments")
 			container.ProtoReflect().Clear(fd)
-			_, err := fx.service.UpdateTour(fx.ctx, &UpdateTourRequest{
+			_, err := fx.Service().UpdateTour(fx.Context(), &UpdateTourRequest{
 				Tour: msg,
 				UpdateMask: &fieldmaskpb.FieldMask{
 					Paths: []string{
@@ -430,7 +462,7 @@ func (fx *BookingServiceTourTestSuiteConfig) testUpdate(t *testing.T) {
 			}
 			fd := container.ProtoReflect().Descriptor().Fields().ByName("stops")
 			container.ProtoReflect().Clear(fd)
-			_, err := fx.service.UpdateTour(fx.ctx, &UpdateTourRequest{
+			_, err := fx.Service().UpdateTour(fx.Context(), &UpdateTourRequest{
 				Tour: msg,
 				UpdateMask: &fieldmaskpb.FieldMask{
 					Paths: []string{
@@ -449,7 +481,7 @@ func (fx *BookingServiceTourTestSuiteConfig) testList(t *testing.T) {
 	// Method should fail with InvalidArgument if provided parent is invalid.
 	t.Run("invalid parent", func(t *testing.T) {
 		fx.maybeSkip(t)
-		_, err := fx.service.ListTours(fx.ctx, &ListToursRequest{
+		_, err := fx.Service().ListTours(fx.Context(), &ListToursRequest{
 			Parent: "invalid resource name",
 		})
 		assert.Equal(t, codes.InvalidArgument, status.Code(err), err)
@@ -459,7 +491,7 @@ func (fx *BookingServiceTourTestSuiteConfig) testList(t *testing.T) {
 	t.Run("invalid page token", func(t *testing.T) {
 		fx.maybeSkip(t)
 		parent := fx.nextParent(t, false)
-		_, err := fx.service.ListTours(fx.ctx, &ListToursRequest{
+		_, err := fx.Service().ListTours(fx.Context(), &ListToursRequest{
 			Parent:    parent,
 			PageToken: "invalid page token",
 		})
@@ -470,7 +502,7 @@ func (fx *BookingServiceTourTestSuiteConfig) testList(t *testing.T) {
 	t.Run("negative page size", func(t *testing.T) {
 		fx.maybeSkip(t)
 		parent := fx.nextParent(t, false)
-		_, err := fx.service.ListTours(fx.ctx, &ListToursRequest{
+		_, err := fx.Service().ListTours(fx.Context(), &ListToursRequest{
 			Parent:   parent,
 			PageSize: -10,
 		})
@@ -488,7 +520,7 @@ func (fx *BookingServiceTourTestSuiteConfig) testList(t *testing.T) {
 	// under that parent.
 	t.Run("isolation", func(t *testing.T) {
 		fx.maybeSkip(t)
-		response, err := fx.service.ListTours(fx.ctx, &ListToursRequest{
+		response, err := fx.Service().ListTours(fx.Context(), &ListToursRequest{
 			Parent:   parent,
 			PageSize: 999,
 		})
@@ -507,7 +539,7 @@ func (fx *BookingServiceTourTestSuiteConfig) testList(t *testing.T) {
 	// If there are no more resources, next_page_token should not be set.
 	t.Run("last page", func(t *testing.T) {
 		fx.maybeSkip(t)
-		response, err := fx.service.ListTours(fx.ctx, &ListToursRequest{
+		response, err := fx.Service().ListTours(fx.Context(), &ListToursRequest{
 			Parent:   parent,
 			PageSize: resourcesCount,
 		})
@@ -518,7 +550,7 @@ func (fx *BookingServiceTourTestSuiteConfig) testList(t *testing.T) {
 	// If there are more resources, next_page_token should be set.
 	t.Run("more pages", func(t *testing.T) {
 		fx.maybeSkip(t)
-		response, err := fx.service.ListTours(fx.ctx, &ListToursRequest{
+		response, err := fx.Service().ListTours(fx.Context(), &ListToursRequest{
 			Parent:   parent,
 			PageSize: resourcesCount - 1,
 		})
@@ -532,7 +564,7 @@ func (fx *BookingServiceTourTestSuiteConfig) testList(t *testing.T) {
 		msgs := make([]*Tour, 0, resourcesCount)
 		var nextPageToken string
 		for {
-			response, err := fx.service.ListTours(fx.ctx, &ListToursRequest{
+			response, err := fx.Service().ListTours(fx.Context(), &ListToursRequest{
 				Parent:    parent,
 				PageSize:  1,
 				PageToken: nextPageToken,
@@ -563,7 +595,7 @@ func (fx *BookingServiceTourTestSuiteConfig) testSearch(t *testing.T) {
 	// Method should fail with InvalidArgument if provided parent is invalid.
 	t.Run("invalid parent", func(t *testing.T) {
 		fx.maybeSkip(t)
-		_, err := fx.service.SearchTours(fx.ctx, &SearchToursRequest{
+		_, err := fx.Service().SearchTours(fx.Context(), &SearchToursRequest{
 			Parent: "invalid resource name",
 		})
 		assert.Equal(t, codes.InvalidArgument, status.Code(err), err)
@@ -573,7 +605,7 @@ func (fx *BookingServiceTourTestSuiteConfig) testSearch(t *testing.T) {
 	t.Run("invalid page token", func(t *testing.T) {
 		fx.maybeSkip(t)
 		parent := fx.nextParent(t, false)
-		_, err := fx.service.SearchTours(fx.ctx, &SearchToursRequest{
+		_, err := fx.Service().SearchTours(fx.Context(), &SearchToursRequest{
 			Parent:    parent,
 			PageToken: "invalid page token",
 		})
@@ -584,7 +616,7 @@ func (fx *BookingServiceTourTestSuiteConfig) testSearch(t *testing.T) {
 	t.Run("negative page size", func(t *testing.T) {
 		fx.maybeSkip(t)
 		parent := fx.nextParent(t, false)
-		_, err := fx.service.SearchTours(fx.ctx, &SearchToursRequest{
+		_, err := fx.Service().SearchTours(fx.Context(), &SearchToursRequest{
 			Parent:   parent,
 			PageSize: -10,
 		})
@@ -602,7 +634,7 @@ func (fx *BookingServiceTourTestSuiteConfig) testSearch(t *testing.T) {
 	// under that parent.
 	t.Run("isolation", func(t *testing.T) {
 		fx.maybeSkip(t)
-		response, err := fx.service.SearchTours(fx.ctx, &SearchToursRequest{
+		response, err := fx.Service().SearchTours(fx.Context(), &SearchToursRequest{
 			Parent:   parent,
 			PageSize: 999,
 		})
@@ -621,7 +653,7 @@ func (fx *BookingServiceTourTestSuiteConfig) testSearch(t *testing.T) {
 	// If there are no more resources, next_page_token should not be set.
 	t.Run("last page", func(t *testing.T) {
 		fx.maybeSkip(t)
-		response, err := fx.service.SearchTours(fx.ctx, &SearchToursRequest{
+		response, err := fx.Service().SearchTours(fx.Context(), &SearchToursRequest{
 			Parent:   parent,
 			PageSize: resourcesCount,
 		})
@@ -632,7 +664,7 @@ func (fx *BookingServiceTourTestSuiteConfig) testSearch(t *testing.T) {
 	// If there are more resources, next_page_token should be set.
 	t.Run("more pages", func(t *testing.T) {
 		fx.maybeSkip(t)
-		response, err := fx.service.SearchTours(fx.ctx, &SearchToursRequest{
+		response, err := fx.Service().SearchTours(fx.Context(), &SearchToursRequest{
 			Parent:   parent,
 			PageSize: resourcesCount - 1,
 		})
@@ -646,7 +678,7 @@ func (fx *BookingServiceTourTestSuiteConfig) testSearch(t *testing.T) {
 		msgs := make([]*Tour, 0, resourcesCount)
 		var nextPageToken string
 		for {
-			response, err := fx.service.SearchTours(fx.ctx, &SearchToursRequest{
+			response, err := fx.Service().SearchTours(fx.Context(), &SearchToursRequest{
 				Parent:    parent,
 				PageSize:  1,
 				PageToken: nextPageToken,
@@ -700,7 +732,7 @@ func (fx *BookingServiceTourTestSuiteConfig) maybeSkip(t *testing.T) {
 
 func (fx *BookingServiceTourTestSuiteConfig) create(t *testing.T, parent string) *Tour {
 	t.Helper()
-	created, err := fx.service.CreateTour(fx.ctx, &CreateTourRequest{
+	created, err := fx.Service().CreateTour(fx.Context(), &CreateTourRequest{
 		Parent: parent,
 		Tour:   fx.Create(parent),
 	})

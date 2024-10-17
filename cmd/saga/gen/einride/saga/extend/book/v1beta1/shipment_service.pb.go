@@ -431,6 +431,8 @@ type UpdateShipmentRequest struct {
 	// This applies also for empty update mask partial update
 	// For the `FieldMask` definition, see:
 	// https://developers.google.com/protocol-buffers/docs/reference/google.protobuf#fieldmask
+	// Disable false positives for required update mask, keep as is.
+	// (-- api-linter: core::0134::update-mask-optional-behavior=disabled --)
 	UpdateMask *fieldmaskpb.FieldMask `protobuf:"bytes,2,opt,name=update_mask,json=updateMask,proto3" json:"update_mask,omitempty"`
 }
 
