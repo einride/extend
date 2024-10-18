@@ -10,8 +10,6 @@ lint:
     - STANDARD
   except:
     - ENUM_VALUE_PREFIX
-    - FIELD_NOT_REQUIRED
-    - PACKAGE_NO_IMPORT_CYCLE
     - RPC_REQUEST_RESPONSE_UNIQUE
     - RPC_RESPONSE_STANDARD_NAME
   ignore:
@@ -20,8 +18,5 @@ lint:
 breaking:
   use:
     - PACKAGE
-  except:
-    - FIELD_SAME_DEFAULT
-    - PACKAGE_EXTENSION_NO_DELETE
   ignore:
     - google
