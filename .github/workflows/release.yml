@@ -24,7 +24,7 @@ jobs:
       - name: Setup Node
         uses: actions/setup-node@v4.0.4
         with:
-          node-version: 18
+          node-version: 22
 
       - name: Generate API Documentation
         run: make generate-api-doc
@@ -71,4 +71,3 @@ jobs:
           hooks: goreleaser
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-
