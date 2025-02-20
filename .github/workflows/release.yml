@@ -22,7 +22,7 @@ jobs:
           check-latest: true
 
       - name: Setup Node
-        uses: actions/setup-node@v4.1.0
+        uses: actions/setup-node@v4.2.0
         with:
           node-version: 22
 
@@ -65,7 +65,7 @@ jobs:
         run: git fetch --force --tags
 
       - name: Release
-        uses: go-semantic-release/action@v1.23
+        uses: go-semantic-release/action@v1.24
         with:
           allow-initial-development-versions: true
           hooks: goreleaser
