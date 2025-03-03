@@ -444,6 +444,7 @@ paths:
               - sender
               - deliveryAddress
               - units
+              - shipment
       tags:
         - ShipmentService
   /v1beta1/{shipmentTrackingEvent}:
@@ -753,6 +754,7 @@ paths:
               - serviceType
               - preliminaryShipments
               - stops
+              - tour
       tags:
         - BookingService
   /v1beta1/{tour}:
