@@ -4,7 +4,7 @@ go 1.23
 
 require (
 	github.com/adrg/xdg v0.5.3
-	github.com/grpc-ecosystem/grpc-gateway/v2 v2.22.0
+	github.com/grpc-ecosystem/grpc-gateway/v2 v2.23.0
 	github.com/spf13/cobra v1.9.1
 	go.einride.tech/aip-cli v0.31.0
 	go.einride.tech/grpc-service-config v0.12.0
