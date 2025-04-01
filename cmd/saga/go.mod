@@ -2,7 +2,7 @@ module github.com/einride/saga/cmd/saga
 
 go 1.23.0
 
-toolchain go1.23.6
+toolchain go1.24.1
 
 require (
 	github.com/adrg/xdg v0.5.3
@@ -10,17 +10,17 @@ require (
 	github.com/spf13/cobra v1.9.1
 	go.einride.tech/aip-cli v0.31.0
 	go.einride.tech/grpc-service-config v0.12.0
-	go.einride.tech/iam v0.56.0
+	go.einride.tech/iam v0.56.1
 	google.golang.org/genproto v0.0.0-20241021214115-324edc3d5d38
 	google.golang.org/genproto/googleapis/api v0.0.0-20250303144028-a0af3efb3deb
-	google.golang.org/grpc v1.70.0
-	google.golang.org/protobuf v1.36.5
+	google.golang.org/grpc v1.71.0
+	google.golang.org/protobuf v1.36.6
 	gotest.tools/v3 v3.5.2
 )
 
 require (
-	cloud.google.com/go/compute/metadata v0.5.2 // indirect
-	cloud.google.com/go/iam v1.2.1 // indirect
+	cloud.google.com/go/compute/metadata v0.6.0 // indirect
+	cloud.google.com/go/iam v1.2.2 // indirect
 	github.com/antlr4-go/antlr/v4 v4.13.0 // indirect
 	github.com/google/cel-go v0.21.0 // indirect
 	github.com/google/go-cmp v0.7.0 // indirect
