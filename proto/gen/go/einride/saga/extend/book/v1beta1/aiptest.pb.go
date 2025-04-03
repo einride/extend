@@ -10,12 +10,10 @@ import (
 type ServiceConfigProviders interface {
 	BookingServiceTestSuiteConfigProvider
 	ShipmentServiceTestSuiteConfigProvider
-	ShipmentTrackingEventServiceTestSuiteConfigProvider
 }
 
 // TestServices is the main entrypoint for starting the AIP tests for all services.
 func TestServices(t *testing.T, s ServiceConfigProviders) {
 	testBookingService(t, s)
 	testShipmentService(t, s)
-	testShipmentTrackingEventService(t, s)
 }
