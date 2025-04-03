@@ -36,7 +36,6 @@ SERVICE COMMANDS
   authentication           Authentication service
   booking                  Freight booking service
   shipment                 Shipment service
-  shipment-tracking-event  Shipment tracking event service
 
 MODULE COMMANDS
   auth  authentication commands for cli

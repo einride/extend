@@ -19,7 +19,6 @@ func NewModuleCommand(use string, short string, commands ...*cobra.Command) *cob
 				v1beta1.NewAuthenticationServiceCommand(config),
 				v1beta11.NewBookingServiceCommand(config),
 				v1beta11.NewShipmentServiceCommand(config),
-				v1beta11.NewShipmentTrackingEventServiceCommand(config),
 			},
 			commands...,
 		)...,

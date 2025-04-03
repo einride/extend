@@ -63,7 +63,6 @@ info:
 tags:
   - name: ShipmentService
   - name: BookingService
-  - name: ShipmentTrackingEventService
 schemes:
   - https
 consumes:
@@ -278,48 +277,6 @@ paths:
           type: string
       tags:
         - BookingService
-  /v1beta1/{parent}/trackingEvents:
-    get:
-      summary: List shipment tracking events.
-      description: 'See: https://google.aip.dev/132 (Standard methods: List).'
-      operationId: ShipmentTrackingEventService_ListShipmentTrackingEvents
-      responses:
-        "200":
-          description: A successful response.
-          schema:
-            $ref: '#/definitions/v1beta1ListShipmentTrackingEventsResponse'
-        default:
-          description: An unexpected error response.
-          schema:
-            $ref: '#/definitions/rpcStatus'
-      parameters:
-        - name: parent
-          description: |-
-            The resource name of the parent, which owns this collection of shipment tracking events.
-            Format: spaces/{space}/shipments/{shipment}/trackingEvents
-          in: path
-          required: true
-          type: string
-          pattern: spaces/[^/]+/shipments/[^/]+
-        - name: pageSize
-          description: |-
-            Requested page size. Server may return fewer shipment tracking events than requested.
-            If unspecified, server will pick an appropriate default.
-          in: query
-          required: false
-          type: integer
-          format: int32
-        - name: pageToken
-          description: |-
-            A token identifying a page of results the server should return.
-            Typically, this is the value of
-            [ListShipmentTrackingEventsResponse.page_token][einride.saga.extend.book.v1beta1.ListShipmentTrackingEventsResponse.page_token]
-            returned from the previous call to `ListShipmentTrackingEvents` method.
-          in: query
-          required: false
-          type: string
-      tags:
-        - ShipmentTrackingEventService
   /v1beta1/{shipment.name}:
     patch:
       summary: Update a shipment in a space.
@@ -447,31 +404,6 @@ paths:
               - shipment
       tags:
         - ShipmentService
-  /v1beta1/{shipmentTrackingEvent}:
-    get:
-      summary: Get a shipment tracking event.
-      description: This is an AIP standard [Get](https://google.aip.dev/131) method.
-      operationId: ShipmentTrackingEventService_GetShipmentTrackingEvent
-      responses:
-        "200":
-          description: A successful response.
-          schema:
-            $ref: '#/definitions/v1beta1ShipmentTrackingEvent'
-        default:
-          description: An unexpected error response.
-          schema:
-            $ref: '#/definitions/rpcStatus'
-      parameters:
-        - name: shipmentTrackingEvent
-          description: |-
-            The resource name of the shipment tracking event to retrieve.
-            Format: spaces/{space}/shipments/{shipment}/trackingEvents/{shipmentTrackingEvent}
-          in: path
-          required: true
-          type: string
-          pattern: spaces/[^/]+/shipments/[^/]+/trackingEvents/[^/]+
-      tags:
-        - ShipmentTrackingEventService
   /v1beta1/{shipment}:
     get:
       summary: Get a shipment.
@@ -495,37 +427,6 @@ paths:
           pattern: spaces/[^/]+/shipments/[^/]+
       tags:
         - ShipmentService
-  /v1beta1/{shipment}/trackingEvents:
-    post:
-      summary: Create a tracking event.
-      description: This is an AIP standard [Create](https://google.aip.dev/133) method.
-      operationId: ShipmentTrackingEventService_CreateShipmentTrackingEvent
-      responses:
-        "200":
-          description: A successful response.
-          schema:
-            $ref: '#/definitions/v1beta1ShipmentTrackingEvent'
-        default:
-          description: An unexpected error response.
-          schema:
-            $ref: '#/definitions/rpcStatus'
-      parameters:
-        - name: shipment
-          description: The parent shipment in which to create the event.
-          in: path
-          required: true
-          type: string
-          pattern: spaces/[^/]+/shipments/[^/]+
-        - name: shipmentTrackingEvent
-          description: The shipment tracking event
-          in: body
-          required: true
-          schema:
-            $ref: '#/definitions/v1beta1ShipmentTrackingEvent'
-            required:
-              - shipmentTrackingEvent
-      tags:
-        - ShipmentTrackingEventService
   /v1beta1/{shipment}:cancel:
     post:
       summary: Cancel a shipment.
@@ -856,27 +757,6 @@ definitions:
   ShipmentServiceReleaseShipmentBody:
     type: object
     description: Request message for BookService.ReleaseShipment.
-  ShipmentTrackingEventEventCode:
-    type: string
-    enum:
-      - ARRIVED_AT_PICKUP
-      - DEPARTED_PICKUP
-      - ARRIVED_AT_DELIVERY
-      - DEPARTED_DELIVERY
-      - STARTED_AT_PICKUP
-      - COMPLETED_PICKUP
-      - STARTED_AT_DELIVERY
-      - COMPLETED_DELIVERY
-    description: |-
-      - ARRIVED_AT_PICKUP: Arrived at pickup.
-       - DEPARTED_PICKUP: Departed pickup.
-       - ARRIVED_AT_DELIVERY: Arrived at delivery.
-       - DEPARTED_DELIVERY: Departed delivery.
-       - STARTED_AT_PICKUP: Started at pickup.
-       - COMPLETED_PICKUP: Completed pickup.
-       - STARTED_AT_DELIVERY: Started at delivery.
-       - COMPLETED_DELIVERY: Completed delivery.
-    title: Event code
   TourAutomationRule:
     type: string
     enum:
@@ -1170,25 +1050,6 @@ definitions:
       - postalCode
       - city
       - regionCode
-  v1beta1ListShipmentTrackingEventsResponse:
-    type: object
-    properties:
-      shipmentTrackingEvents:
-        type: array
-        items:
-          type: object
-          $ref: '#/definitions/v1beta1ShipmentTrackingEvent'
-        description: The list of shipment tracking events.
-        readOnly: true
-      nextPageToken:
-        type: string
-        description: |-
-          A token to retrieve next page of results.  Pass this value in the
-          [ListShipmentTrackingEventsRequest.page_token][einride.saga.extend.book.v1beta1.ListShipmentTrackingEventsRequest.page_token]
-          field in the subsequent call to `ListShipmentTrackingEvents` method to retrieve the next
-          page of results.
-        readOnly: true
-    description: Response message for ShipmentTrackingEventService.ListShipmentTrackingEvents.
   v1beta1ListShipmentsResponse:
     type: object
     properties:
@@ -1360,53 +1221,6 @@ definitions:
        - RELEASED: Shipment is ready for pickup.
        - CANCELLED: Shipment is cancelled
     title: Shipment state
-  v1beta1ShipmentTrackingEvent:
-    type: object
-    properties:
-      name:
-        type: string
-        description: The resource name of the ShipmentTrackingEvent.
-      shipment:
-        type: string
-        description: Resource name of the shipment that owns the ShipmentTrackingEvent.
-        readOnly: true
-      createTime:
-        type: string
-        format: date-time
-        description: The creation timestamp of the ShipmentTrackingEvent. When this event was received by Einride.
-        readOnly: true
-      updateTime:
-        type: string
-        format: date-time
-        description: |-
-          The last update timestamp of the ShipmentTrackingEvent.
-          Updated when create/update/delete operation is performed.
-        readOnly: true
-      deleteTime:
-        type: string
-        format: date-time
-        description: The deletion timestamp of the ShipmentTrackingEvent. Set if the event is deleted.
-        readOnly: true
-      code:
-        $ref: '#/definitions/ShipmentTrackingEventEventCode'
-        title: The kind of tracking event that happened
-      occurredTime:
-        type: string
-        format: date-time
-        description: When the event occurred.
-      address:
-        $ref: '#/definitions/v1beta1Address'
-        description: The address where the event happened.
-      description:
-        type: string
-        description: Description for the ShipmentTrackingEvent.
-      vehicle:
-        $ref: '#/definitions/v1beta1Vehicle'
-        title: On what vehicle did this event occur
-    description: A shipment tracking event represents an event on a shipment.
-    required:
-      - code
-      - occurredTime
   v1beta1Tour:
     type: object
     properties:
