@@ -232,9 +232,7 @@ message CreateShipmentRequest {
   string parent = 1 [
     (google.api.field_behavior) = REQUIRED,
     (google.api.resource_reference) = {type: "api.saga.einride.tech/Space"},
-    (grpc.gateway.protoc_gen_openapiv2.options.openapiv2_field) = {
-      field_configuration: {path_param_name: "space"}
-    }
+    (grpc.gateway.protoc_gen_openapiv2.options.openapiv2_field) = {field_configuration: {path_param_name: "space"}}
   ];
 
   // The shipment to create.
@@ -247,9 +245,7 @@ message GetShipmentRequest {
   string name = 1 [
     (google.api.field_behavior) = REQUIRED,
     (google.api.resource_reference) = {type: "api.saga.einride.tech/Shipment"},
-    (grpc.gateway.protoc_gen_openapiv2.options.openapiv2_field) = {
-      field_configuration: {path_param_name: "shipment"}
-    }
+    (grpc.gateway.protoc_gen_openapiv2.options.openapiv2_field) = {field_configuration: {path_param_name: "shipment"}}
   ];
 }
 
@@ -305,9 +301,7 @@ message ReleaseShipmentRequest {
   string name = 1 [
     (google.api.field_behavior) = REQUIRED,
     (google.api.resource_reference) = {type: "api.saga.einride.tech/Shipment"},
-    (grpc.gateway.protoc_gen_openapiv2.options.openapiv2_field) = {
-      field_configuration: {path_param_name: "shipment"}
-    }
+    (grpc.gateway.protoc_gen_openapiv2.options.openapiv2_field) = {field_configuration: {path_param_name: "shipment"}}
   ];
 }
 
@@ -317,9 +311,7 @@ message CancelShipmentRequest {
   string name = 1 [
     (google.api.field_behavior) = REQUIRED,
     (google.api.resource_reference) = {type: "api.saga.einride.tech/Shipment"},
-    (grpc.gateway.protoc_gen_openapiv2.options.openapiv2_field) = {
-      field_configuration: {path_param_name: "shipment"}
-    }
+    (grpc.gateway.protoc_gen_openapiv2.options.openapiv2_field) = {field_configuration: {path_param_name: "shipment"}}
   ];
 }
 

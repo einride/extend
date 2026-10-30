@@ -133,9 +133,7 @@ message CreateTourRequest {
   string parent = 1 [
     (google.api.field_behavior) = REQUIRED,
     (google.api.resource_reference) = {type: "api.saga.einride.tech/Space"},
-    (grpc.gateway.protoc_gen_openapiv2.options.openapiv2_field) = {
-      field_configuration: {path_param_name: "space"}
-    }
+    (grpc.gateway.protoc_gen_openapiv2.options.openapiv2_field) = {field_configuration: {path_param_name: "space"}}
   ];
 
   // The tour to create.
@@ -148,9 +146,7 @@ message GetTourRequest {
   string name = 1 [
     (google.api.field_behavior) = REQUIRED,
     (google.api.resource_reference) = {type: "api.saga.einride.tech/Tour"},
-    (grpc.gateway.protoc_gen_openapiv2.options.openapiv2_field) = {
-      field_configuration: {path_param_name: "tour"}
-    }
+    (grpc.gateway.protoc_gen_openapiv2.options.openapiv2_field) = {field_configuration: {path_param_name: "tour"}}
   ];
 }
 
@@ -260,9 +256,7 @@ message ConfirmTourRequest {
   string name = 1 [
     (google.api.field_behavior) = REQUIRED,
     (google.api.resource_reference) = {type: "api.saga.einride.tech/Tour"},
-    (grpc.gateway.protoc_gen_openapiv2.options.openapiv2_field) = {
-      field_configuration: {path_param_name: "tour"}
-    }
+    (grpc.gateway.protoc_gen_openapiv2.options.openapiv2_field) = {field_configuration: {path_param_name: "tour"}}
   ];
 }
 
@@ -282,8 +276,6 @@ message CancelTourRequest {
   string name = 1 [
     (google.api.field_behavior) = REQUIRED,
     (google.api.resource_reference) = {type: "api.saga.einride.tech/Tour"},
-    (grpc.gateway.protoc_gen_openapiv2.options.openapiv2_field) = {
-      field_configuration: {path_param_name: "tour"}
-    }
+    (grpc.gateway.protoc_gen_openapiv2.options.openapiv2_field) = {field_configuration: {path_param_name: "tour"}}
   ];
 }
