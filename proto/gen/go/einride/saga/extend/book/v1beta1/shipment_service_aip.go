@@ -45,6 +45,14 @@ func (n SpaceResourceName) MarshalString() (string, error) {
 	return n.String(), nil
 }
 
+// MarshalText implements the encoding.TextMarshaler interface.
+func (n SpaceResourceName) MarshalText() ([]byte, error) {
+	if err := n.Validate(); err != nil {
+		return nil, err
+	}
+	return []byte(n.String()), nil
+}
+
 func (n *SpaceResourceName) UnmarshalString(name string) error {
 	err := resourcename.Sscan(
 		name,
@@ -55,6 +63,20 @@ func (n *SpaceResourceName) UnmarshalString(name string) error {
 		return err
 	}
 	return n.Validate()
+}
+
+// UnmarshalText implements the encoding.TextUnmarshaler interface.
+func (n *SpaceResourceName) UnmarshalText(text []byte) error {
+	return n.UnmarshalString(string(text))
+}
+
+func (n SpaceResourceName) Type() string {
+	return "api.saga.einride.tech/Space"
+}
+
+// Pattern returns the resource name pattern for SpaceResourceName as a string.
+func (n SpaceResourceName) Pattern() string {
+	return "spaces/{space}"
 }
 
 type OrganizationResourceName struct {
@@ -89,6 +111,14 @@ func (n OrganizationResourceName) MarshalString() (string, error) {
 	return n.String(), nil
 }
 
+// MarshalText implements the encoding.TextMarshaler interface.
+func (n OrganizationResourceName) MarshalText() ([]byte, error) {
+	if err := n.Validate(); err != nil {
+		return nil, err
+	}
+	return []byte(n.String()), nil
+}
+
 func (n *OrganizationResourceName) UnmarshalString(name string) error {
 	err := resourcename.Sscan(
 		name,
@@ -99,6 +129,20 @@ func (n *OrganizationResourceName) UnmarshalString(name string) error {
 		return err
 	}
 	return n.Validate()
+}
+
+// UnmarshalText implements the encoding.TextUnmarshaler interface.
+func (n *OrganizationResourceName) UnmarshalText(text []byte) error {
+	return n.UnmarshalString(string(text))
+}
+
+func (n OrganizationResourceName) Type() string {
+	return "api.saga.einride.tech/Organization"
+}
+
+// Pattern returns the resource name pattern for OrganizationResourceName as a string.
+func (n OrganizationResourceName) Pattern() string {
+	return "organizations/{organization}"
 }
 
 type UserResourceName struct {
@@ -133,6 +177,14 @@ func (n UserResourceName) MarshalString() (string, error) {
 	return n.String(), nil
 }
 
+// MarshalText implements the encoding.TextMarshaler interface.
+func (n UserResourceName) MarshalText() ([]byte, error) {
+	if err := n.Validate(); err != nil {
+		return nil, err
+	}
+	return []byte(n.String()), nil
+}
+
 func (n *UserResourceName) UnmarshalString(name string) error {
 	err := resourcename.Sscan(
 		name,
@@ -143,6 +195,20 @@ func (n *UserResourceName) UnmarshalString(name string) error {
 		return err
 	}
 	return n.Validate()
+}
+
+// UnmarshalText implements the encoding.TextUnmarshaler interface.
+func (n *UserResourceName) UnmarshalText(text []byte) error {
+	return n.UnmarshalString(string(text))
+}
+
+func (n UserResourceName) Type() string {
+	return "api.saga.einride.tech/User"
+}
+
+// Pattern returns the resource name pattern for UserResourceName as a string.
+func (n UserResourceName) Pattern() string {
+	return "organizations/{user}"
 }
 
 type SenderResourceName struct {
@@ -194,6 +260,14 @@ func (n SenderResourceName) MarshalString() (string, error) {
 	return n.String(), nil
 }
 
+// MarshalText implements the encoding.TextMarshaler interface.
+func (n SenderResourceName) MarshalText() ([]byte, error) {
+	if err := n.Validate(); err != nil {
+		return nil, err
+	}
+	return []byte(n.String()), nil
+}
+
 func (n *SenderResourceName) UnmarshalString(name string) error {
 	err := resourcename.Sscan(
 		name,
@@ -205,6 +279,20 @@ func (n *SenderResourceName) UnmarshalString(name string) error {
 		return err
 	}
 	return n.Validate()
+}
+
+// UnmarshalText implements the encoding.TextUnmarshaler interface.
+func (n *SenderResourceName) UnmarshalText(text []byte) error {
+	return n.UnmarshalString(string(text))
+}
+
+func (n SenderResourceName) Type() string {
+	return "api.saga.einride.tech/Sender"
+}
+
+// Pattern returns the resource name pattern for SenderResourceName as a string.
+func (n SenderResourceName) Pattern() string {
+	return "spaces/{space}/senders/{sender}"
 }
 
 func (n SenderResourceName) SpaceResourceName() SpaceResourceName {

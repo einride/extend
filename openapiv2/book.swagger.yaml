@@ -62,7 +62,9 @@ info:
   version: v1beta1
 tags:
   - name: ShipmentService
+    description: Shipment service.
   - name: BookingService
+    description: Booking service.
 schemes:
   - https
 consumes:
@@ -367,7 +369,7 @@ paths:
                 type: array
                 items:
                   type: object
-                  $ref: '#/definitions/bookv1beta1Unit'
+                  $ref: '#/definitions/bookV1beta1Unit'
                 title: Shipment units
               externalReferenceId:
                 type: string
@@ -401,7 +403,6 @@ paths:
               - sender
               - deliveryAddress
               - units
-              - shipment
       tags:
         - ShipmentService
   /v1beta1/{shipment}:
@@ -516,8 +517,6 @@ paths:
           required: true
           schema:
             $ref: '#/definitions/v1beta1Shipment'
-            required:
-              - shipment
       tags:
         - ShipmentService
   /v1beta1/{space}/tours:
@@ -547,8 +546,6 @@ paths:
           required: true
           schema:
             $ref: '#/definitions/v1beta1Tour'
-            required:
-              - tour
       tags:
         - BookingService
   /v1beta1/{tour.name}:
@@ -655,7 +652,6 @@ paths:
               - serviceType
               - preliminaryShipments
               - stops
-              - tour
       tags:
         - BookingService
   /v1beta1/{tour}:
@@ -778,7 +774,7 @@ definitions:
         type: array
         items:
           type: object
-          $ref: '#/definitions/bookv1beta1Unit'
+          $ref: '#/definitions/bookV1beta1Unit'
         description: The units that should be shipped.
       annotations:
         type: object
@@ -931,7 +927,7 @@ definitions:
       - KG: Kilograms
        - LBS: Pounds
     title: Weight units
-  bookv1beta1Unit:
+  bookV1beta1Unit:
     type: object
     properties:
       type:
@@ -971,7 +967,7 @@ definitions:
     properties:
       '@type':
         type: string
-    additionalProperties: {}
+    additionalProperties: true
   rpcStatus:
     type: object
     properties:
@@ -1176,7 +1172,7 @@ definitions:
         type: array
         items:
           type: object
-          $ref: '#/definitions/bookv1beta1Unit'
+          $ref: '#/definitions/bookV1beta1Unit'
         title: Shipment units
       externalReferenceId:
         type: string
