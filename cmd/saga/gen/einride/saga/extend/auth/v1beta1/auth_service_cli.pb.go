@@ -23,6 +23,7 @@ func NewAuthenticationServiceCommand(config aipcli.Config) *cobra.Command {
 			&ExchangeSecretResponse{},
 			map[protoreflect.FullName]string{
 				"einride.saga.extend.auth.v1beta1.AuthenticationService.ExchangeSecret": " Exchange secret for access token.\n",
+				"einride.saga.extend.auth.v1beta1.ExchangeSecretRequest":                " Request to the ExchangeSecret method.\n",
 				"einride.saga.extend.auth.v1beta1.ExchangeSecretRequest.client_id":      " The client ID.\n\n Example: \"example\"\n",
 				"einride.saga.extend.auth.v1beta1.ExchangeSecretRequest.client_secret":  " The client secret.\n",
 			},
